@@ -22,11 +22,10 @@ class ChartController extends Controller
             ->get();
 
         $status = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        $data = [0, 0, 0, 0, 0, 0, 0]; // Initialize counts for each day
+        $data = [0, 0, 0, 0, 0, 0, 0];
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9'];
 
         foreach ($travelodges as $travelodge) {
-            // Adjusting day_of_week value returned by MySQL to match array index
             $index = ($travelodge->day_of_week + 5) % 7;
             $data[$index] = $travelodge->count;
         }
@@ -83,7 +82,6 @@ class ChartController extends Controller
 
     public function DepartmentChart()
     {
-        // เพิ่มแผนกใหม่และเรียงลำดับตามที่กำหนด
         $departments = [
             'IT Support',
             'Front Office',
@@ -103,7 +101,6 @@ class ChartController extends Controller
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2', '#007bff'];
 
         foreach ($departments as $department) {
-            // สร้างข้อมูลสำหรับแผนกแต่ละแผนก
             /* $count = Travelodge::where('department', $department)
                 ->where('created_at', '>=', date('Y-m-d', strtotime('-1 week')))
                 ->count(); */

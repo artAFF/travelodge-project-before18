@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Eastin_guest extends Model
+class Ehcm_server extends Model
 {
     use HasFactory;
 }

@@ -15,6 +15,7 @@
         .navbar-nav .nav-link:hover {
             background-color: grey;
         }
+
         .dropdown-menu .dropdown-item:hover {
             background-color: grey;
         }
@@ -44,7 +45,7 @@
                         <ul class="dropdown-menu" aria-labelledby="checklistDropdown">
                             <li>
                                 <a class="dropdown-item" href="{{ route('dashboardStatus') }}"><i
-                                    class="bi bi-cone-striped px-1"></i>
+                                        class="bi bi-cone-striped px-1"></i>
                                     </i>Status Report</a>
                             </li>
                             <li>
@@ -58,20 +59,27 @@
                                     </i>Issue By Months</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('dashboardDepartment') }}"><i class="bi bi-people-fill px-1">
+                                <a class="dropdown-item" href="{{ route('dashboardDepartment') }}"><i
+                                        class="bi bi-people-fill px-1">
                                     </i>Issue By Departments</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('dashboardCategory') }}"><i class="bi bi-tags-fill px-1"></i>Issue By Categorys</a>
+                                <a class="dropdown-item" href="{{ route('dashboardCategory') }}"><i
+                                        class="bi bi-tags-fill px-1"></i>Issue By Categorys</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('dashboardHotel') }}"><i class="bi bi-buildings-fill px-1" ></i>Issue By Hotels</a>
+                                <a class="dropdown-item" href="{{ route('dashboardHotel') }}"><i
+                                        class="bi bi-buildings-fill px-1"></i>Issue By Hotels</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item dropdown">
                         <a class="nav-link active" aria-current="page" href="{{ route('reportIssue') }}"><i
                                 class="bi bi-clipboard px-2"></i>Report Issue</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active" aria-current="page" href="{{ route('filter.form') }}"><i
+                                class="bi bi-funnel px-2"></i>Filter PDF</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link active dropdown-toggle " href="#" id="checklistDropdown" role="button"
@@ -79,7 +87,7 @@
                             <i class="bi bi-calendar-check px-2"></i>Daily Checklist
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="checklistDropdown">
-                            <li><a class="dropdown-item" href="{{ route('reportGuest') }}"><i
+                            {{-- <li><a class="dropdown-item" href="{{ route('reportGuest') }}"><i
                                         class="bi bi-person-fill px-1">
                                     </i>Guest Room</a>
                             </li>
@@ -91,7 +99,15 @@
                                     </i>Server Room</a>
                             </li>
                             <li><a class="dropdown-item" href="{{ route('reportNet') }}">
-                                    <i class="bi bi-router-fill px-1"></i>Speed Check</a></li>
+                                    <i class="bi bi-router-fill px-1"></i>Speed Check</a></li> --}}
+                            <li><a class="dropdown-item" href="/tlcmn">
+                                    <i class="bi bi-1-circle-fill px-2"></i>TLCMN
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="/ehcm"><i class="bi bi-2-circle-fill px-2"></i>EHCM</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/uncm"><i class="bi bi-3-circle-fill px-2"></i>UNCM</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -143,9 +159,9 @@
     .sidebar .nav-link {
         color: #333;
     }
-</style> --}}
+</style>
 
-  {{--     <div class='container-fluid'>
+     <div class='container-fluid'>
         <div class="row">
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collpase">
                 <div class="position-sticky">

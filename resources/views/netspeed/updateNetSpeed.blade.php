@@ -16,16 +16,6 @@
 
             </select>
         </div>
-        <div class="mb-3">
-            <label for="upload" class="form-label">Upload</label>
-            <input type="number" step="0.1" class="form-control" id="upload" name="upload"
-                value="{{ $ReportNetSpeeds->upload }}">
-        </div>
-        @error('upload')
-            <div class="my-error">
-                <span class="text-danger">{{ $message }}</span>
-            </div>
-        @enderror
 
         <div class="mb-3">
             <label for="download" class="form-label">Download</label>
@@ -33,6 +23,17 @@
                 value="{{ $ReportNetSpeeds->download }}">
         </div>
         @error('download')
+            <div class="my-error">
+                <span class="text-danger">{{ $message }}</span>
+            </div>
+        @enderror
+
+        <div class="mb-3">
+            <label for="upload" class="form-label">Upload</label>
+            <input type="number" step="0.1" class="form-control" id="upload" name="upload"
+                value="{{ $ReportNetSpeeds->upload }}">
+        </div>
+        @error('upload')
             <div class="my-error">
                 <span class="text-danger">{{ $message }}</span>
             </div>

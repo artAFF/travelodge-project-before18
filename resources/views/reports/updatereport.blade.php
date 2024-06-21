@@ -4,14 +4,16 @@
 @section('content')
     <form action="{{ route('updatePreport', $ReportIssues->id) }}" method="POST">
         @csrf
-        <input type="hidden" name="previous_url" value="{{ url()->previous() }}"> {{-- for test go back --}}
+        <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
         <div class="mb-3">
             <label for="issue" class="form-label">Issue Category</label>
             <select class="form-select" id="issue" name="issue">
-                <option disabled>{{ $ReportIssues->issue }}</<option>
+                <option value="{{ $ReportIssues->issue }}" selected>{{ $ReportIssues->issue }}</option>
                 @foreach ($categories as $category)
-                <option value="{{ $category->name }}">{{ $category->name }}</option>
-            @endforeach
+                    @if ($category->name !== $ReportIssues->issue)
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                    @endif
+                @endforeach
             </select>
         </div>
         @error('issue')
@@ -33,22 +35,22 @@
         <div class="mb-3">
             <label for="department" class="form-label">Department</label>
             <select class="form-select" id="department" name="department">
-                <option disabled>{{ $ReportIssues->department }}</<option>
-
-                    @foreach ($departments as $department)
-                <option value="{{ $department->name }}">{{ $department->name }}</option>
+                <option value="{{ $ReportIssues->department }}" selected>{{ $ReportIssues->department }}</option>
+                @foreach ($departments as $department)
+                    @if ($department->name !== $ReportIssues->department)
+                        <option value="{{ $department->name }}">{{ $department->name }}</option>
+                    @endif
                 @endforeach
-
             </select>
         </div>
 
         <div class="mb-3">
             <label for="issue" class="form-label">Hotel</label>
             <select class="form-select" id="hotel" name="hotel">
-                <option disabled>{{ $ReportIssues->hotel }}</<option>
-                <option value="TLCMN">TLCMN</option>
-                <option value="EHCM">EHCM</option>
-                <option value="UNMC">UNMC</option>
+                <option value="{{ $ReportIssues->hotel }}" selected>{{ $ReportIssues->hotel }}</option>
+                <option value="TLCMN" @if ($ReportIssues->hotel == 'TLCMN') selected @endif>TLCMN</option>
+                <option value="EHCM" @if ($ReportIssues->hotel == 'EHCM') selected @endif>EHCM</option>
+                <option value="UNMC" @if ($ReportIssues->hotel == 'UNMC') selected @endif>UNMC</option>
             </select>
         </div>
         @error('hotel')
@@ -60,36 +62,24 @@
         <div class="mb-3">
             <label for="location" class="form-label">Location</label>
             <select class="form-select" id="location" name="location">
-                <option disabled>{{ $ReportIssues->location }}</option>
-
+                <option value="{{ $ReportIssues->location }}" selected>{{ $ReportIssues->location }}</option>
                 @foreach ($buildings as $building)
-                    <option value="{{ $building->name }}">{{ $building->name }}</option>
+                    @if ($building->name !== $ReportIssues->location)
+                        <option value="{{ $building->name }}">{{ $building->name }}</option>
+                    @endif
                 @endforeach
-
             </select>
         </div>
 
         <div class="mb-3">
             <label for="status" class="form-label">Status</label>
             <select class="form-select" id="status" name="status">
-                @if ($ReportIssues->status === 0)
-                    <option value="0" selected>In-process</option>
-                @else
-                    <option value="0">In-process</option>
-                @endif
-                @if ($ReportIssues->status === 1)
-                    <option value="1" selected>Done</option>
-                @else
-                    <option value="1">Done</option>
-                @endif
+                <option value="0" @if ($ReportIssues->status === 0) selected @endif>In-process</option>
+                <option value="1" @if ($ReportIssues->status === 1) selected @endif>Done</option>
             </select>
         </div>
 
-        {{-- <input type="hidden" name="updated_at" value="<?= now() ?>"> --}}
-
         <button type="submit" class="btn btn-primary">Submit</button>
         <a href="/reports/reportIssue" class="btn btn-secondary">Cancel</a>
-
     </form>
-
 @endsection

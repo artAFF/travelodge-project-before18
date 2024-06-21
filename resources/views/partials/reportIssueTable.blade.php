@@ -91,11 +91,8 @@
                     @endforeach
                 </tbody>
             </table>
-            {{-- <div class="justify-content-center">
-                {{ $ReportIssues->links() }}
-            </div> --}}
             <div class="justify-content-center">
-                {{ $ReportIssues->appends(request()->input())->links() }}
+                {{ $ReportIssues->links() }}
             </div>
         @else
             <h1 class="text-center py-5">No data found, please add a report issue <a href="/addIssue"

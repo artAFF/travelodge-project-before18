@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Unimman_server extends Model
+class Uncm_server extends Model
 {
     use HasFactory;
 }

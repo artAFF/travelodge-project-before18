@@ -27,7 +27,7 @@ Route::post('/reports/updatePreport/{id}', [UpdateController::class, 'UpdateIssu
 Route::get('/reports/pdf-issue/{id}', [PdfController::class, 'pdfissue'])->name('pdfissue');
 Route::get('/reports/pdf-issue-all', [PdfController::class, 'printAllIssues'])->name('pdf-issue-all');
 Route::get('/reports/inprocess', [ReadController::class, 'inprocess'])->name('inprocess');
-Route::get('/filter', [ReadController::class, 'filter'])->name('filter');
+Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDate');
 
 // Internet Speed Checking
 Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
@@ -62,7 +62,11 @@ Route::post('/updatePGuest/{id}', [UpdateController::class, 'Tlcmn_UpdateGuestPr
 Route::delete('/deleteGuest/{id}', [DeleteController::class, 'Tlcmn_DeleteGuest'])->name('deleteGuest');
 
 // Home page s
-Route::get('/home/itsup_status', [ReadController::class, 'itsup_status']);
+/* Route::get('/home/itsup_status', [ReadController::class, 'itsup_status']); */
+// web.php
+
+Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status');
+
 Route::get('/home/admin_status', [ReadController::class, 'admin_status']);
 
 // Dasboard
@@ -74,6 +78,14 @@ Route::get('/dashboards/dashboardHotel', [ChartController::class, 'HotelChart'])
 Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
 
 Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
+Route::get('/ehcm', [ReadController::class, 'TableReportAll'])->name('TableReportAll');;
+Route::get('/uncm', [ReadController::class, 'TableReportAll'])->name('TableReportAll');;
+// routes/web.php
+/* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
+
+Route::get('/filter', [PdfController::class, 'showFilterForm'])->name('filter.form');
+Route::post('/filter', [PdfController::class, 'filterData'])->name('filter.data');
+Route::get('/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
 
 
 Route::get('/login', function () {

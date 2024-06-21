@@ -6,6 +6,15 @@
         @csrf
 
         <div class="mb-3">
+            <label for="hotel" class="form-label"><b>Hotel</b></label>
+            <select class="form-select" id="hotel" name="hotel">
+                <option value="tlcmn">TLCMN</option>
+                <option value="ehcm">EHCM</option>
+                <option value="uncm">UNCM</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
             <label for="server_temp" class="form-label">Server Temperature</label>
             <input type="number" class="form-control" id="server_temp" name="server_temp">
         </div>
