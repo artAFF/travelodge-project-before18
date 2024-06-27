@@ -2,7 +2,7 @@
 @section('title', 'Update Server Room Check')
 
 @section('content')
-    <div class="containter">
+    <div class="container">
         <form action="{{ route('updatePserver', $ReportServers->id) }}" method="POST">
             @csrf
 
