@@ -3,7 +3,7 @@
 
 @section('content')
     <div id="report-content">
-        @include('partials.report_guests')
+        @include('partials.report_guests', ['type' => 'uncm'])
         @include('partials.report_switchs')
         @include('partials.report_servers')
         @include('partials.report_netspeeds')

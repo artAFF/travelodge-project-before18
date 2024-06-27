@@ -6,12 +6,12 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Server Temperature</th>
-                    <th scope="col">UPS Temperature</th>
-                    <th scope="col">USP Battery Percentage</th>
-                    <th scope="col">UPS Period Of Service Available</th>
-                    <th scope="col">Created Time</th>
-                    <th scope="col">Updated time</th>
+                    <th scope="col" class="col-md-1">Server Temperature</th>
+                    <th scope="col"class="col-md-1">UPS Temperature</th>
+                    <th scope="col"class="col-md-2">USP Battery Percentage</th>
+                    <th scope="col"class="col-md-2">UPS Period Of Service Available</th>
+                    <th scope="col"class="col-md-2">Created Time</th>
+                    <th scope="col"class="col-md-2">Updated time</th>
                     <th scope="col">Action
                     </th>
 
@@ -41,6 +41,7 @@
                                         class="bi bi-trash3-fill"></i>
                                 </button>
                             </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

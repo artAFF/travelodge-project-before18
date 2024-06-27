@@ -153,15 +153,15 @@ class ReadController extends Controller
 
             if ($request->ajax()) {
                 return response()->json([
-                    'ReportGuests' => view('partials.report_guests', compact('ReportGuests'))->render(),
-                    'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs'))->render(),
-                    'ReportServers' => view('partials.report_servers', compact('ReportServers'))->render(),
-                    'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds'))->render(),
+                    'ReportGuests' => view('partials.report_guests', compact('ReportGuests', 'source'))->render(),
+                    'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs', 'source'))->render(),
+                    'ReportServers' => view('partials.report_servers', compact('ReportServers', 'source'))->render(),
+                    'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds', 'source'))->render(),
                 ]);
             }
 
             // ส่งตัวแปร source ไปยัง Blade view
-            return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
+            return view($source, compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
         }
 
         private function getPrefixFromRequest(Request $request)
@@ -186,7 +186,7 @@ class ReadController extends Controller
             } elseif (str_contains($url, 'uncm')) {
                 return 'uncm';
             } else {
-                return 'tlcm';
+                return 'tlcmn';
             }
         }
 

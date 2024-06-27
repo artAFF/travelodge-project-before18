@@ -41,15 +41,15 @@ Route::post('/updatePNetSpeed/{id}', [UpdateController::class, 'Tlcmn_UpdateRepo
 Route::get('/server/reportServer', [ReadController::class, 'TableReportServer'])->name("reportServer");
 Route::get('/server/addServer', [CreateController::class, 'Tlcmn_AddServer'])->name('addServer');
 Route::post('/insertServer', [CreateController::class, 'Tlcmn_InsertServer']);
-Route::get('/server /updateServer/{id}', [UpdateController::class, 'Tlcmn_UpdateServer'])->name('updateServer');
+Route::get('/server/updateServer/{id}', [UpdateController::class, 'Tlcmn_UpdateServer'])->name('updateServer');
 Route::post('/updatePServer/{id}', [UpdateController::class, 'Tlcmn_UpdateServerProcess'])->name('updatePserver');
 Route::delete('/deleteServer/{id}', [DeleteController::class, 'Tlcmn_DeleteServer'])->name('deleteServer');
 
 // Switch Room Checking
-Route::get('/reportSwitch', [ReadController::class, 'TableReportSwitch'])->name("reportSwitch");
-Route::get('/addSwitch', [CreateController::class, 'Tlcmn_AddSwitch'])->name('addSwitch');
+Route::get('/switchs/reportSwitch', [ReadController::class, 'TableReportSwitch'])->name("reportSwitch");
+Route::get('/switchs/addSwitch', [CreateController::class, 'Tlcmn_AddSwitch'])->name('addSwitch');
 Route::post('/insertSwitch', [CreateController::class, 'Tlcmn_InsertSwitch']);
-Route::get('/updateSwitch/{id}', [UpdateController::class, 'Tlcmn_UpdateSwitch'])->name('updateSwitch');
+Route::get('/switchs/updateSwitch/{id}', [UpdateController::class, 'Tlcmn_UpdateSwitch'])->name('updateSwitch');
 Route::post('/updatePSwitch/{id}', [UpdateController::class, 'Tlcmn_UpdateSwitchProcess'])->name('updatePSwitch');
 Route::delete('/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
 
