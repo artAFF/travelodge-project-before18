@@ -2,110 +2,112 @@
 @section('title', 'Update Guest Room Check')
 
 @section('content')
-    <form action="{{ route('updatePguest', $ReportGuests->id) }}" method="POST">
-        @csrf
+    <div class="container">
+        <form action="{{ route('updatePguest', $ReportGuests->id) }}" method="POST">
+            @csrf
 
-        <h2>Internet Guest Speed</h2>
-        <br>
-        <div class="mb-3" id="form1">
-            <label for="location1" class="form-label">Location</label>
-            <select class="form-select" id="location1" name="location1">
-                <option disabled selected>{{ $ReportGuests->location }}</option>
-                @foreach ($buildings as $building)
-                    <option value="{{ $building->name }}">{{ $building->name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3 hidden" id="form2">
-            <label for="location2" class="form-label">Location</label>
-            <select class="form-select" id="location2" name="location2">
-                <option disabled selected>{{ $ReportGuests->location }}</option>
-                <option value="Floor 1">Floor 1</option>
-                <option value="Floor 2">Floor 2</option>
-                <option value="Floor 3">Floor 3</option>
-                <option value="Floor 4">Floor 4</option>
-                <option value="Floor 5">Floor 5</option>
-                <option value="Floor 6">Floor 6</option>
-                <option value="Floor 7">Floor 7</option>
-                <option value="Floor 8">Floor 8</option>
-                <option value="Floor 9">Floor 9</option>
-            </select>
-        </div>
-
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="othersCheckbox">
-            <label class="form-check-label" for="othersCheckbox">
-                Others ( Only EHCM and UNCM )
-            </label>
-        </div>
-
-
-        <div class="mb-3">
-            <label for="room_no" class="form-label">Room Number</label>
-            <input type="number" class="form-control" id="room_no" name="room_no" value="{{ $ReportGuests->room_no }}">
-        </div>
-        @error('room_no')
-            <div class="my-error">
-                <span class="text-danger">{{ $message }}</span>
+            <h2>Internet Guest Speed</h2>
+            <br>
+            <div class="mb-3" id="form1">
+                <label for="location1" class="form-label">Location</label>
+                <select class="form-select" id="location1" name="location1">
+                    <option disabled selected>{{ $ReportGuests->location }}</option>
+                    @foreach ($buildings as $building)
+                        <option value="{{ $building->name }}">{{ $building->name }}</option>
+                    @endforeach
+                </select>
             </div>
-        @enderror
 
-        <div class="mb-3">
-            <label for="download" class="form-label">Download</label>
-            <input type="number" step="0.1" class="form-control" id="download" name="download"
-                value="{{ $ReportGuests->download }}"></input>
-        </div>
-        @error('download')
-            <div class="my-error">
-                <span class="text-danger">{{ $message }}</span>
+            <div class="mb-3 hidden" id="form2">
+                <label for="location2" class="form-label">Location</label>
+                <select class="form-select" id="location2" name="location2">
+                    <option disabled selected>{{ $ReportGuests->location }}</option>
+                    <option value="Floor 1">Floor 1</option>
+                    <option value="Floor 2">Floor 2</option>
+                    <option value="Floor 3">Floor 3</option>
+                    <option value="Floor 4">Floor 4</option>
+                    <option value="Floor 5">Floor 5</option>
+                    <option value="Floor 6">Floor 6</option>
+                    <option value="Floor 7">Floor 7</option>
+                    <option value="Floor 8">Floor 8</option>
+                    <option value="Floor 9">Floor 9</option>
+                </select>
             </div>
-        @enderror
 
-        <div class="mb-3">
-            <label for="upload" class="form-label">Upload</label>
-            <input type="number" step="0.1" class="form-control" id="upload" name="upload"
-                value="{{ $ReportGuests->upload }}">
-        </div>
-        @error('upload')
-            <div class="my-error">
-                <span class="text-danger">{{ $message }}</span>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="othersCheckbox">
+                <label class="form-check-label" for="othersCheckbox">
+                    Others ( Only EHCM and UNCM )
+                </label>
             </div>
-        @enderror
 
-        <br>
-        <hr><br>
 
-        <h2>TV Channel</h2>
-        <br>
-
-        <div class="mb-3">
-            <label for="ch_no" class="form-label">Channel Number</label>
-            <input type="number" step="0.1" class="form-control" id="ch_no" name="ch_no"
-                value="{{ $ReportGuests->ch_no }}">
-        </div>
-        @error('ch_no')
-            <div class="my-error">
-                <span class="text-danger">{{ $message }}</span>
+            <div class="mb-3">
+                <label for="room_no" class="form-label">Room Number</label>
+                <input type="number" class="form-control" id="room_no" name="room_no"
+                    value="{{ $ReportGuests->room_no }}">
             </div>
-        @enderror
+            @error('room_no')
+                <div class="my-error">
+                    <span class="text-danger">{{ $message }}</span>
+                </div>
+            @enderror
 
-        <div class="mb-3">
-            <label for="ch_name" class="form-label">Channel Name</label>
-            <input type="text" class="form-control" id="ch_name" name="ch_name"
-                value="{{ $ReportGuests->ch_name }}"></input>
-        </div>
-        @error('ch_name')
-            <div class="my-error">
-                <span class="text-danger">{{ $message }}</span>
+            <div class="mb-3">
+                <label for="download" class="form-label">Download</label>
+                <input type="number" step="0.1" class="form-control" id="download" name="download"
+                    value="{{ $ReportGuests->download }}"></input>
             </div>
-        @enderror
+            @error('download')
+                <div class="my-error">
+                    <span class="text-danger">{{ $message }}</span>
+                </div>
+            @enderror
 
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="/tlcmn" class="btn btn-secondary">Cancel</a>
-    </form>
+            <div class="mb-3">
+                <label for="upload" class="form-label">Upload</label>
+                <input type="number" step="0.1" class="form-control" id="upload" name="upload"
+                    value="{{ $ReportGuests->upload }}">
+            </div>
+            @error('upload')
+                <div class="my-error">
+                    <span class="text-danger">{{ $message }}</span>
+                </div>
+            @enderror
 
+            <br>
+            <hr><br>
+
+            <h2>TV Channel</h2>
+            <br>
+
+            <div class="mb-3">
+                <label for="ch_no" class="form-label">Channel Number</label>
+                <input type="number" step="0.1" class="form-control" id="ch_no" name="ch_no"
+                    value="{{ $ReportGuests->ch_no }}">
+            </div>
+            @error('ch_no')
+                <div class="my-error">
+                    <span class="text-danger">{{ $message }}</span>
+                </div>
+            @enderror
+
+            <div class="mb-3">
+                <label for="ch_name" class="form-label">Channel Name</label>
+                <input type="text" class="form-control" id="ch_name" name="ch_name"
+                    value="{{ $ReportGuests->ch_name }}"></input>
+            </div>
+            @error('ch_name')
+                <div class="my-error">
+                    <span class="text-danger">{{ $message }}</span>
+                </div>
+            @enderror
+
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="/tlcmn" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
     <script>
         document.getElementById('othersCheckbox').addEventListener('change', function() {
             var form1 = document.getElementById('form1');

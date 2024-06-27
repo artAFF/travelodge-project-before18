@@ -1,8 +1,8 @@
 @if (count($ReportNetSpeeds) > 0)
     <div class="container">
         <h1 class="text text-center">All <b class='text-danger'>Internet Checking</b> Report</h1><br>
-        <h2 class="text text-center text-danger"><b>Only as follows Lobby, The Lodge, Pool, Gym, Grab and Go,
-                Office</b></h2>
+        {{-- <h2 class="text text-center text-danger"><b>Only as follows Lobby, The Lodge, Pool, Gym, Grab and Go,
+                Office</b></h2> --}}
         <a href="/netspeed/addNetSpeed" class="btn btn-primary">Add Internet Check</a>
         <table class="table table-striped table-hover ">
             <thead>

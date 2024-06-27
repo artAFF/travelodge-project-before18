@@ -103,70 +103,29 @@ class UpdateController extends Controller
         return view('/guest/updateGuest', compact('ReportGuests', 'buildings'));
     }
 
-    public function Tlcmn_UpdateGuestProcess(Request $request, $id)
+    function Tlcmn_UpdateGuestProcess(Request $request, $id)
     {
         $request->validate([
+            'location' => 'required',
             'room_no' => 'required',
             'upload' => 'required',
             'download' => 'required',
             'ch_no' => 'required',
             'ch_name' => 'required'
+
         ]);
+        $data = [
+            'location' => $request->location,
+            'room_no' => $request->room_no,
+            'upload' => $request->upload,
+            'download' => $request->download,
+            'ch_no' => $request->ch_no,
+            'ch_name' => $request->ch_name,
+            'updated_at' => $request->updated_at
 
-        $hotel = $request->input('hotel');
-
-        switch ($hotel) {
-            case 'tlcmn':
-                $request->validate([
-                    'location1' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location1'),
-                    'room_no' => $request->room_no,
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'ch_no' => $request->ch_no,
-                    'ch_name' => $request->ch_name,
-                    'updated_at' => now()
-                ];
-                Tlcmn_guest::where('id', $id)->update($data);
-                return redirect('/tlcmn');
-                break;
-            case 'ehcm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'room_no' => $request->room_no,
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'ch_no' => $request->ch_no,
-                    'ch_name' => $request->ch_name,
-                    'updated_at' => now()
-                ];
-                Ehcm_guest::where('id', $id)->update($data);
-                return redirect('/ehcm');
-                break;
-            case 'uncm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'room_no' => $request->room_no,
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'ch_no' => $request->ch_no,
-                    'ch_name' => $request->ch_name,
-                    'updated_at' => now()
-                ];
-                Uncm_guest::where('id', $id)->update($data);
-                return redirect('/uncm');
-                break;
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        ];
+        Tlcmn_guest::where('id', $id)->update($data);
+        return redirect('/tlcmn');
     }
 
     function Tlcmn_UpdateSwitch($id)
@@ -177,62 +136,26 @@ class UpdateController extends Controller
         return view('/switchs/updateSwitch', compact('ReportSwitchs', 'buildings'));
     }
 
-    public function Tlcmn_UpdateSwitchProcess(Request $request, $id)
+    function Tlcmn_UpdateSwitchProcess(Request $request, $id)
     {
         $request->validate([
+            'location' => 'required',
             'ups_battery' => 'required',
             'ups_time' => 'required',
             'ups_temp' => 'required'
+
+
         ]);
+        $data = [
+            'location' => $request->location,
+            'ups_battery' => $request->ups_temp,
+            'ups_time' => $request->ups_time,
+            'ups_temp' => $request->ups_temp,
+            'updated_at' => $request->updated_at
 
-        $hotel = $request->input('hotel');
-
-        switch ($hotel) {
-            case 'tlcmn':
-                $request->validate([
-                    'location1' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location1'),
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'ups_temp' => $request->ups_temp,
-                    'updated_at' => now()
-                ];
-                Tlcmn_switch::where('id', $id)->update($data);
-                return redirect('/tlcmn');
-                break;
-            case 'ehcm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'ups_temp' => $request->ups_temp,
-                    'updated_at' => now()
-                ];
-                Ehcm_switch::where('id', $id)->update($data);
-                return redirect('/ehcm');
-                break;
-            case 'uncm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'ups_temp' => $request->ups_temp,
-                    'updated_at' => now()
-                ];
-                Uncm_switch::where('id', $id)->update($data);
-                return redirect('/uncm');
-                break;
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        ];
+        Tlcmn_switch::where('id', $id)->update($data);
+        return redirect('/tlcmn');
     }
 
     function Tlcmn_UpdateServer($id)
@@ -242,54 +165,26 @@ class UpdateController extends Controller
         return view('/servers/updateServer', compact('ReportServers'));
     }
 
-    public function Tlcmn_UpdateServerProcess(Request $request, $id)
+    function Tlcmn_UpdateServerProcess(Request $request, $id)
     {
         $request->validate([
             'server_temp' => 'required',
             'ups_temp' => 'required',
             'ups_battery' => 'required',
             'ups_time' => 'required'
+
+
         ]);
+        $data = [
+            'server_temp' => $request->server_temp,
+            'ups_temp' => $request->ups_temp,
+            'ups_battery' => $request->ups_battery,
+            'ups_time' => $request->ups_time,
+            'updated_at' => $request->updated_at
 
-        $hotel = $request->input('hotel');
-
-        switch ($hotel) {
-            case 'tlcmn':
-                $data = [
-                    'server_temp' => $request->server_temp,
-                    'ups_temp' => $request->ups_temp,
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'updated_at' => now()
-                ];
-                Tlcmn_server::where('id', $id)->update($data);
-                return redirect('/tlcmn');
-                break;
-            case 'ehcm':
-                $data = [
-                    'server_temp' => $request->server_temp,
-                    'ups_temp' => $request->ups_temp,
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'updated_at' => now()
-                ];
-                Ehcm_server::where('id', $id)->update($data);
-                return redirect('/ehcm');
-                break;
-            case 'uncm':
-                $data = [
-                    'server_temp' => $request->server_temp,
-                    'ups_temp' => $request->ups_temp,
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'updated_at' => now()
-                ];
-                Uncm_server::where('id', $id)->update($data);
-                return redirect('/uncm');
-                break;
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        ];
+        Tlcmn_server::where('id', $id)->update($data);
+        return redirect('/tlcmn');
     }
 
     function Tlcmn_UpdateReportNetSpeed($id)
@@ -300,57 +195,22 @@ class UpdateController extends Controller
         return view('/netspeed/updateNetSpeed', compact('ReportNetSpeeds', 'buildings'));
     }
 
-    public function Tlcmn_UpdateReportNetSpeedProcess(Request $request, $id)
+    function Tlcmn_UpdateReportNetSpeedProcess(Request $request, $id)
     {
         $request->validate([
+            'location' => 'required',
             'upload' => 'required',
             'download' => 'required'
+
         ]);
+        $data = [
+            'location' => $request->location,
+            'upload' => $request->upload,
+            'download' => $request->download,
+            'updated_at' => $request->updated_at
 
-        $hotel = $request->input('hotel');
-
-        switch ($hotel) {
-            case 'tlcmn':
-                $request->validate([
-                    'location1' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location1'),
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'updated_at' => now()
-                ];
-                Tlcmn_net::where('id', $id)->update($data);
-                return redirect('/tlcmn');
-                break;
-            case 'ehcm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'updated_at' => now()
-                ];
-                Ehcm_net::where('id', $id)->update($data);
-                return redirect('/ehcm');
-                break;
-            case 'uncm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'updated_at' => now()
-                ];
-                Uncm_net::where('id', $id)->update($data);
-                return redirect('/uncm');
-                break;
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        ];
+        Tlcmn_net::where('id', $id)->update($data);
+        return redirect('/tlcmn');
     }
 }
