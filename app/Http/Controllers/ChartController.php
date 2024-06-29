@@ -82,31 +82,17 @@ class ChartController extends Controller
 
     public function DepartmentChart()
     {
-        $departments = [
-            'IT Support',
-            'Front Office',
-            'Food and Beverage',
-            'Housekeeping',
-            'Engineering',
-            'Finance and Accounting',
-            'Human Resources',
-            'Sale and Catering',
-            'Kitchen',
-            'Reservation',
-            'Security'
+        $departmentsWithCounts = Travelodge::select('department')
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('department')
+            ->orderByDesc('count')
+            ->get();
 
-        ];
+        $departments = $departmentsWithCounts->pluck('department')->toArray();
+        $data = $departmentsWithCounts->pluck('count')->toArray();
 
-        $data = [];
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2', '#007bff'];
-
-        foreach ($departments as $department) {
-            /* $count = Travelodge::where('department', $department)
-                ->where('created_at', '>=', date('Y-m-d', strtotime('-1 week')))
-                ->count(); */
-            $count = Travelodge::where('department', $department)->count();
-            array_push($data, $count);
-        }
+        $colors = array_slice($colors, 0, count($departments)); // ตัดสีให้พอดีกับจำนวนแผนก
 
         $datasets = [
             [
@@ -116,29 +102,22 @@ class ChartController extends Controller
             ]
         ];
 
-        // ส่งข้อมูลไปยังวิว
         return view('/dashboards/dashboardDepartment', compact('datasets', 'departments'));
     }
 
-
-
     public function CategoryChart()
     {
+        $categoriesWithCounts = Travelodge::select('issue as category')
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('issue')
+            ->orderByDesc('count')
+            ->get();
 
-        $categories = ['Computer', 'Comanche', 'Internet', 'Server', 'Program', 'Printer', 'Telephone', 'CCTV', 'TV', 'Sound', 'Others'];
-
-        $data = [];
+        $categories = $categoriesWithCounts->pluck('category')->toArray();
+        $data = $categoriesWithCounts->pluck('count')->toArray();
 
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#6495ED', '#20B2AA', '#FFA07A', '#808080', '#7FFFD4', '#D3D3D3', '#90CAF9'];
-
-        foreach ($categories as $category) {
-
-            /* $count = Travelodge::where('issue', $category)
-                ->where('created_at', '>=', date('Y-m-d', strtotime('-1 week')))
-                ->count(); */
-            $count = Travelodge::where('issue', $category)->count();
-            array_push($data, $count);
-        }
+        $colors = array_slice($colors, 0, count($categories)); // ตัดสีให้พอดีกับจำนวนหมวดหมู่
 
         $datasets = [
             [
@@ -150,7 +129,6 @@ class ChartController extends Controller
 
         return view('/dashboards/dashboardCategory', compact('datasets', 'categories'));
     }
-
 
     public function HotelChart()
     {
@@ -179,7 +157,6 @@ class ChartController extends Controller
                 'backgroundColor' => $colors
             ]
         ];
-
 
         $hotels = array_values($hotels);
 
