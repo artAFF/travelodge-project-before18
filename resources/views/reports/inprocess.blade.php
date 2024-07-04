@@ -6,36 +6,32 @@
     @if (count($in_process) > 0)
         <div class="container">
             <h1 class="text-center">Report all IT Support Issues in the process</h1><br>
-            <form method="GET" action="/filterDate">
-                <div class="row pb-3">
+            <form id="combinedForm" method="GET">
+                <div class="row pb-3 align-items-end">
                     <div class="col-md-2">
                         <label>Start Date:</label>
                         <input type="date" name="start_date" class="form-control">
                     </div>
-
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label>End Date:</label>
-                        <input type="date" name="end_date" class="form-control">
+                        <div class="input-group">
+                            <input type="date" name="end_date" class="form-control">
+                            <div class="input-group-append">
+                                <button type="button" onclick="submitFilter()" class="btn btn-primary">Filter</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="col-md-1 pt-4">
-                        <button type="submit" class="btn btn-primary ">Filter</button>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control" placeholder="Search"
+                                value="{{ request('query') }}">
+                            <div class="input-group-append">
+                                <button type="button" onclick="submitSearch()" class="btn btn-info">Search</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
-            <div class="col-md-7 pt-4">
-                <form class=" method="GET" action="{{ route('inprocess') }}">
-                    <div class="row pb-3">
-                        <div class="col-md-5">
-                            <input type="text" name="query" class="form-control" placeholder="Search"
-                                value="{{ request('query') }}">
-                        </div>
-                        <div class="col-md">
-                            <button type="submit" class="btn btn-info">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
 
             <table class="table table-striped table-hover ">
                 <thead>

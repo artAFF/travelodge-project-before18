@@ -148,7 +148,7 @@ class UpdateController extends Controller
         ]);
         $data = [
             'location' => $request->location,
-            'ups_battery' => $request->ups_temp,
+            'ups_battery' => $request->ups_battery,
             'ups_time' => $request->ups_time,
             'ups_temp' => $request->ups_temp,
             'updated_at' => $request->updated_at

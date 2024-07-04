@@ -33,9 +33,9 @@ Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDa
 Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
 Route::get('/netspeed/addNetSpeed', [CreateController::class, 'Tlcmn_AddNetSpeed']);
 Route::post('/insertNetSpeed', [CreateController::class, 'Tlcmn_InsertNetSpeed']);
-Route::delete('/deleteNetSpeed/{id}', [DeleteController::class, 'Tlcmn_DeleteNetSpeed'])->name('deleteNetSpeed');
 Route::get('/netspeed/updateNetSpeed/{id}', [UpdateController::class, 'Tlcmn_UpdateReportNetSpeed'])->name('updateNetSpeed');
 Route::post('/updatePNetSpeed/{id}', [UpdateController::class, 'Tlcmn_UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
+Route::delete('/deleteNetSpeed/{id}', [DeleteController::class, 'Tlcmn_DeleteNetSpeed'])->name('deleteNetSpeed');
 
 // Server Room Checking
 Route::get('/server/reportServer', [ReadController::class, 'TableReportServer'])->name("reportServer");
