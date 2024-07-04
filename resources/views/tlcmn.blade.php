@@ -236,7 +236,7 @@
 
 @section('content')
     <div id="report-content">
-        @include('partials.report_guests', ['type' => 'tlcmn'])
+        @include('partials.report_guests')
         @include('partials.report_switchs')
         @include('partials.report_servers')
         @include('partials.report_netspeeds')
@@ -250,7 +250,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    $('#report-content').html(data.ReportGuests);
+                    $('#report-content').append(data.ReportGuests);
                     $('#report-content').append(data.ReportSwitchs);
                     $('#report-content').append(data.ReportServers);
                     $('#report-content').append(data.ReportNetSpeeds);

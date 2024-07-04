@@ -21,23 +21,21 @@
                     <div class="col-md-1 pt-4">
                         <button type="submit" class="btn btn-primary ">Filter</button>
                     </div>
-
-                    <div class="col-md-7 pt-4">
-                        <form class=" method="GET" action="{{ route('inprocess') }}">
-                            <div class="row pb-3">
-                                <div class="col-md-5">
-                                    <input type="text" name="query" class="form-control" placeholder="Search"
-                                        value="{{ request('query') }}">
-                                </div>
-                                <div class="col-md">
-                                    <button type="submit" class="btn btn-info">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                 </div>
-
             </form>
+            <div class="col-md-7 pt-4">
+                <form class=" method="GET" action="{{ route('inprocess') }}">
+                    <div class="row pb-3">
+                        <div class="col-md-5">
+                            <input type="text" name="query" class="form-control" placeholder="Search"
+                                value="{{ request('query') }}">
+                        </div>
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-info">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
             <table class="table table-striped table-hover ">
                 <thead>
