@@ -27,9 +27,8 @@
                         <td>{{ $ReportNetSpeed->created_at }}</td>
                         <td>{{ $ReportNetSpeed->updated_at }}</td>
                         <td>
-                            <a href="{{ route('updateNetSpeed', $ReportNetSpeed->id) }}"
-                                class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i>
-                            </a>
+                            <a href="{{ route('updateNetSpeed', ['type' => $source, 'id' => $ReportNetSpeed->id]) }}"
+                                class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
 
                             <form action="{{ route('deleteNetSpeed', $ReportNetSpeed->id) }}" method="POST"
                                 style="display: inline-block;">

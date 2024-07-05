@@ -187,30 +187,142 @@ class UpdateController extends Controller
         return redirect('/tlcmn');
     }
 
-    function Tlcmn_UpdateReportNetSpeed($id)
+    function UpdateGuest($type, $id)
     {
-        $ReportNetSpeeds = Tlcmn_net::where('id', $id)->first();
+        $model = $this->getModelFromType($type, 'guest');
+        $ReportGuests = $model::where('id', $id)->first();
         $buildings = Building::select('name')->get();
 
-        return view('/netspeed/updateNetSpeed', compact('ReportNetSpeeds', 'buildings'));
+        return view('/guest/updateGuest', compact('ReportGuests', 'buildings', 'type'));
     }
 
-    function Tlcmn_UpdateReportNetSpeedProcess(Request $request, $id)
+    function UpdateGuestProcess(Request $request, $type, $id)
+    {
+        $request->validate([
+            'location' => 'required',
+            'room_no' => 'required',
+            'upload' => 'required',
+            'download' => 'required',
+            'ch_no' => 'required',
+            'ch_name' => 'required'
+        ]);
+
+        $data = [
+            'location' => $request->location,
+            'room_no' => $request->room_no,
+            'upload' => $request->upload,
+            'download' => $request->download,
+            'ch_no' => $request->ch_no,
+            'ch_name' => $request->ch_name,
+            'updated_at' => now()
+        ];
+
+        $model = $this->getModelFromType($type, 'guest');
+        $model::where('id', $id)->update($data);
+        return redirect("/{$type}");
+    }
+
+    function UpdateSwitch($type, $id)
+    {
+        $model = $this->getModelFromType($type, 'switch');
+        $ReportSwitchs = $model::where('id', $id)->first();
+        $buildings = Building::select('name')->get();
+
+        return view('/switchs/updateSwitch', compact('ReportSwitchs', 'buildings', 'type'));
+    }
+
+    function UpdateSwitchProcess(Request $request, $type, $id)
+    {
+        $request->validate([
+            'location' => 'required',
+            'ups_battery' => 'required',
+            'ups_time' => 'required',
+            'ups_temp' => 'required'
+        ]);
+
+        $data = [
+            'location' => $request->location,
+            'ups_battery' => $request->ups_battery,
+            'ups_time' => $request->ups_time,
+            'ups_temp' => $request->ups_temp,
+            'updated_at' => now()
+        ];
+
+        $model = $this->getModelFromType($type, 'switch');
+        $model::where('id', $id)->update($data);
+        return redirect("/{$type}");
+    }
+
+    function UpdateServer($type, $id)
+    {
+        $model = $this->getModelFromType($type, 'server');
+        $ReportServers = $model::where('id', $id)->first();
+
+        return view('/servers/updateServer', compact('ReportServers', 'type'));
+    }
+
+    function UpdateServerProcess(Request $request, $type, $id)
+    {
+        $request->validate([
+            'server_temp' => 'required',
+            'ups_temp' => 'required',
+            'ups_battery' => 'required',
+            'ups_time' => 'required'
+        ]);
+
+        $data = [
+            'server_temp' => $request->server_temp,
+            'ups_temp' => $request->ups_temp,
+            'ups_battery' => $request->ups_battery,
+            'ups_time' => $request->ups_time,
+            'updated_at' => now()
+        ];
+
+        $model = $this->getModelFromType($type, 'server');
+        $model::where('id', $id)->update($data);
+        return redirect("/{$type}");
+    }
+
+    function UpdateReportNetSpeed($type, $id)
+    {
+        $model = $this->getModelFromType($type, 'net');
+        $ReportNetSpeeds = $model::where('id', $id)->first();
+        $buildings = Building::select('name')->get();
+
+        return view('/netspeed/updateNetSpeed', compact('ReportNetSpeeds', 'buildings', 'type'));
+    }
+
+    function UpdateReportNetSpeedProcess(Request $request, $type, $id)
     {
         $request->validate([
             'location' => 'required',
             'upload' => 'required',
             'download' => 'required'
-
         ]);
+
         $data = [
             'location' => $request->location,
             'upload' => $request->upload,
             'download' => $request->download,
-            'updated_at' => $request->updated_at
-
+            'updated_at' => now()
         ];
-        Tlcmn_net::where('id', $id)->update($data);
-        return redirect('/tlcmn');
+
+        $model = $this->getModelFromType($type, 'net');
+        $model::where('id', $id)->update($data);
+        return redirect("/{$type}");
+    }
+
+    private function getModelFromType($type, $modelType)
+    {
+        switch ($type) {
+            case 'tlcmn':
+                return "App\\Models\\Tlcmn_{$modelType}";
+            case 'ehcm':
+                return "App\\Models\\Ehcm_{$modelType}";
+            case 'uncm':
+                return "App\\Models\\Uncm_{$modelType}";
+            default:
+                throw new \Exception("Invalid type");
+        }
     }
 }

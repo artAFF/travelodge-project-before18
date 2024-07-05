@@ -28,9 +28,8 @@
                         <td style="text-center">{{ $ReportServer->created_at }}</td>
                         <td style="text-center">{{ $ReportServer->updated_at }}</td>
                         <td>
-                            <a href="{{ route('updateServer', $ReportServer->id) }}" class="btn btn-primary btn-sm"><i
-                                    class="bi bi-pencil-square"></i>
-                            </a>
+                            <a href="{{ route('updateServer', ['type' => $source, 'id' => $ReportServer->id]) }}"
+                                class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
 
                             <form action="{{ route('deleteServer', $ReportServer->id) }}" method="POST"
                                 style="display: inline-block;">

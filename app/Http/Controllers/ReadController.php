@@ -137,10 +137,10 @@ class ReadController extends Controller
             return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds'));
         } */
 
-        public function TableReportAll(Request $request)
+        public function TableReportAll(Request $request, $type)
         {
-            $prefix = $this->getPrefixFromRequest($request);
-            $source = $this->getSourceFromRequest($request);
+            $prefix = $this->getPrefixFromType($type);
+            $source = $type;
 
             $pageGuests = $request->input('pageGuests', 1);
             $pageSwitchs = $request->input('pageSwitchs', 1);
@@ -161,20 +161,18 @@ class ReadController extends Controller
                 ]);
             }
 
-            // ส่งตัวแปร source ไปยัง Blade view
             return view($source, compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
         }
 
-        private function getPrefixFromRequest(Request $request)
+        private function getPrefixFromType($type)
         {
-            $url = $request->url();
-
-            if (str_contains($url, 'ehcm')) {
-                return 'Ehcm_';
-            } elseif (str_contains($url, 'uncm')) {
-                return 'Uncm_';
-            } else {
-                return 'Tlcmn_';
+            switch ($type) {
+                case 'ehcm':
+                    return 'Ehcm_';
+                case 'uncm':
+                    return 'Uncm_';
+                default:
+                    return 'Tlcmn_';
             }
         }
 

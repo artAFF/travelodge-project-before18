@@ -1,7 +1,7 @@
 @if (count($ReportSwitchs) > 0)
     <div class="container">
         <h1 class="text text-center">All Report Daily Checklist at <b class='text-danger'>Switch Room</b></h1><br>
-        <a href="/addSwitch" class="btn btn-primary">Add Switch Room Check</a>
+        <a href="/switchs/addSwitch" class="btn btn-primary">Add Switch Room Check</a>
         <table class="table table-striped table-hover ">
             <thead>
                 <tr>
@@ -27,9 +27,8 @@
                         <td>{{ $ReportSwitch->created_at }}</td>
                         <td>{{ $ReportSwitch->updated_at }}</td>
                         <td>
-                            <a href="{{ route('updateSwitch', $ReportSwitch->id) }}" class="btn btn-primary btn-sm"><i
-                                    class="bi bi-pencil-square"></i>
-                            </a>
+                            <a href="{{ route('updateSwitch', ['type' => $source, 'id' => $ReportSwitch->id]) }}"
+                                class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
 
                             <form action="{{ route('deleteSwitch', $ReportSwitch->id) }}" method="POST"
                                 style="display: inline-block;">

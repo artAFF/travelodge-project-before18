@@ -33,32 +33,32 @@ Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDa
 Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
 Route::get('/netspeed/addNetSpeed', [CreateController::class, 'Tlcmn_AddNetSpeed']);
 Route::post('/insertNetSpeed', [CreateController::class, 'Tlcmn_InsertNetSpeed']);
-Route::get('/netspeed/updateNetSpeed/{id}', [UpdateController::class, 'Tlcmn_UpdateReportNetSpeed'])->name('updateNetSpeed');
-Route::post('/updatePNetSpeed/{id}', [UpdateController::class, 'Tlcmn_UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
+Route::get('/{type}/updateNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeed'])->name('updateNetSpeed');
+Route::post('/{type}/updatePNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
 Route::delete('/deleteNetSpeed/{id}', [DeleteController::class, 'Tlcmn_DeleteNetSpeed'])->name('deleteNetSpeed');
 
 // Server Room Checking
 Route::get('/server/reportServer', [ReadController::class, 'TableReportServer'])->name("reportServer");
 Route::get('/server/addServer', [CreateController::class, 'Tlcmn_AddServer'])->name('addServer');
 Route::post('/insertServer', [CreateController::class, 'Tlcmn_InsertServer']);
-Route::get('/server/updateServer/{id}', [UpdateController::class, 'Tlcmn_UpdateServer'])->name('updateServer');
-Route::post('/updatePServer/{id}', [UpdateController::class, 'Tlcmn_UpdateServerProcess'])->name('updatePserver');
+Route::get('/{type}/updateServer/{id}', [UpdateController::class, 'UpdateServer'])->name('updateServer');
+Route::post('/{type}/updatePServer/{id}', [UpdateController::class, 'UpdateServerProcess'])->name('updatePserver');
 Route::delete('/deleteServer/{id}', [DeleteController::class, 'Tlcmn_DeleteServer'])->name('deleteServer');
 
 // Switch Room Checking
 Route::get('/switchs/reportSwitch', [ReadController::class, 'TableReportSwitch'])->name("reportSwitch");
 Route::get('/switchs/addSwitch', [CreateController::class, 'Tlcmn_AddSwitch'])->name('addSwitch');
 Route::post('/insertSwitch', [CreateController::class, 'Tlcmn_InsertSwitch']);
-Route::get('/switchs/updateSwitch/{id}', [UpdateController::class, 'Tlcmn_UpdateSwitch'])->name('updateSwitch');
-Route::post('/updatePSwitch/{id}', [UpdateController::class, 'Tlcmn_UpdateSwitchProcess'])->name('updatePSwitch');
+Route::get('/{type}/updateSwitch/{id}', [UpdateController::class, 'UpdateSwitch'])->name('updateSwitch');
+Route::post('/{type}/updatePSwitch/{id}', [UpdateController::class, 'UpdateSwitchProcess'])->name('updatePSwitch');
 Route::delete('/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
 
 // Guest Room Checking
 Route::get('/guest/reportGuest', [ReadController::class, 'TableReportGuest'])->name("reportGuest");
 Route::get('/guest/addGuest', [CreateController::class, 'Tlcmn_AddGuest'])->name('addGuest');
 Route::post('/insertGuest', [CreateController::class, 'Tlcmn_InsertGuest']);
-Route::get('/guest/updateGuest/{id}', [UpdateController::class, 'Tlcmn_UpdateGuest'])->name('updateGuest');
-Route::post('/updatePGuest/{id}', [UpdateController::class, 'Tlcmn_UpdateGuestProcess'])->name('updatePguest');
+Route::get('/{type}/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])->name('updateGuest');
+Route::post('/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
 Route::delete('/deleteGuest/{id}', [DeleteController::class, 'Tlcmn_DeleteGuest'])->name('deleteGuest');
 
 // Home page s
@@ -77,9 +77,7 @@ Route::get('/dashboards/dashboardCategory', [ChartController::class, 'CategoryCh
 Route::get('/dashboards/dashboardHotel', [ChartController::class, 'HotelChart'])->name('dashboardHotel');
 Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
 
-Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
-Route::get('/ehcm', [ReadController::class, 'TableReportAll'])->name('TableReportAll');;
-Route::get('/uncm', [ReadController::class, 'TableReportAll'])->name('TableReportAll');;
+Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
 // routes/web.php
 /* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
 

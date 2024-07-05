@@ -32,8 +32,8 @@
                            <td>{{ $ReportGuest->created_at }}</td>
                            <td>{{ $ReportGuest->updated_at }}</td>
                            <td>
-                               <a href="{{ route('updateGuest', $ReportGuest->id) }}" class="btn btn-primary btn-sm"><i
-                                       class="bi bi-pencil-square"></i></a>
+                               <a href="{{ route('updateGuest', ['type' => $source, 'id' => $ReportGuest->id]) }}"
+                                   class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
 
                                <form action="{{ route('deleteGuest', $ReportGuest->id) }}" method="POST"
                                    style="display: inline-block;">

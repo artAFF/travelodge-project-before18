@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="container">
-        <form action="{{ route('updatePNetSpeed', $ReportNetSpeeds->id) }}" method="POST">
+        <form action="{{ route('updatePNetSpeed', ['type' => $type, 'id' => $ReportNetSpeeds->id]) }}" method="POST">
             @csrf
 
             <div class="mb-3">
@@ -41,7 +41,7 @@
             @enderror
 
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="/tlcmn" class="btn btn-secondary">Cancel</a>
+            <a href="/{{ $type }}" class="btn btn-secondary">Cancel</a>
 
         </form>
     </div>
