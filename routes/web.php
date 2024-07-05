@@ -84,6 +84,7 @@ Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableRep
 Route::get('/filter', [PdfController::class, 'showFilterForm'])->name('filter.form');
 Route::post('/filter', [PdfController::class, 'filterData'])->name('filter.data');
 Route::get('/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
+Route::get('/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
 
 
 Route::get('/login', function () {

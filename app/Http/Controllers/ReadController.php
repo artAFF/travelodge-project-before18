@@ -189,6 +189,12 @@ class ReadController extends Controller
             }
         }
 
+        public function preview($id)
+        {
+        $report = Travelodge::findOrFail($id);
+        return view('preview-issue', compact('report'));
+        }
+
     public function inprocess(Request $request)
     {
         $query = $request->input('query');
