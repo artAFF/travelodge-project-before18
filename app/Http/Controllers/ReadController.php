@@ -114,28 +114,28 @@ class ReadController extends Controller
     } */
 
     /* public function TableReportAll(Request $request)
-        {
-            $pageGuests = $request->input('pageGuests', 1);
-            $pageSwitchs = $request->input('pageSwitchs', 1);
-            $pageServers = $request->input('pageServers', 1);
-            $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
+    {
+        $pageGuests = $request->input('pageGuests', 1);
+        $pageSwitchs = $request->input('pageSwitchs', 1);
+        $pageServers = $request->input('pageServers', 1);
+        $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
 
-            $ReportGuests = Tlcmn_guest::orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
-            $ReportSwitchs = Tlcmn_switch::orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
-            $ReportServers = Tlcmn_server::orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
-            $ReportNetSpeeds = Tlcmn_net::orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
+        $ReportGuests = Tlcmn_guest::orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
+        $ReportSwitchs = Tlcmn_switch::orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
+        $ReportServers = Tlcmn_server::orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
+        $ReportNetSpeeds = Tlcmn_net::orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'ReportGuests' => view('partials.report_guests', compact('ReportGuests'))->render(),
-                    'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs'))->render(),
-                    'ReportServers' => view('partials.report_servers', compact('ReportServers'))->render(),
-                    'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds'))->render(),
-                ]);
-            }
+        if ($request->ajax()) {
+            return response()->json([
+                'ReportGuests' => view('partials.report_guests', compact('ReportGuests'))->render(),
+                'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs'))->render(),
+                'ReportServers' => view('partials.report_servers', compact('ReportServers'))->render(),
+                'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds'))->render(),
+            ]);
+        }
 
-            return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds'));
-        } */
+        return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds'));
+    } */
 
         public function TableReportAll(Request $request, $type)
         {

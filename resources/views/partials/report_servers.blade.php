@@ -8,8 +8,8 @@
                     <th scope="col">#</th>
                     <th scope="col" class="col-md-1">Server Temperature</th>
                     <th scope="col"class="col-md-1">UPS Temperature</th>
-                    <th scope="col"class="col-md-2">USP Battery Percentage</th>
-                    <th scope="col"class="col-md-2">UPS Period Of Service Available</th>
+                    <th scope="col"class="col-md-2">USP Battery {{-- Percentage --}}</th>
+                    <th scope="col"class="col-md-2">UPS Period Of Service {{-- Available --}}</th>
                     <th scope="col"class="col-md-2">Created Time</th>
                     <th scope="col"class="col-md-2">Updated time</th>
                     <th scope="col">Action
