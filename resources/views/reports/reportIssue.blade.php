@@ -142,7 +142,7 @@
             document.querySelectorAll('.preview-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     let reportId = this.getAttribute('data-id');
-                    fetch(`/preview-issue/${reportId}`)
+                    fetch(`/reports/preview-issue/${reportId}`)
                         .then(response => response.text())
                         .then(data => {
                             document.getElementById('previewContent').innerHTML = data;

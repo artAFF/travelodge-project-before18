@@ -65,7 +65,7 @@ class PdfController extends Controller
         $departments = Department::all();
         $hotels = ['TLCMN', 'EHCM', 'UNCM'];
 
-        return view('filter-form', compact('categories', 'departments', 'hotels'));
+        return view('/filter/filter-form', compact('categories', 'departments', 'hotels'));
     }
 
     public function filterData(Request $request)
@@ -94,14 +94,14 @@ class PdfController extends Controller
 
         $issues = $query->get();
 
-        return view('filtered-data', compact('issues'));
+        return view('/filter/filtered-data', compact('issues'));
     }
 
     public function downloadPDF(Request $request)
     {
      $issues = json_decode($request->issues, true);
 
-        $pdf = FacadePdf::loadView('pdf-report', compact('issues'));
+        $pdf = FacadePdf::loadView('/filter/pdf-report', compact('issues'));
 
         return $pdf->download('report.pdf');
     }

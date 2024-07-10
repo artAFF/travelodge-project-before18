@@ -81,10 +81,10 @@ Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableRep
 // routes/web.php
 /* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
 
-Route::get('/filter', [PdfController::class, 'showFilterForm'])->name('filter.form');
-Route::post('/filter', [PdfController::class, 'filterData'])->name('filter.data');
-Route::get('/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
-Route::get('/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
+Route::get('/filter/filter-form', [PdfController::class, 'showFilterForm'])->name('filter.form');
+Route::post('/filter/filter-data', [PdfController::class, 'filterData'])->name('filter.data');
+Route::get('/filter/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
+Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
 
 
 Route::get('/login', function () {

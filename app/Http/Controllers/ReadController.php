@@ -44,25 +44,25 @@ class ReadController extends Controller
     } */
 
     public function TableReportIssue(Request $request)
-{
-    $query = $request->input('query');
-    $sort_by = $request->input('sort_by', 'id');
-    $sort_order = $request->input('sort_order', 'desc');
+    {
+        $query = $request->input('query');
+        $sort_by = $request->input('sort_by', 'id');
+        $sort_order = $request->input('sort_order', 'desc');
 
-    $ReportIssues = Travelodge::query()
-        ->when($query, function ($q) use ($query) {
-            $q->where('issue', 'like', "%{$query}%")
-                ->orWhere('detail', 'like', "%{$query}%")
-                ->orWhere('department', 'like', "%{$query}%")
-                ->orWhere('hotel', 'like', "%{$query}%")
-                ->orWhere('location', 'like', "%{$query}%");
-        })
-        ->orderBy($sort_by, $sort_order)
-        ->paginate(10)
-        ->appends(['query' => $query, 'sort_by' => $sort_by, 'sort_order' => $sort_order]);
+        $ReportIssues = Travelodge::query()
+            ->when($query, function ($q) use ($query) {
+                $q->where('issue', 'like', "%{$query}%")
+                    ->orWhere('detail', 'like', "%{$query}%")
+                    ->orWhere('department', 'like', "%{$query}%")
+                    ->orWhere('hotel', 'like', "%{$query}%")
+                    ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->orderBy($sort_by, $sort_order)
+            ->paginate(10)
+            ->appends(['query' => $query, 'sort_by' => $sort_by, 'sort_order' => $sort_order]);
 
-    return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order'));
-}
+        return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order'));
+    }
 
 
     /*
@@ -137,63 +137,63 @@ class ReadController extends Controller
         return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds'));
     } */
 
-        public function TableReportAll(Request $request, $type)
-        {
-            $prefix = $this->getPrefixFromType($type);
-            $source = $type;
+    public function TableReportAll(Request $request, $type)
+    {
+        $prefix = $this->getPrefixFromType($type);
+        $source = $type;
 
-            $pageGuests = $request->input('pageGuests', 1);
-            $pageSwitchs = $request->input('pageSwitchs', 1);
-            $pageServers = $request->input('pageServers', 1);
-            $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
+        $pageGuests = $request->input('pageGuests', 1);
+        $pageSwitchs = $request->input('pageSwitchs', 1);
+        $pageServers = $request->input('pageServers', 1);
+        $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
 
-            $ReportGuests = DB::table("{$prefix}guests")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
-            $ReportSwitchs = DB::table("{$prefix}switches")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
-            $ReportServers = DB::table("{$prefix}servers")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
-            $ReportNetSpeeds = DB::table("{$prefix}nets")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
+        $ReportGuests = DB::table("{$prefix}guests")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
+        $ReportSwitchs = DB::table("{$prefix}switches")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
+        $ReportServers = DB::table("{$prefix}servers")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
+        $ReportNetSpeeds = DB::table("{$prefix}nets")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'ReportGuests' => view('partials.report_guests', compact('ReportGuests', 'source'))->render(),
-                    'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs', 'source'))->render(),
-                    'ReportServers' => view('partials.report_servers', compact('ReportServers', 'source'))->render(),
-                    'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds', 'source'))->render(),
-                ]);
-            }
-
-            return view($source, compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
+        if ($request->ajax()) {
+            return response()->json([
+                'ReportGuests' => view('partials.report_guests', compact('ReportGuests', 'source'))->render(),
+                'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs', 'source'))->render(),
+                'ReportServers' => view('partials.report_servers', compact('ReportServers', 'source'))->render(),
+                'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds', 'source'))->render(),
+            ]);
         }
 
-        private function getPrefixFromType($type)
-        {
-            switch ($type) {
-                case 'ehcm':
-                    return 'Ehcm_';
-                case 'uncm':
-                    return 'Uncm_';
-                default:
-                    return 'Tlcmn_';
-            }
+        return view($source, compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
+    }
+
+    private function getPrefixFromType($type)
+    {
+        switch ($type) {
+            case 'ehcm':
+                return 'Ehcm_';
+            case 'uncm':
+                return 'Uncm_';
+            default:
+                return 'Tlcmn_';
         }
+    }
 
-        private function getSourceFromRequest(Request $request)
-        {
-            $url = $request->url();
+    private function getSourceFromRequest(Request $request)
+    {
+        $url = $request->url();
 
-            if (str_contains($url, 'ehcm')) {
-                return 'ehcm';
-            } elseif (str_contains($url, 'uncm')) {
-                return 'uncm';
-            } else {
-                return 'tlcmn';
-            }
+        if (str_contains($url, 'ehcm')) {
+            return 'ehcm';
+        } elseif (str_contains($url, 'uncm')) {
+            return 'uncm';
+        } else {
+            return 'tlcmn';
         }
+    }
 
-        public function preview($id)
-        {
+    public function preview($id)
+    {
         $report = Travelodge::findOrFail($id);
-        return view('preview-issue', compact('report'));
-        }
+        return view('/reports/preview-issue', compact('report'));
+    }
 
     public function inprocess(Request $request)
     {
@@ -267,7 +267,7 @@ class ReadController extends Controller
         return view('/home/main', ['departments' => $departments, 'departmentLinks' => $departmentLinks, 'allTotals' => $allTotals]);
     }
 
-        /*  public function itsup_status()
+    /*  public function itsup_status()
 
         {
 
@@ -286,5 +286,4 @@ class ReadController extends Controller
 
         return view('home.itsup_status', compact('itsup_statuses', 'department'));
     }
-
 }
