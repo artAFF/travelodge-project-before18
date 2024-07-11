@@ -2,7 +2,7 @@
 @section('title', 'Add Report')
 
 @section('content')
-    <form action="/insertIssue" method="POST" id="issueForm">
+    <form action="/insertIssue" method="POST" id="issueForm" enctype="multipart/form-data">
         @csrf
         <div id="issueFormsContainer">
             <div class="issue-form">
@@ -74,6 +74,12 @@
                         <option value="1">Done</option>
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <label for="file" class="form-label">Upload File (PDF or Image)</label>
+                    <input type="file" class="form-control" id="file" name="issues[0][file]"
+                        accept=".pdf,.jpg,.jpeg,.png">
+                </div>
                 <br>
                 <hr>
                 <br>
@@ -97,7 +103,11 @@
                 if (name) {
                     input.setAttribute('name', name.replace(/\[\d+\]/, `[${issueIndex}]`));
                 }
-                input.value = '';
+                if (input.type !== 'file') {
+                    input.value = '';
+                } else {
+                    input.value = null;
+                }
             });
 
             issueFormsContainer.appendChild(newIssueForm);

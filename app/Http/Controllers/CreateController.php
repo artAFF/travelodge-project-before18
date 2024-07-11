@@ -45,11 +45,12 @@ class CreateController extends Controller
         $request->validate([
             'issues.*.issue' => 'required',
             'issues.*.detail' => 'required',
+            'issues.*.file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
         $issues = $request->input('issues');
 
-        foreach ($issues as $issueData) {
+        foreach ($issues as $index => $issueData) {
             $data = [
                 'issue' => $issueData['issue'],
                 'detail' => $issueData['detail'],
@@ -59,6 +60,13 @@ class CreateController extends Controller
                 'status' => $issueData['status'],
                 'created_at' => now()
             ];
+
+            if ($request->hasFile("issues.{$index}.file")) {
+                $file = $request->file("issues.{$index}.file");
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads', $filename, 'public');
+                $data['file_path'] = $filePath;
+            }
 
             Travelodge::insert($data);
 
@@ -173,62 +181,62 @@ class CreateController extends Controller
     }
 
     public function Tlcmn_InsertSwitch(Request $request)
-{
-    $request->validate([
-        'ups_battery' => 'required',
-        'ups_time' => 'required',
-        'ups_temp' => 'required'
-    ]);
+    {
+        $request->validate([
+            'ups_battery' => 'required',
+            'ups_time' => 'required',
+            'ups_temp' => 'required'
+        ]);
 
-    $hotel = $request->input('hotel');
+        $hotel = $request->input('hotel');
 
-    switch ($hotel) {
-        case 'tlcmn':
-            $request->validate([
-                'location1' => 'required'
-            ]);
-            $data = [
-                'location' => $request->input('location1'),
-                'ups_battery' => $request->ups_battery,
-                'ups_time' => $request->ups_time,
-                'ups_temp' => $request->ups_temp,
-                'created_at' => now()
-            ];
-            Tlcmn_switch::insert($data);
-            return redirect('/tlcmn');
-            break;
-        case 'ehcm':
-            $request->validate([
-                'location2' => 'required'
-            ]);
-            $data = [
-                'location' => $request->input('location2'),
-                'ups_battery' => $request->ups_battery,
-                'ups_time' => $request->ups_time,
-                'ups_temp' => $request->ups_temp,
-                'created_at' => now()
-            ];
-            Ehcm_switch::insert($data);
-            return redirect('/ehcm');
-            break;
-        case 'uncm':
-            $request->validate([
-                'location2' => 'required'
-            ]);
-            $data = [
-                'location' => $request->input('location2'),
-                'ups_battery' => $request->ups_battery,
-                'ups_time' => $request->ups_time,
-                'ups_temp' => $request->ups_temp,
-                'created_at' => now()
-            ];
-            Uncm_switch::insert($data);
-            return redirect('/uncm');
-            break;
-        default:
-            return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
+        switch ($hotel) {
+            case 'tlcmn':
+                $request->validate([
+                    'location1' => 'required'
+                ]);
+                $data = [
+                    'location' => $request->input('location1'),
+                    'ups_battery' => $request->ups_battery,
+                    'ups_time' => $request->ups_time,
+                    'ups_temp' => $request->ups_temp,
+                    'created_at' => now()
+                ];
+                Tlcmn_switch::insert($data);
+                return redirect('/tlcmn');
+                break;
+            case 'ehcm':
+                $request->validate([
+                    'location2' => 'required'
+                ]);
+                $data = [
+                    'location' => $request->input('location2'),
+                    'ups_battery' => $request->ups_battery,
+                    'ups_time' => $request->ups_time,
+                    'ups_temp' => $request->ups_temp,
+                    'created_at' => now()
+                ];
+                Ehcm_switch::insert($data);
+                return redirect('/ehcm');
+                break;
+            case 'uncm':
+                $request->validate([
+                    'location2' => 'required'
+                ]);
+                $data = [
+                    'location' => $request->input('location2'),
+                    'ups_battery' => $request->ups_battery,
+                    'ups_time' => $request->ups_time,
+                    'ups_temp' => $request->ups_temp,
+                    'created_at' => now()
+                ];
+                Uncm_switch::insert($data);
+                return redirect('/uncm');
+                break;
+            default:
+                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
+        }
     }
-}
 
     function Tlcmn_AddServer()
     {
@@ -293,56 +301,56 @@ class CreateController extends Controller
     }
 
     public function Tlcmn_InsertNetSpeed(Request $request)
-{
-    $request->validate([
-        'upload' => 'required',
-        'download' => 'required'
-    ]);
+    {
+        $request->validate([
+            'upload' => 'required',
+            'download' => 'required'
+        ]);
 
-    $hotel = $request->input('hotel');
+        $hotel = $request->input('hotel');
 
-    switch ($hotel) {
-        case 'tlcmn':
-            $request->validate([
-                'location1' => 'required'
-            ]);
-            $data = [
-                'location' => $request->input('location1'),
-                'upload' => $request->upload,
-                'download' => $request->download,
-                'created_at' => now()
-            ];
-            Tlcmn_net::insert($data);
-            return redirect('/tlcmn');
-            break;
-        case 'ehcm':
-            $request->validate([
-                'location2' => 'required'
-            ]);
-            $data = [
-                'location' => $request->input('location2'),
-                'upload' => $request->upload,
-                'download' => $request->download,
-                'created_at' => now()
-            ];
-            Ehcm_net::insert($data);
-            return redirect('/ehcm');
-            break;
-        case 'uncm':
-            $request->validate([
-                'location2' => 'required'
-            ]);
-            $data = [
-                'location' => $request->input('location2'),
-                'upload' => $request->upload,
-                'download' => $request->download,
-                'created_at' => now()
-            ];
-            Uncm_net::insert($data);
-            return redirect('/uncm');
-            break;
-        default:
-            return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
+        switch ($hotel) {
+            case 'tlcmn':
+                $request->validate([
+                    'location1' => 'required'
+                ]);
+                $data = [
+                    'location' => $request->input('location1'),
+                    'upload' => $request->upload,
+                    'download' => $request->download,
+                    'created_at' => now()
+                ];
+                Tlcmn_net::insert($data);
+                return redirect('/tlcmn');
+                break;
+            case 'ehcm':
+                $request->validate([
+                    'location2' => 'required'
+                ]);
+                $data = [
+                    'location' => $request->input('location2'),
+                    'upload' => $request->upload,
+                    'download' => $request->download,
+                    'created_at' => now()
+                ];
+                Ehcm_net::insert($data);
+                return redirect('/ehcm');
+                break;
+            case 'uncm':
+                $request->validate([
+                    'location2' => 'required'
+                ]);
+                $data = [
+                    'location' => $request->input('location2'),
+                    'upload' => $request->upload,
+                    'download' => $request->download,
+                    'created_at' => now()
+                ];
+                Uncm_net::insert($data);
+                return redirect('/uncm');
+                break;
+            default:
+                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
+        }
     }
-}
 }
