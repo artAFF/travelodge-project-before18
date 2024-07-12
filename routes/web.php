@@ -70,11 +70,11 @@ Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_sta
 Route::get('/home/admin_status', [ReadController::class, 'admin_status']);
 
 // Dasboard
-Route::get('/dashboards/dashboardMonth', [ChartController::class, 'MonthChart'])->name('dashboardMonth');
-Route::get('/dashboards/dashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('dashboardDepartment');
-Route::get('/dashboards/dashboardWeek', [ChartController::class, 'WeekChart'])->name('dashboardWeek');
-Route::get('/dashboards/dashboardCategory', [ChartController::class, 'CategoryChart'])->name('dashboardCategory');
-Route::get('/dashboards/dashboardHotel', [ChartController::class, 'HotelChart'])->name('dashboardHotel');
+Route::get('/dashboards/dashboardMonth', [ChartController::class, 'MonthChart'])->name('month.chart');
+Route::get('/dashboards/dashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
+Route::get('/dashboards/dashboardWeek', [ChartController::class, 'WeekChart'])->name('week.chart');
+Route::get('/dashboards/dashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
+Route::get('/dashboards/dashboardHotel', [ChartController::class, 'HotelChart'])->name('hotel.chart');
 Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
 
 Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
