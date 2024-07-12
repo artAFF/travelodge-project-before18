@@ -14,7 +14,7 @@
     </div>
 
     <div>
-        <canvas id='chart' style="width:900px; margin: auto;"></canvas>
+        <canvas id='chart' style="width:600px; margin: auto;"></canvas>
     </div>
 
     <script>
