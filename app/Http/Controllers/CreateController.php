@@ -102,13 +102,13 @@ class CreateController extends Controller
     }
 
 
-    function Tlcmn_AddGuest()
+    function AddGuest()
     {
         $buildings = Building::select('name')->get();
         return view('/guest/addGuest', compact('buildings'));
     }
 
-    public function Tlcmn_InsertGuest(Request $request)
+    public function InsertGuest(Request $request)
     {
         $request->validate([
             'room_no' => 'required',
@@ -174,13 +174,13 @@ class CreateController extends Controller
         }
     }
 
-    function Tlcmn_AddSwitch()
+    function AddSwitch()
     {
         $buildings = Building::select('name')->get();
         return view('/switchs/addSwitch', compact('buildings'));
     }
 
-    public function Tlcmn_InsertSwitch(Request $request)
+    public function InsertSwitch(Request $request)
     {
         $request->validate([
             'ups_battery' => 'required',
@@ -238,12 +238,12 @@ class CreateController extends Controller
         }
     }
 
-    function Tlcmn_AddServer()
+    function AddServer()
     {
         return view('/servers/addServer');
     }
 
-    public function Tlcmn_InsertServer(Request $request)
+    public function InsertServer(Request $request)
     {
         $request->validate([
             'server_temp' => 'required|numeric',
@@ -294,13 +294,13 @@ class CreateController extends Controller
     }
 
 
-    function Tlcmn_AddNetSpeed()
+    function AddNetSpeed()
     {
         $buildings = Building::select('name')->get();
         return view('/netspeed/addNetSpeed', compact('buildings'));
     }
 
-    public function Tlcmn_InsertNetSpeed(Request $request)
+    public function InsertNetSpeed(Request $request)
     {
         $request->validate([
             'upload' => 'required',

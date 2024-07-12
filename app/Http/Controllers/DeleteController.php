@@ -22,35 +22,14 @@ class DeleteController extends Controller
         $this->middleware('auth');
     } */
 
-    function DeleteIssue($id)
+    /*     function DeleteIssue($id)
+
     {
         Travelodge::where('id', $id)->delete();
-
-
         return redirect('/reports/reportIssue');
     }
 
-    function DeleteItem($type, $modelType, $id)
-    {
-        $model = $this->getModelFromType($type, $modelType);
-        $model::where('id', $id)->delete();
-        return redirect("/{$type}");
-    }
-
-    private function getModelFromType($type, $modelType)
-    {
-        switch ($type) {
-            case 'tlcmn':
-                return "App\\Models\\Tlcmn_{$modelType}";
-            case 'ehcm':
-                return "App\\Models\\Ehcm_{$modelType}";
-            case 'uncm':
-                return "App\\Models\\Uncm_{$modelType}";
-            default:
-                throw new \Exception("Invalid type");
-        }
-    }
-    /*     function Tlcmn_DeleteGuest($id)
+    function Tlcmn_DeleteGuest($id)
     {
         Tlcmn_guest::where('id', $id)->delete();
         return redirect('/guest/reportGuest');

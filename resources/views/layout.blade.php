@@ -76,33 +76,28 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('dashboardWeek') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue
-                                            By Weeks</span>
+                                    <a href="{{ route('week.chart') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Issue By Weeks</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('dashboardMonth') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue
-                                            By Months</span>
+                                    <a href="{{ route('month.chart') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Issue By Months</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('dashboardDepartment') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By
-                                            Departments</span>
+                                    <a href="{{ route('department.chart') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Issue By Departments</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('dashboardCategory') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By
-                                            Categories</span>
+                                    <a href="{{ route('category.chart') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Issue By Categories</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('dashboardHotel') }}" class="nav-link px-0">
-                                        </i> <span class="d-none d-sm-inline px-3">Issue By
-                                            Hotels</span>
+                                    <a href="{{ route('hotel.chart') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Issue By Hotels</span>
                                     </a>
                                 </li>
                             </ul>
@@ -115,7 +110,8 @@
                         </li>
                         <li class="nav-item main-menu-item">
                             <a href="{{ route('filter.form') }}" class="nav-link px-0 align-middle">
-                                <i class="bi bi-funnel"></i> <span class="ms-1 d-none d-sm-inline">Filter PDF</span>
+                                <i class="bi bi-funnel"></i> <span class="ms-1 d-none d-sm-inline">Filter Report
+                                    PDF</span>
                             </a>
                         </li>
                         <li class="main-menu-item">

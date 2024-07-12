@@ -31,32 +31,32 @@ Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDa
 
 // Internet Speed Checking
 Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
-Route::get('/netspeed/addNetSpeed', [CreateController::class, 'Tlcmn_AddNetSpeed']);
-Route::post('/insertNetSpeed', [CreateController::class, 'Tlcmn_InsertNetSpeed']);
+Route::get('/netspeed/addNetSpeed', [CreateController::class, 'AddNetSpeed']);
+Route::post('/insertNetSpeed', [CreateController::class, 'InsertNetSpeed']);
 Route::get('/{type}/updateNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeed'])->name('updateNetSpeed');
 Route::post('/{type}/updatePNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
 Route::delete('/deleteNetSpeed/{id}', [DeleteController::class, 'Tlcmn_DeleteNetSpeed'])->name('deleteNetSpeed');
 
 // Server Room Checking
 Route::get('/server/reportServer', [ReadController::class, 'TableReportServer'])->name("reportServer");
-Route::get('/server/addServer', [CreateController::class, 'Tlcmn_AddServer'])->name('addServer');
-Route::post('/insertServer', [CreateController::class, 'Tlcmn_InsertServer']);
+Route::get('/server/addServer', [CreateController::class, 'AddServer'])->name('addServer');
+Route::post('/insertServer', [CreateController::class, 'InsertServer']);
 Route::get('/{type}/updateServer/{id}', [UpdateController::class, 'UpdateServer'])->name('updateServer');
 Route::post('/{type}/updatePServer/{id}', [UpdateController::class, 'UpdateServerProcess'])->name('updatePserver');
 Route::delete('/deleteServer/{id}', [DeleteController::class, 'Tlcmn_DeleteServer'])->name('deleteServer');
 
 // Switch Room Checking
 Route::get('/switchs/reportSwitch', [ReadController::class, 'TableReportSwitch'])->name("reportSwitch");
-Route::get('/switchs/addSwitch', [CreateController::class, 'Tlcmn_AddSwitch'])->name('addSwitch');
-Route::post('/insertSwitch', [CreateController::class, 'Tlcmn_InsertSwitch']);
+Route::get('/switchs/addSwitch', [CreateController::class, 'AddSwitch'])->name('addSwitch');
+Route::post('/insertSwitch', [CreateController::class, 'InsertSwitch']);
 Route::get('/{type}/updateSwitch/{id}', [UpdateController::class, 'UpdateSwitch'])->name('updateSwitch');
 Route::post('/{type}/updatePSwitch/{id}', [UpdateController::class, 'UpdateSwitchProcess'])->name('updatePSwitch');
-Route::delete('/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
+Route::delete('/deleteSwitch/{id}', [DeleteController::class, 'Tlcmn_DeleteSwitch'])->name('deleteSwitch');
 
 // Guest Room Checking
 Route::get('/guest/reportGuest', [ReadController::class, 'TableReportGuest'])->name("reportGuest");
-Route::get('/guest/addGuest', [CreateController::class, 'Tlcmn_AddGuest'])->name('addGuest');
-Route::post('/insertGuest', [CreateController::class, 'Tlcmn_InsertGuest']);
+Route::get('/guest/addGuest', [CreateController::class, 'AddGuest'])->name('addGuest');
+Route::post('/insertGuest', [CreateController::class, 'InsertGuest']);
 Route::get('/{type}/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])->name('updateGuest');
 Route::post('/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
 Route::delete('/deleteGuest/{id}', [DeleteController::class, 'Tlcmn_DeleteGuest'])->name('deleteGuest');
