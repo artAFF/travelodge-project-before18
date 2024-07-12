@@ -22,34 +22,82 @@ class DeleteController extends Controller
         $this->middleware('auth');
     } */
 
-    /*     function DeleteIssue($id)
+    function DeleteIssue($id)
 
     {
         Travelodge::where('id', $id)->delete();
         return redirect('/reports/reportIssue');
     }
 
-    function Tlcmn_DeleteGuest($id)
+    function DeleteGuest($type, $id)
     {
-        Tlcmn_guest::where('id', $id)->delete();
-        return redirect('/guest/reportGuest');
+        $model = $this->getPrefixFromType($type, 'guest');
+        /* $model = "{$prefix}guest"; */
+        $model::where('id', $id)->delete();
+        return redirect("/{$type}");
     }
 
-    function Tlcmn_DeleteSwitch($id)
+    function DeleteSwitch($type, $id)
     {
-        Tlcmn_switch::where('id', $id)->delete();
-        return redirect('/switchs/reportSwitch');
+        $model = $this->getPrefixFromType($type, 'switch');
+        /* $model = "{$prefix}switch"; */
+        $model::where('id', $id)->delete();
+        return redirect("/{$type}");
     }
 
-    function Tlcmn_DeleteServer($id)
+    function DeleteServer($type, $id)
     {
-        Tlcmn_server::where('id', $id)->delete();
-        return redirect('/server/reportServer');
+        $model = $this->getPrefixFromType($type, 'server');
+        /* $model = "{$prefix}server"; */
+        $model::where('id', $id)->delete();
+        return redirect("/{$type}");
     }
 
-    function Tlcmn_DeleteNetSpeed($id)
+    function DeleteNetSpeed($type, $id)
     {
-        Tlcmn_net::where('id', $id)->delete();
-        return redirect('/netspeed/reportNet');
-    } */
+        $model = $this->getPrefixFromType($type, 'net');
+        /* $model = "{$prefix}net"; */
+        $model::where('id', $id)->delete();
+        return redirect("/{$type}");
+    }
+
+    private function getPrefixFromType($type, $modelType)
+    {
+        switch ($type) {
+            case 'tlcmn':
+                return "App\\Models\\Tlcmn_{$modelType}";
+            case 'ehcm':
+                return "App\\Models\\Ehcm_{$modelType}";
+            case 'uncm':
+                return "App\\Models\\Uncm_{$modelType}";
+            default:
+                throw new \Exception("Invalid type");
+        }
+    }
+
+    /*
+        function Tlcmn_DeleteGuest($id)
+        {
+            Tlcmn_guest::where('id', $id)->delete();
+            return redirect('/guest/reportGuest');
+        }
+
+        function Tlcmn_DeleteSwitch($id)
+        {
+            Tlcmn_switch::where('id', $id)->delete();
+            return redirect('/switchs/reportSwitch');
+        }
+
+        function Tlcmn_DeleteServer($id)
+        {
+            Tlcmn_server::where('id', $id)->delete();
+            return redirect('/server/reportServer');
+        }
+
+        function Tlcmn_DeleteNetSpeed($id)
+        {
+            Tlcmn_net::where('id', $id)->delete();
+            return redirect('/netspeed/reportNet');
+        }
+    */
 }
