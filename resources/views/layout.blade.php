@@ -122,6 +122,11 @@
                             </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                                 <li class="w-100">
+                                    <a href="/daily/search" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Search</span>
+                                    </a>
+                                </li>
+                                <li class="w-100">
                                     <a href="/tlcmn" class="nav-link px-0">
                                         <span class="d-none d-sm-inline px-3">TLCMN</span>
                                     </a>

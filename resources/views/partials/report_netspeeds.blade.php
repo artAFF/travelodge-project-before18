@@ -24,8 +24,8 @@
                         <td>{{ $ReportNetSpeed->location }}</td>
                         <td>{{ $ReportNetSpeed->download }}</td>
                         <td>{{ $ReportNetSpeed->upload }}</td>
-                        <td>{{ $ReportNetSpeed->created_at }}</td>
-                        <td>{{ $ReportNetSpeed->updated_at }}</td>
+                        <td>{{ \Carbon\Carbon::parse($ReportNetSpeed->created_at)->format('d/m/Y H:i:s') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($ReportNetSpeed->updated_at)->format('d/m/Y H:i:s') }}</td>
                         <td>
                             <a href="{{ route('updateNetSpeed', ['type' => $source, 'id' => $ReportNetSpeed->id]) }}"
                                 class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>

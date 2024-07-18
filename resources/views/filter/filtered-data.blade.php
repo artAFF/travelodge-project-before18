@@ -28,8 +28,8 @@
                         <td>{{ $issue->hotel }}</td>
                         <td>{{ $issue->location }}</td>
                         <td>{{ $issue->status == 0 ? 'In-progress' : 'Done' }}</td>
-                        <td>{{ $issue->created_at }}</td>
-                        <td>{{ $issue->updated_at }}</td>
+                        <td>{{ \Carbon\Carbon::parse($issue->created_at)->format('d/m/Y H:i:s') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($issue->updated_at)->format('d/m/Y H:i:s') }}</td>
                     </tr>
                 @endforeach
             </tbody>

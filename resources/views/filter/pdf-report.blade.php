@@ -113,8 +113,8 @@
                             Done
                         @endif
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($issue['created_at'])->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($issue['updated_at'])->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($issue['created_at'])->format('d/m/Y H:i:s') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($issue['updated_at'])->format('d/m/Y H:i:s') }}</td>
                 </tr>
             @endforeach
         </tbody>

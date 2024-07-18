@@ -25,8 +25,10 @@
                         <td style="text-center">{{ $ReportServer->ups_temp }}</td>
                         <td style="text-center">{{ $ReportServer->ups_battery }}</td>
                         <td style="text-center">{{ $ReportServer->ups_time }}</td>
-                        <td style="text-center">{{ $ReportServer->created_at }}</td>
-                        <td style="text-center">{{ $ReportServer->updated_at }}</td>
+                        <td style="text-center">
+                            {{ \Carbon\Carbon::parse($ReportServer->created_at)->format('d/m/Y H:i:s') }}</td>
+                        <td style="text-center">
+                            {{ \Carbon\Carbon::parse($ReportServer->updated_at)->format('d/m/Y H:i:s') }}</td>
                         <td>
                             <a href="{{ route('updateServer', ['type' => $source, 'id' => $ReportServer->id]) }}"
                                 class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>

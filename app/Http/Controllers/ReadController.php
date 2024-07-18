@@ -14,6 +14,7 @@ use App\Models\Tlcmn_switch;
 use Illuminate\Http\Request;
 use App\Models\Travelodge;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 
 class ReadController extends Controller
@@ -285,5 +286,67 @@ class ReadController extends Controller
             ->paginate(15);
 
         return view('home.itsup_status', compact('itsup_statuses', 'department'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query', '');  // กำหนดค่าเริ่มต้นเป็นสตริงว่าง
+        $date = $request->input('date');
+        $hotel = $request->input('hotel', 'tlcmn');  // กำหนดค่าเริ่มต้นเป็น 'tlcmn'
+
+        $prefix = $this->getPrefixFromHotel($hotel);
+
+        $prefix = $this->getPrefixFromHotel($hotel);
+
+        $guests = DB::table("{$prefix}guests")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('room_no', 'like', "%{$query}%")
+                    ->orWhere('location', 'like', "%{$query}%")
+                    ->orWhere('ch_name', 'like', "%{$query}%");
+            })
+            ->paginate(10, ['*'], 'guests_page');
+
+        $netSpeeds = DB::table("{$prefix}nets")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('location', 'like', "%{$query}%");
+            })
+            ->paginate(10, ['*'], 'netSpeeds_page');
+
+        $servers = DB::table("{$prefix}servers")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->paginate(10, ['*'], 'servers_page');
+
+        $switches = DB::table("{$prefix}switches")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('location', 'like', "%{$query}%");
+            })
+            ->paginate(10, ['*'], 'switches_page');
+
+        return view('/daily/search', compact('guests', 'netSpeeds', 'servers', 'switches', 'query', 'date', 'hotel'));
+    }
+
+    private function getPrefixFromHotel($hotel)
+    {
+        switch ($hotel) {
+            case 'tlcmn':
+                return 'tlcmn_';
+            case 'ehcm':
+                return 'ehcm_';
+            case 'uncm':
+                return 'uncm_';
+            default:
+                return '';
+        }
     }
 }

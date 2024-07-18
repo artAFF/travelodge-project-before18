@@ -17,10 +17,13 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    $('#report-content').append(data.ReportGuests);
-                    $('#report-content').append(data.ReportSwitchs);
-                    $('#report-content').append(data.ReportServers);
-                    $('#report-content').append(data.ReportNetSpeeds);
+                    $('#report-content').empty();
+                    $('#report-content').html(
+                        data.ReportGuests +
+                        data.ReportSwitchs +
+                        data.ReportServers +
+                        data.ReportNetSpeeds
+                    );
                 }
             });
         }
@@ -28,6 +31,10 @@
         $(document).on('click', '.pagination a', function(event) {
             event.preventDefault();
             let url = $(this).attr('href');
+            if (url.indexOf('type=') === -1) {
+
+                url += (url.indexOf('?') === -1 ? '?' : '&') + 'type={{ $source }}';
+            }
             loadPage(url);
         });
     </script>

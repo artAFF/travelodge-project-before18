@@ -29,8 +29,8 @@
                            <td>{{ $ReportGuest->upload }}</td>
                            <td>{{ $ReportGuest->ch_no }}</td>
                            <td>{{ $ReportGuest->ch_name }}</td>
-                           <td>{{ $ReportGuest->created_at }}</td>
-                           <td>{{ $ReportGuest->updated_at }}</td>
+                           <td>{{ \Carbon\Carbon::parse($ReportGuest->created_at)->format('d/m/Y H:i:s') }}</td>
+                           <td>{{ \Carbon\Carbon::parse($ReportGuest->updated_at)->format('d/m/Y H:i:s') }}</td>
                            <td>
                                <a href="{{ route('updateGuest', ['type' => $source, 'id' => $ReportGuest->id]) }}"
                                    class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>

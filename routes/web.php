@@ -30,6 +30,10 @@ Route::get('/reports/inprocess', [ReadController::class, 'inprocess'])->name('in
 Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDate');
 Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
 
+// For All Daily Report
+Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
+/* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
+
 // Internet Speed Checking
 Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
 Route::get('/netspeed/addNetSpeed', [CreateController::class, 'AddNetSpeed']);
@@ -62,10 +66,6 @@ Route::get('/{type}/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])
 Route::post('/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
 Route::delete('/{type}/deleteGuest/{id}', [DeleteController::class, 'DeleteGuest'])->name('deleteGuest');
 
-// Home page s
-/* Route::get('/home/itsup_status', [ReadController::class, 'itsup_status']); */
-// web.php
-
 Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status');
 
 // Dasboard
@@ -75,9 +75,6 @@ Route::get('/dashboards/dashboardWeek', [ChartController::class, 'WeekChart'])->
 Route::get('/dashboards/dashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
 Route::get('/dashboards/dashboardHotel', [ChartController::class, 'HotelChart'])->name('hotel.chart');
 Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
-
-Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
-/* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
 
 Route::get('/filter/filter-form', [PdfController::class, 'showFilterForm'])->name('filter.form');
 Route::post('/filter/filter-data', [PdfController::class, 'filterData'])->name('filter.data');
@@ -91,9 +88,7 @@ Route::get('/login', function () {
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-/* Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard'); */
+Route::get('/daily/search', [ReadController::class, 'search'])->name('search');
 
 /* Route::get('/test', function () {
     return view('test');

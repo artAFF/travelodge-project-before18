@@ -68,6 +68,15 @@ class CreateController extends Controller
                 $data['file_path'] = $filePath;
             }
 
+            $hasAttachment = false;
+            if ($request->hasFile("issues.{$index}.file")) {
+                $file = $request->file("issues.{$index}.file");
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads', $filename, 'public');
+                $data['file_path'] = $filePath;
+                $hasAttachment = true;
+            }
+
             Travelodge::insert($data);
 
             $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
@@ -81,7 +90,9 @@ class CreateController extends Controller
             $message .= "  - Department: " . $issueData['department'] . "\n";
             $message .= "  - Hotel: " . $issueData['hotel'] . "\n";
             $message .= "  - Location: " . $issueData['location'] . "\n";
+            $message .= "  - Attachment: " . ($hasAttachment ? 'Yes' : 'No') . "\n";
             $message .= "  - Status: " . ($issueData['status'] == 0 ? 'In-progress' : 'Done');
+
 
             $response = $client->post($messageUrl, [
                 'headers' => [
