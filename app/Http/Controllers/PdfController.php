@@ -99,10 +99,142 @@ class PdfController extends Controller
 
     public function downloadPDF(Request $request)
     {
-     $issues = json_decode($request->issues, true);
+        $issues = json_decode($request->issues, true);
 
         $pdf = FacadePdf::loadView('/filter/pdf-report', compact('issues'));
 
         return $pdf->download('report.pdf');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query', '');
+        $date = $request->input('date');
+        $hotel = $request->input('hotel', 'tlcmn');
+        $category = $request->input('category', 'all');
+
+        $prefix = $this->getPrefixFromHotel($hotel);
+
+        $guests = ($category == 'all' || $category == 'guest') ? $this->getGuests($prefix, $date, $query, true) : collect();
+        $netSpeeds = ($category == 'all' || $category == 'internet') ? $this->getNetSpeeds($prefix, $date, $query, true) : collect();
+        $servers = ($category == 'all' || $category == 'server') ? $this->getServers($prefix, $date, $query, true) : collect();
+        $switches = ($category == 'all' || $category == 'switch') ? $this->getSwitches($prefix, $date, $query, true) : collect();
+
+        $searchResults = [
+            'guests' => $guests,
+            'netSpeeds' => $netSpeeds,
+            'servers' => $servers,
+            'switches' => $switches,
+            'category' => $category,
+            'query' => $query,
+            'date' => $date,
+            'hotel' => $hotel
+        ];
+
+        $request->session()->put('searchResults', $searchResults);
+
+        return view('/daily/search', $searchResults);
+    }
+
+    public function downloadPdfDaily(Request $request)
+    {
+        $searchParams = $request->session()->get('searchResults');
+
+        if (!$searchParams) {
+            return redirect()->route('search')->with('error', 'No search results found. Please perform a search first.');
+        }
+
+        $prefix = $this->getPrefixFromHotel($searchParams['hotel']);
+        $category = $searchParams['category'] ?? 'all';
+        $date = $searchParams['date'];
+        $query = $searchParams['query'];
+
+        // ดึงข้อมูลทั้งหมดโดยไม่มีการ paginate
+        $guests = ($category == 'all' || $category == 'guest') ? $this->getGuests($prefix, $date, $query, false) : collect();
+        $netSpeeds = ($category == 'all' || $category == 'internet') ? $this->getNetSpeeds($prefix, $date, $query, false) : collect();
+        $servers = ($category == 'all' || $category == 'server') ? $this->getServers($prefix, $date, $query, false) : collect();
+        $switches = ($category == 'all' || $category == 'switch') ? $this->getSwitches($prefix, $date, $query, false) : collect();
+
+        $pdfData = [
+            'guests' => $guests,
+            'netSpeeds' => $netSpeeds,
+            'servers' => $servers,
+            'switches' => $switches,
+            'category' => $category,
+            'date' => $date,
+            'hotel' => $searchParams['hotel']
+        ];
+
+        $pdf = FacadePdf::loadView('/daily/pdf-daily', $pdfData);
+
+        return $pdf->download('daily_report.pdf');
+    }
+
+    private function getPrefixFromHotel($hotel)
+    {
+        switch ($hotel) {
+            case 'tlcmn':
+                return 'tlcmn_';
+            case 'ehcm':
+                return 'ehcm_';
+            case 'uncm':
+                return 'uncm_';
+            default:
+                return '';
+        }
+    }
+
+    private function getGuests($prefix, $date, $query, $paginate = true)
+    {
+        $query = DB::table("{$prefix}guests")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('room_no', 'like', "%{$query}%")
+                    ->orWhere('location', 'like', "%{$query}%")
+                    ->orWhere('ch_name', 'like', "%{$query}%");
+            });
+
+        return $paginate ? $query->paginate(10, ['*'], 'guests_page') : $query->get();
+    }
+
+    function getNetSpeeds($prefix, $date, $query, $paginate = true)
+    {
+        $query = DB::table("{$prefix}nets")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('location', 'like', "%{$query}%");
+            });
+
+        return $paginate ? $query->paginate(10, ['*'], 'netSpeeds_page') : $query->get();
+    }
+
+    private function getServers($prefix, $date, $query, $paginate = true)
+    {
+        $query = DB::table("{$prefix}servers")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('server_temp', 'like', "%{$query}%");
+            });
+
+        return $paginate ? $query->paginate(10, ['*'], 'servers_page') : $query->get();
+    }
+
+    private function getSwitches($prefix, $date, $query, $paginate = true)
+    {
+        $query = DB::table("{$prefix}switches")
+            ->when($date, function ($q) use ($date) {
+                return $q->whereDate('created_at', $date);
+            })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('location', 'like', "%{$query}%");
+            });
+
+        return $paginate ? $query->paginate(10, ['*'], 'switches_page') : $query->get();
     }
 }

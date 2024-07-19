@@ -112,7 +112,6 @@ class CreateController extends Controller
         return redirect('/reports/reportIssue');
     }
 
-
     function AddGuest()
     {
         $buildings = Building::select('name')->get();
@@ -303,7 +302,6 @@ class CreateController extends Controller
                 return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
         }
     }
-
 
     function AddNetSpeed()
     {

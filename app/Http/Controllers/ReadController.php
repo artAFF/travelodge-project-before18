@@ -288,11 +288,11 @@ class ReadController extends Controller
         return view('home.itsup_status', compact('itsup_statuses', 'department'));
     }
 
-    public function search(Request $request)
+    /*     public function search(Request $request)
     {
-        $query = $request->input('query', '');  // กำหนดค่าเริ่มต้นเป็นสตริงว่าง
+        $query = $request->input('query', '');
         $date = $request->input('date');
-        $hotel = $request->input('hotel', 'tlcmn');  // กำหนดค่าเริ่มต้นเป็น 'tlcmn'
+        $hotel = $request->input('hotel', 'tlcmn');
 
         $prefix = $this->getPrefixFromHotel($hotel);
 
@@ -322,6 +322,9 @@ class ReadController extends Controller
             ->when($date, function ($q) use ($date) {
                 return $q->whereDate('created_at', $date);
             })
+            ->when($query, function ($q) use ($query) {
+                return $q->where('server_temp', 'like', "%{$query}%");
+            })
             ->paginate(10, ['*'], 'servers_page');
 
         $switches = DB::table("{$prefix}switches")
@@ -348,5 +351,5 @@ class ReadController extends Controller
             default:
                 return '';
         }
-    }
+    } */
 }

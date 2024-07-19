@@ -1,5 +1,3 @@
-<!-- resources/views/pdf-report.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 

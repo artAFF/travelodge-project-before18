@@ -88,7 +88,9 @@ Route::get('/login', function () {
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/daily/search', [ReadController::class, 'search'])->name('search');
+/* Route::get('/daily/search', [ReadController::class, 'search'])->name('search'); */
+Route::get('/daily/search', [PdfController::class, 'search'])->name('search');
+Route::get('/daily/download-pdf', [PdfController::class, 'downloadPdfDaily'])->name('download.pdfdaily');
 
 /* Route::get('/test', function () {
     return view('test');
