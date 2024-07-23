@@ -5,7 +5,7 @@
 
     @if (count($in_process) > 0)
         <div class="container">
-            <h1 class="text-center">Report all IT Support Issues in the process</h1><br>
+            <h1 class="text-center">Issues in the process</h1><br>
             <form id="combinedForm" method="GET">
                 <div class="row pb-3 align-items-end">
                     <div class="col-md-2">

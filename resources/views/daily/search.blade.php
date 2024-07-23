@@ -10,7 +10,12 @@
                         placeholder="Search...">
                 </div>
                 <div class="col-md-2">
-                    <input type="date" name="date" class="form-control" value="{{ $date ?? '' }}">
+                    <input type="date" name="start_date" class="form-control" value="{{ $start_date ?? '' }}"
+                        placeholder="Start Date">
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="end_date" class="form-control" value="{{ $end_date ?? '' }}"
+                        placeholder="End Date">
                 </div>
                 <div class="col-md-2">
                     <select name="hotel" class="form-select">
@@ -19,7 +24,7 @@
                         <option value="uncm" {{ ($hotel ?? '') == 'uncm' ? 'selected' : '' }}>UNCM</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <select name="category" class="form-select">
                         <option value="all" {{ ($category ?? '') == 'all' ? 'selected' : '' }}>All</option>
                         <option value="guest" {{ ($category ?? '') == 'guest' ? 'selected' : '' }}>Guest Room</option>
@@ -29,7 +34,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <button type="submit" class="btn btn-primary btn-block">Search</button>
                 </div>
             </div>
