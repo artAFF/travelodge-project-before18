@@ -110,7 +110,8 @@
                         </li>
                         <li class="nav-item main-menu-item">
                             <a href="{{ route('filter.form') }}" class="nav-link px-0 align-middle">
-                                <i class="bi bi-funnel"></i> <span class="ms-1 d-none d-sm-inline">Filter Report
+                                <i class="bi bi-file-earmark-pdf"></i><span class="ms-1 d-none d-sm-inline">Filter
+                                    Report
                                     PDF</span>
                             </a>
                         </li>
