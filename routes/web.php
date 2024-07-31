@@ -7,6 +7,7 @@ use App\Http\Controllers\CreateController;
 use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ReadController;
+use App\Http\Controllers\StructureController;
 use App\Http\Controllers\UpdateController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Models\Task;
@@ -80,6 +81,15 @@ Route::get('/filter/filter-form', [PdfController::class, 'showFilterForm'])->nam
 Route::post('/filter/filter-data', [PdfController::class, 'filterData'])->name('filter.data');
 Route::get('/filter/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
 
+// Structure
+Route::get('/structure/buildings', [StructureController::class, 'buildings'])->name('structure.buildings');
+Route::post('/structure/buildings', [StructureController::class, 'storeBuilding'])->name('structure.buildings.store');
+
+Route::get('/structure/categories', [StructureController::class, 'categories'])->name('structure.categories');
+Route::post('/structure/categories', [StructureController::class, 'storeCategory'])->name('structure.categories.store');
+
+Route::get('/structure/departments', [StructureController::class, 'departments'])->name('structure.departments');
+Route::post('/structure/departments', [StructureController::class, 'storeDepartment'])->name('structure.departments.store');
 
 Route::get('/login', function () {
     return view('/login');

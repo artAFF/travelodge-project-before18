@@ -143,6 +143,30 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="main-menu-item">
+                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="bi bi-gear"></i>
+                                <span class="ms-1 d-none d-sm-inline">Structure Settings</span>
+                                <i class="bi bi-chevron-right ms-auto px-2"></i>
+                            </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="{{ route('structure.buildings') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Buildings</span>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="{{ route('structure.categories') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Categories Issues</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('structure.departments') }}" class="nav-link px-0">
+                                        <span class="d-none d-sm-inline px-3">Departments</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>

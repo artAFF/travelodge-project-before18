@@ -31,7 +31,7 @@
                             <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'issue', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Issue</a>
                             </th>
-                            <th class="col-md-3 text-center" scope="col"><a class="text-dark text-decoration-none"
+                            <th class="col-md-4 text-center" scope="col"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'detail', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Detail</a>
                             </th>
                             <th class="col-md-2 text-center" scope="col"><a class="text-dark text-decoration-none"
@@ -40,9 +40,9 @@
                             <th class="col-md-1 text-center" scope="col"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'hotel', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Hotel</a>
                             </th>
-                            <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
+                            {{-- <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'location', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Location</a>
-                            </th>
+                            </th> --}}
                             <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'status', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Status</a>
                             </th>
@@ -60,10 +60,10 @@
                             <tr>
                                 <th class="text-center" scope="row">{{ $reporter->id }}</th>
                                 <td class="text-center">{{ $reporter->issue }}</td>
-                                <td class="text-center">{{ Str::limit($reporter->detail, 30, '...') }}</td>
+                                <td class="text-center">{{ Str::limit($reporter->detail, 40, '...') }}</td>
                                 <td class="text-center">{{ $reporter->department }}</td>
                                 <td class="text-center">{{ $reporter->hotel }}</td>
-                                <td class="text-center">{{ $reporter->location }}</td>
+                                {{-- <td class="text-center">{{ $reporter->location }}</td> --}}
                                 <td class="text-center">
                                     @if ($reporter->status === 0)
                                         <a href="#" class="btn btn-warning"><i class="bi bi-hourglass-split"></i></a>
