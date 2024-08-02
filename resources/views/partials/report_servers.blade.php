@@ -13,7 +13,7 @@
                     <th scope="col"class="col-md-2">Created Time</th>
                     <th scope="col"class="col-md-2">Updated time</th>
                     <th scope="col">Action
-                    </th>
+
 
                 </tr>
             </thead>
@@ -55,6 +55,5 @@
                 class="btn btn-primary px-5">Add</a></h1>
     </div>
 @endif
-
 <br>
 <hr><br>

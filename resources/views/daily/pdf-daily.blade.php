@@ -47,16 +47,18 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Room No.</th>
                         <th>Location</th>
-                        <th>Download</th>
-                        <th>Upload</th>
+                        <th>Download (Mbps)</th>
+                        <th>Upload (Mbps)</th>
                         <th>Channel Name</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($guests as $guest)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $guest->room_no }}</td>
                             <td>{{ $guest->location }}</td>
                             <td>{{ $guest->download }}</td>
@@ -78,15 +80,17 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Location</th>
-                        <th>UPS Battery</th>
-                        <th>UPS Time</th>
-                        <th>Temperature</th>
+                        <th>UPS Battery(%)</th>
+                        <th>UPS Time (M)</th>
+                        <th>Temperature (°C)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($switches as $switch)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $switch->location }}</td>
                             <td>{{ $switch->ups_battery }}</td>
                             <td>{{ $switch->ups_time }}</td>
@@ -107,17 +111,19 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Server Temperature</th>
-                        <th>UPS Temperature</th>
-                        <th>UPS Battery</th>
-                        <th>UPS Time</th>
+                        <th>#</th>
+                        <th>Server Temperature (°C)</th>
+                        {{-- <th>UPS Temperature (°C)</th> --}}
+                        <th>UPS Battery (%)</th>
+                        <th>UPS Time (H.MM)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($servers as $server)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $server->server_temp }}</td>
-                            <td>{{ $server->ups_temp }}</td>
+                            {{-- <td>{{ $server->ups_temp }}</td> --}}
                             <td>{{ $server->ups_battery }}</td>
                             <td>{{ $server->ups_time }}</td>
                         </tr>
@@ -136,14 +142,16 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Location</th>
-                        <th>Download</th>
-                        <th>Upload</th>
+                        <th>Download (Mbps)</th>
+                        <th>Upload (Mbps)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($netSpeeds as $netSpeed)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $netSpeed->location }}</td>
                             <td>{{ $netSpeed->download }}</td>
                             <td>{{ $netSpeed->upload }}</td>

@@ -51,6 +51,5 @@
                 class="btn btn-primary px-5">Add</a></h1>
     </div>
 @endif
-
 <br>
 <hr><br>
