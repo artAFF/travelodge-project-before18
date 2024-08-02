@@ -53,17 +53,20 @@
                         <th>Download (Mbps)</th>
                         <th>Upload (Mbps)</th>
                         <th>Channel Name</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php $guestCounter = 1; @endphp
                     @foreach ($guests as $guest)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $guestCounter++ }}</td>
                             <td>{{ $guest->room_no }}</td>
                             <td>{{ $guest->location }}</td>
                             <td>{{ $guest->download }}</td>
                             <td>{{ $guest->upload }}</td>
                             <td>{{ $guest->ch_name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($guest->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -85,16 +88,19 @@
                         <th>UPS Battery(%)</th>
                         <th>UPS Time (M)</th>
                         <th>Temperature (°C)</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php $switchCounter = 1; @endphp
                     @foreach ($switches as $switch)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $switchCounter++ }}</td>
                             <td>{{ $switch->location }}</td>
                             <td>{{ $switch->ups_battery }}</td>
                             <td>{{ $switch->ups_time }}</td>
                             <td>{{ $switch->ups_temp }}</td>
+                            <td>{{ \Carbon\Carbon::parse($switch->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -113,19 +119,20 @@
                     <tr>
                         <th>#</th>
                         <th>Server Temperature (°C)</th>
-                        {{-- <th>UPS Temperature (°C)</th> --}}
                         <th>UPS Battery (%)</th>
                         <th>UPS Time (H.MM)</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php $serverCounter = 1; @endphp
                     @foreach ($servers as $server)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $serverCounter++ }}</td>
                             <td>{{ $server->server_temp }}</td>
-                            {{-- <td>{{ $server->ups_temp }}</td> --}}
                             <td>{{ $server->ups_battery }}</td>
                             <td>{{ $server->ups_time }}</td>
+                            <td>{{ \Carbon\Carbon::parse($server->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -146,15 +153,18 @@
                         <th>Location</th>
                         <th>Download (Mbps)</th>
                         <th>Upload (Mbps)</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php $netCounter = 1; @endphp
                     @foreach ($netSpeeds as $netSpeed)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $netCounter++ }}</td>
                             <td>{{ $netSpeed->location }}</td>
                             <td>{{ $netSpeed->download }}</td>
                             <td>{{ $netSpeed->upload }}</td>
+                            <td>{{ \Carbon\Carbon::parse($netSpeed->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -38,7 +38,6 @@
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
                             </form>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -51,5 +50,6 @@
                 href="/netspeed/addNetSpeed" class="btn btn-primary px-5">Add</a></h1>
     </div>
 @endif
+
 <br>
 <hr>
