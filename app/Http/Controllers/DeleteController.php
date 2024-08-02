@@ -74,30 +74,4 @@ class DeleteController extends Controller
                 throw new \Exception("Invalid type");
         }
     }
-
-    /*
-        function Tlcmn_DeleteGuest($id)
-        {
-            Tlcmn_guest::where('id', $id)->delete();
-            return redirect('/guest/reportGuest');
-        }
-
-        function Tlcmn_DeleteSwitch($id)
-        {
-            Tlcmn_switch::where('id', $id)->delete();
-            return redirect('/switchs/reportSwitch');
-        }
-
-        function Tlcmn_DeleteServer($id)
-        {
-            Tlcmn_server::where('id', $id)->delete();
-            return redirect('/server/reportServer');
-        }
-
-        function Tlcmn_DeleteNetSpeed($id)
-        {
-            Tlcmn_net::where('id', $id)->delete();
-            return redirect('/netspeed/reportNet');
-        }
-    */
 }

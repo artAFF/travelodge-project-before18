@@ -34,7 +34,7 @@ class PdfController extends Controller
 
     public function printAllIssues()
     {
-        $reportIssues = Travelodge::all();  // Travelodge::where('hotel', 'TLCMN')->where('status', 1)->get();
+        $reportIssues = Travelodge::all();
 
         $data = [];
 

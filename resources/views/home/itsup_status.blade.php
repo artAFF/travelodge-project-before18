@@ -7,29 +7,6 @@
         <div class="container">
             <h1 class="text-center">{{ $department }} Issues in the Process</h1>
 
-            {{--  <form method="GET" action="/filter">
-            <div class="row pb-3">
-            <div class="col-md-3">
-                <label>Start Date:</label>
-                <input type="date" name="start_date" class="form-control">
-            </div>
-
-            <div class="col-md-3">
-                <label>End Date:</label>
-                <input type="date" name="end_date" class="form-control">
-            </div>
-
-            <div class="col-md pt-4">
-                <button type="submit" class="btn btn-primary col-md-3">Filter</button>
-            </div>
-
-            <div class="col-md-3 pt-4">
-
-            </div>
-
-        </div>
-        </form> --}}
-
             <form method="GET" action="/filter">
                 <div class="row pb-3">
                     <div class="col-md-3">

@@ -8,7 +8,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Location</th>
                     <th scope="col">USP Battery Percentage</th>
-                    <th scope="col">UPS Period Of Service {{-- Available --}}</th>
+                    <th scope="col">UPS Period Of Service</th>
                     <th scope="col">Switch Temperature</th>
                     <th scope="col">Created Time</th>
                     <th scope="col">Updated time</th>

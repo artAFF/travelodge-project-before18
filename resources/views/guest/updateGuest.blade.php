@@ -138,7 +138,6 @@
 
             othersCheckbox.addEventListener('change', toggleForms);
 
-            // Call once to set initial state
             toggleForms();
         });
     </script>

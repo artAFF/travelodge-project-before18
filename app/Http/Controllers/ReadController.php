@@ -24,26 +24,6 @@ class ReadController extends Controller
         $this->middleware('auth');
     } */
 
-    /* function TableReportIssue(Request $request)
-    {
-        $query = $request->input('query');
-        $sort_by = $request->input('sort_by', 'id');
-        $sort_order = $request->input('sort_order', 'desc');
-
-        $ReportIssues = Travelodge::query()
-            ->when($query, function ($q) use ($query) {
-                $q->where('issue', 'like', "%{$query}%")
-                    ->orWhere('detail', 'like', "%{$query}%")
-                    ->orWhere('department', 'like', "%{$query}%")
-                    ->orWhere('hotel', 'like', "%{$query}%")
-                    ->orWhere('location', 'like', "%{$query}%");
-            })
-            ->orderBy($sort_by, $sort_order)
-            ->paginate(10);
-
-        return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order'));
-    } */
-
     public function TableReportIssue(Request $request)
     {
         $query = $request->input('query');
@@ -64,79 +44,6 @@ class ReadController extends Controller
 
         return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order'));
     }
-
-
-    /*
-    function TableReportIssue()
-    {
-        $ReportIssues = Travelodge::orderBy('id', 'desc')->paginate(10);
-        return view('/reportIssue', compact('ReportIssues'));
-    }
-        $reports = Travelodge::paginate(10);
-        return view('/report', compact('reports')); */
-
-    /*  function TableReportGuest()
-    {
-        $ReportGuests = GuestRoom::orderBy('id', 'desc')->paginate(10);
-        return view('/guest/reportGuest', compact('ReportGuests'));
-    }
-
-    function TableReportSwitch()
-    {
-        $ReportSwitchs = SwitchRoom::orderBy('id', 'desc')->paginate(10);
-        return view('/switchs/reportSwitch', compact('ReportSwitchs'));
-    }
-
-    function TableReportServer()
-    {
-        $ReportServers = ServerRoom::orderBy('id', 'desc')->paginate(10);
-        return view('/server/reportServer', compact('ReportServers'));
-    }
-
-    function TableReportNetSpeed()
-    {
-        $ReportNetSpeeds = NetSpeed::orderBy('id', 'desc')->paginate(10);
-        return view('/netspeed/reportNet', compact('ReportNetSpeeds'));
-    } */
-
-    /* function TableReportAll(Request $request)
-    {
-        $pageGuests = $request->input('pageGuests', 1);
-        $pageSwitchs = $request->input('pageSwitchs', 1);
-        $pageServers = $request->input('pageServers', 1);
-        $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
-
-        $ReportGuests = Tlcmn_guest::orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
-        $ReportSwitchs = Tlcmn_switch::orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
-        $ReportServers = Tlcmn_server::orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
-        $ReportNetSpeeds = Tlcmn_net::orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
-
-        return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds'));
-    } */
-
-    /* public function TableReportAll(Request $request)
-    {
-        $pageGuests = $request->input('pageGuests', 1);
-        $pageSwitchs = $request->input('pageSwitchs', 1);
-        $pageServers = $request->input('pageServers', 1);
-        $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
-
-        $ReportGuests = Tlcmn_guest::orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
-        $ReportSwitchs = Tlcmn_switch::orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
-        $ReportServers = Tlcmn_server::orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
-        $ReportNetSpeeds = Tlcmn_net::orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'ReportGuests' => view('partials.report_guests', compact('ReportGuests'))->render(),
-                'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs'))->render(),
-                'ReportServers' => view('partials.report_servers', compact('ReportServers'))->render(),
-                'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds'))->render(),
-            ]);
-        }
-
-        return view('tlcmn', compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds'));
-    } */
 
     public function TableReportAll(Request $request, $type)
     {
@@ -268,17 +175,6 @@ class ReadController extends Controller
         return view('/home/main', ['departments' => $departments, 'departmentLinks' => $departmentLinks, 'allTotals' => $allTotals]);
     }
 
-    /*  public function itsup_status()
-
-        {
-
-            $itsup_statuses = Travelodge::where('department', 'IT Support')
-                ->where('status', 0)
-                ->paginate(15);
-
-            return view('/home/itsup_status', compact('itsup_statuses'));
-        } */
-
     public function itsup_status($department)
     {
         $itsup_statuses = Travelodge::where('department', $department)
@@ -287,69 +183,4 @@ class ReadController extends Controller
 
         return view('home.itsup_status', compact('itsup_statuses', 'department'));
     }
-
-    /*     public function search(Request $request)
-    {
-        $query = $request->input('query', '');
-        $date = $request->input('date');
-        $hotel = $request->input('hotel', 'tlcmn');
-
-        $prefix = $this->getPrefixFromHotel($hotel);
-
-        $prefix = $this->getPrefixFromHotel($hotel);
-
-        $guests = DB::table("{$prefix}guests")
-            ->when($date, function ($q) use ($date) {
-                return $q->whereDate('created_at', $date);
-            })
-            ->when($query, function ($q) use ($query) {
-                return $q->where('room_no', 'like', "%{$query}%")
-                    ->orWhere('location', 'like', "%{$query}%")
-                    ->orWhere('ch_name', 'like', "%{$query}%");
-            })
-            ->paginate(10, ['*'], 'guests_page');
-
-        $netSpeeds = DB::table("{$prefix}nets")
-            ->when($date, function ($q) use ($date) {
-                return $q->whereDate('created_at', $date);
-            })
-            ->when($query, function ($q) use ($query) {
-                return $q->where('location', 'like', "%{$query}%");
-            })
-            ->paginate(10, ['*'], 'netSpeeds_page');
-
-        $servers = DB::table("{$prefix}servers")
-            ->when($date, function ($q) use ($date) {
-                return $q->whereDate('created_at', $date);
-            })
-            ->when($query, function ($q) use ($query) {
-                return $q->where('server_temp', 'like', "%{$query}%");
-            })
-            ->paginate(10, ['*'], 'servers_page');
-
-        $switches = DB::table("{$prefix}switches")
-            ->when($date, function ($q) use ($date) {
-                return $q->whereDate('created_at', $date);
-            })
-            ->when($query, function ($q) use ($query) {
-                return $q->where('location', 'like', "%{$query}%");
-            })
-            ->paginate(10, ['*'], 'switches_page');
-
-        return view('/daily/search', compact('guests', 'netSpeeds', 'servers', 'switches', 'query', 'date', 'hotel'));
-    }
-
-    private function getPrefixFromHotel($hotel)
-    {
-        switch ($hotel) {
-            case 'tlcmn':
-                return 'tlcmn_';
-            case 'ehcm':
-                return 'ehcm_';
-            case 'uncm':
-                return 'uncm_';
-            default:
-                return '';
-        }
-    } */
 }
