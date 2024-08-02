@@ -1,18 +1,19 @@
-@if (count($ReportServers) > 0)
-    <div class="container">
+<div class="container">
+    @if (count($ReportServers) > 0)
+
         <h1 class="text text-center">All Report Daily Checklist at <b class='text-danger'>Server Room</b></h1><br>
         <a href="/server/addServer" class="btn btn-primary">Add Server Room Check</a>
         <table class="table table-striped table-hover ">
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col" class="col-md-1">Server Temperature</th>
-                    <th scope="col"class="col-md-1">UPS Temperature</th>
-                    <th scope="col"class="col-md-2">USP Battery {{-- Percentage --}}</th>
-                    <th scope="col"class="col-md-2">UPS Period Of Service {{-- Available --}}</th>
-                    <th scope="col"class="col-md-2">Created Time</th>
-                    <th scope="col"class="col-md-2">Updated time</th>
-                    <th scope="col">Action
+                    <th scope="col">Server Temperature</th>
+                    <th scope="col">UPS Temperature</th>
+                    <th scope="col">USP Battery</th>
+                    <th scope="col">UPS Period Of Service</th>
+                    <th scope="col">Created Time</th>
+                    {{-- <th scope="col"class="col-md-2">Updated time</th> --}}
+                    <th scope="col">Action</th>
 
 
                 </tr>
@@ -27,8 +28,8 @@
                         <td style="text-center">{{ $ReportServer->ups_time }}</td>
                         <td style="text-center">
                             {{ \Carbon\Carbon::parse($ReportServer->created_at)->format('d/m/Y H:i:s') }}</td>
-                        <td style="text-center">
-                            {{ \Carbon\Carbon::parse($ReportServer->updated_at)->format('d/m/Y H:i:s') }}</td>
+                        {{-- <td style="text-center">
+                            {{ \Carbon\Carbon::parse($ReportServer->updated_at)->format('d/m/Y H:i:s') }}</td> --}}
                         <td>
                             <a href="{{ route('updateServer', ['type' => $source, 'id' => $ReportServer->id]) }}"
                                 class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
@@ -51,10 +52,11 @@
             {{ $ReportServers->links() }}
         </div>
     @else
-        <h1 class="text text-center py-5 ">No data found, Pleases add report server<a href="/server/addServer"
-                class="btn btn-primary px-5">Add</a></h1>
-    </div>
-@endif
+        <h2 class="text text-center py-5">
+            No data found, Please add report server
+            <a href="/server/addServer" class="btn btn-primary px-5 ms-2">Add</a>
+        </h2>
+    @endif
+</div>
 
-<br>
 <hr><br>
