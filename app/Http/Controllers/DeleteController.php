@@ -17,10 +17,10 @@ use PhpParser\Node\Stmt\Switch_;
 
 class DeleteController extends Controller
 {
-    /*     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
-    } */
+    }
 
     function DeleteIssue($id)
 

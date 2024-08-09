@@ -9,6 +9,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ReadController;
 use App\Http\Controllers\StructureController;
 use App\Http\Controllers\UpdateController;
+use App\Http\Controllers\UserController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/home/main', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
+Route::get('/', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
 
 // Report Issue
 Route::get('/reports/reportIssue', [ReadController::class, 'TableReportIssue'])->name("reportIssue");
@@ -32,7 +34,7 @@ Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDa
 Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
 
 // For All Daily Report
-Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
+/* Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll'); */
 /* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
 
 // Internet Speed Checking
@@ -91,12 +93,15 @@ Route::post('/structure/categories', [StructureController::class, 'storeCategory
 Route::get('/structure/departments', [StructureController::class, 'departments'])->name('structure.departments');
 Route::post('/structure/departments', [StructureController::class, 'storeDepartment'])->name('structure.departments.store');
 
-Route::get('/login', function () {
-    return view('/login');
-})->name('login');
-
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/daily/search', [PdfController::class, 'search'])->name('search');
 Route::get('/daily/download-pdf', [PdfController::class, 'downloadPdfDaily'])->name('download.pdfdaily');
+
+Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');

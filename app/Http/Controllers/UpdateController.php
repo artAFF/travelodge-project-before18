@@ -27,10 +27,10 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateController extends Controller
 {
-    /*  public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
-    } */
+    }
 
     function UpdateReportIssue($id)
     {

@@ -166,6 +166,10 @@
                                         <span class="d-none d-sm-inline px-3">Departments</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('users.index') }}" class="nav-link px-0"><span
+                                            class="d-none d-sm-inline px-3">Users</span></a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

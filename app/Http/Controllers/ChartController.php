@@ -8,6 +8,11 @@ use App\Models\User;
 
 class ChartController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     private function calculatePercentages($data)
     {
         $total = array_sum($data);

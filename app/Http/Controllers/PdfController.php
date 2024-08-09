@@ -12,6 +12,11 @@ use PDF;
 
 class PdfController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function pdfissue($id)
     {
         $ReportIssues = Travelodge::find($id);
