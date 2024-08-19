@@ -94,7 +94,6 @@ Route::get('/structure/departments', [StructureController::class, 'departments']
 Route::post('/structure/departments', [StructureController::class, 'storeDepartment'])->name('structure.departments.store');
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/daily/search', [PdfController::class, 'search'])->name('search');
 Route::get('/daily/download-pdf', [PdfController::class, 'downloadPdfDaily'])->name('download.pdfdaily');

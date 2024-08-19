@@ -40,7 +40,21 @@
 
         .main-menu-item {
             margin-bottom: 10px;
+        }
 
+        .dropdown-toggle::after {
+            margin-left: 10px;
+        }
+
+        #userDropdown {
+            width: 100%;
+            text-align: left;
+            padding: 8px;
+            color: #fff;
+        }
+
+        #userDropdown:hover {
+            background-color: #495057;
         }
     </style>
 </head>
@@ -48,7 +62,7 @@
 <body>
     <div class="container-fluid">
         <div class="row flex-nowrap">
-
+            <!-- Sidebar -->
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                     <a href="/"
@@ -71,8 +85,7 @@
                             <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                 <li class="w-100">
                                     <a href="{{ route('dashboardStatus') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Status
-                                            Report</span>
+                                        <span class="d-none d-sm-inline px-3">Status Report</span>
                                     </a>
                                 </li>
                                 <li>
@@ -111,8 +124,7 @@
                         <li class="nav-item main-menu-item">
                             <a href="{{ route('filter.form') }}" class="nav-link px-0 align-middle">
                                 <i class="bi bi-file-earmark-pdf"></i><span class="ms-1 d-none d-sm-inline">Filter
-                                    Report
-                                    PDF</span>
+                                    Report PDF</span>
                             </a>
                         </li>
                         <li class="main-menu-item">
@@ -172,15 +184,37 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item main-menu-item">
+                            <a href="#userSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                id="userDropdown">
+                                <i class="bi bi-person"></i>
+                                <span class="ms-1 d-none d-sm-inline">{{ Auth::user()->name }}</span>
+                                <i class="bi bi-chevron-right ms-auto"></i>
+                            </a>
+                            <ul class="collapse nav flex-column ms-1" id="userSubmenu" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="{{ route('logout') }}" class="nav-link px-0"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <span class="d-none d-sm-inline px-3">Sign out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
 
+            <!-- Main content area -->
             <div class="col py-3">
                 @yield('content')
             </div>
         </div>
     </div>
+
+    <!-- Logout form -->
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -218,6 +252,17 @@
                     }
                 });
             });
+
+            // Logout functionality
+            const logoutForm = document.getElementById('logout-form');
+            const logoutLink = document.querySelector('a[href="{{ route('logout') }}"]');
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logoutForm.submit();
+                });
+            }
         });
     </script>
 </body>

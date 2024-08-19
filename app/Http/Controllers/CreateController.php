@@ -125,63 +125,25 @@ class CreateController extends Controller
             'upload' => 'required',
             'download' => 'required',
             'ch_no' => 'required',
-            'ch_name' => 'required'
+            'ch_name' => 'required',
+            'location' => 'required'
         ]);
 
         $hotel = $request->input('hotel');
+        $model = $this->getModelFromType($hotel, 'guest');
 
-        switch ($hotel) {
-            case 'tlcmn':
-                $request->validate([
-                    'location1' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location1'),
-                    'room_no' => $request->room_no,
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'ch_no' => $request->ch_no,
-                    'ch_name' => $request->ch_name,
-                    'created_at' => now()
-                ];
-                Tlcmn_guest::insert($data);
-                return redirect('/tlcmn');
-                break;
-            case 'ehcm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'room_no' => $request->room_no,
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'ch_no' => $request->ch_no,
-                    'ch_name' => $request->ch_name,
-                    'created_at' => now()
-                ];
-                Ehcm_guest::insert($data);
-                return redirect('/ehcm');
-                break;
-            case 'uncm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'room_no' => $request->room_no,
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'ch_no' => $request->ch_no,
-                    'ch_name' => $request->ch_name,
-                    'created_at' => now()
-                ];
-                Uncm_guest::insert($data);
-                return redirect('/uncm');
-                break;
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        $data = [
+            'location' => $request->location,
+            'room_no' => $request->room_no,
+            'upload' => $request->upload,
+            'download' => $request->download,
+            'ch_no' => $request->ch_no,
+            'ch_name' => $request->ch_name,
+            'created_at' => now()
+        ];
+
+        $model::insert($data);
+        return redirect("/{$hotel}");
     }
 
     function AddSwitch()
@@ -195,57 +157,23 @@ class CreateController extends Controller
         $request->validate([
             'ups_battery' => 'required',
             'ups_time' => 'required',
-            'ups_temp' => 'required'
+            'ups_temp' => 'required',
+            'location' => 'required'
         ]);
 
         $hotel = $request->input('hotel');
+        $model = $this->getModelFromType($hotel, 'switch');
 
-        switch ($hotel) {
-            case 'tlcmn':
-                $request->validate([
-                    'location1' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location1'),
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'ups_temp' => $request->ups_temp,
-                    'created_at' => now()
-                ];
-                Tlcmn_switch::insert($data);
-                return redirect('/tlcmn');
-                break;
-            case 'ehcm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'ups_temp' => $request->ups_temp,
-                    'created_at' => now()
-                ];
-                Ehcm_switch::insert($data);
-                return redirect('/ehcm');
-                break;
-            case 'uncm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'ups_temp' => $request->ups_temp,
-                    'created_at' => now()
-                ];
-                Uncm_switch::insert($data);
-                return redirect('/uncm');
-                break;
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        $data = [
+            'location' => $request->location,
+            'ups_battery' => $request->ups_battery,
+            'ups_time' => $request->ups_time,
+            'ups_temp' => $request->ups_temp,
+            'created_at' => now()
+        ];
+
+        $model::insert($data);
+        return redirect("/{$hotel}");
     }
 
     function AddServer()
@@ -263,44 +191,18 @@ class CreateController extends Controller
         ]);
 
         $hotel = $request->input('hotel');
+        $model = $this->getModelFromType($hotel, 'server');
 
-        switch ($hotel) {
-            case 'tlcmn':
-                $data = [
-                    'server_temp' => $request->server_temp,
-                    'ups_temp' => $request->ups_temp,
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'created_at' => now()
-                ];
-                Tlcmn_server::insert($data);
-                return redirect('/tlcmn');
+        $data = [
+            'server_temp' => $request->server_temp,
+            'ups_temp' => $request->ups_temp,
+            'ups_battery' => $request->ups_battery,
+            'ups_time' => $request->ups_time,
+            'created_at' => now()
+        ];
 
-            case 'ehcm':
-                $data = [
-                    'server_temp' => $request->server_temp,
-                    'ups_temp' => $request->ups_temp,
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'created_at' => now()
-                ];
-                Ehcm_server::insert($data);
-                return redirect('/ehcm');
-
-            case 'uncm':
-                $data = [
-                    'server_temp' => $request->server_temp,
-                    'ups_temp' => $request->ups_temp,
-                    'ups_battery' => $request->ups_battery,
-                    'ups_time' => $request->ups_time,
-                    'created_at' => now()
-                ];
-                Uncm_server::insert($data);
-                return redirect('/uncm');
-
-            default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
-        }
+        $model::insert($data);
+        return redirect("/{$hotel}");
     }
 
     function AddNetSpeed()
@@ -313,53 +215,35 @@ class CreateController extends Controller
     {
         $request->validate([
             'upload' => 'required',
-            'download' => 'required'
+            'download' => 'required',
+            'location' => 'required'
         ]);
 
         $hotel = $request->input('hotel');
+        $model = $this->getModelFromType($hotel, 'net');
 
-        switch ($hotel) {
+        $data = [
+            'location' => $request->location,
+            'upload' => $request->upload,
+            'download' => $request->download,
+            'created_at' => now()
+        ];
+
+        $model::insert($data);
+        return redirect("/{$hotel}");
+    }
+
+    private function getModelFromType($type, $modelType)
+    {
+        switch ($type) {
             case 'tlcmn':
-                $request->validate([
-                    'location1' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location1'),
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'created_at' => now()
-                ];
-                Tlcmn_net::insert($data);
-                return redirect('/tlcmn');
-                break;
+                return "App\\Models\\Tlcmn_{$modelType}";
             case 'ehcm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'created_at' => now()
-                ];
-                Ehcm_net::insert($data);
-                return redirect('/ehcm');
-                break;
+                return "App\\Models\\Ehcm_{$modelType}";
             case 'uncm':
-                $request->validate([
-                    'location2' => 'required'
-                ]);
-                $data = [
-                    'location' => $request->input('location2'),
-                    'upload' => $request->upload,
-                    'download' => $request->download,
-                    'created_at' => now()
-                ];
-                Uncm_net::insert($data);
-                return redirect('/uncm');
-                break;
+                return "App\\Models\\Uncm_{$modelType}";
             default:
-                return redirect()->back()->withErrors(['hotel' => 'Invalid hotel selection.']);
+                throw new \Exception("Invalid type");
         }
     }
 }

@@ -84,19 +84,6 @@ class ReadController extends Controller
         }
     }
 
-    private function getSourceFromRequest(Request $request)
-    {
-        $url = $request->url();
-
-        if (str_contains($url, 'ehcm')) {
-            return 'ehcm';
-        } elseif (str_contains($url, 'uncm')) {
-            return 'uncm';
-        } else {
-            return 'tlcmn';
-        }
-    }
-
     public function preview($id)
     {
         $report = Travelodge::findOrFail($id);
