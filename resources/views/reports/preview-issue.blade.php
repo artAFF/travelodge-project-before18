@@ -1,6 +1,13 @@
 <p><strong>ID:</strong> {{ $report->id }}</p>
 <p><strong>Issue:</strong> {{ $report->issue }}</p>
 <p><strong>Detail:</strong> {{ $report->detail }}</p>
+<p><strong>Remarks:</strong>
+    @if ($report->remarks)
+        {{ $report->remarks }}
+    @else
+        No Remarks
+    @endif
+</p>
 <p><strong>Department:</strong> {{ $report->department }}</p>
 <p><strong>Hotel:</strong> {{ $report->hotel }}</p>
 <p><strong>Location:</strong> {{ $report->location }}</p>

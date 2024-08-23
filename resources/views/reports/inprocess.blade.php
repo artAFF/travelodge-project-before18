@@ -84,7 +84,7 @@
                                 {{ \Carbon\Carbon::parse($in_process1->created_at)->format('d/m/Y H:i:s') }}</td>
                             {{-- <td>{{ \Carbon\Carbon::parse($in_process1->updated_at)->format('d-m-Y H:i:s') }}</td> --}}
                             <td class="text-center">
-                                <button class="btn btn-secondary preview-btn" data-id=""><i
+                                <button class="btn btn-secondary preview-btn" data-id="{{ $in_process1->id }}"><i
                                         class="bi bi-eye"></i></button>
                                 <a href="{{ route('updateReport', $in_process1->id) }}" class="btn btn-primary "><i
                                         class="bi bi-pencil-square"></i></a>
@@ -100,5 +100,33 @@
             <h1 class="text text-center py-5">No data found</h1>
     @endif
     </div>
+
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Issue Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="previewContent">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.preview-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    let reportId = this.getAttribute('data-id');
+                    fetch(`/reports/preview-issue/${reportId}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('previewContent').innerHTML = data;
+                            new bootstrap.Modal(document.getElementById('previewModal')).show();
+                        });
+                });
+            });
+        });
+    </script>
 
 @endsection

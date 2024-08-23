@@ -31,6 +31,20 @@
                 @enderror
 
                 <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="needRemarks_0" onchange="toggleRemarks(0)">
+                        <label class="form-check-label" for="needRemarks_0">
+                            Add Remarks
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3" id="remarksContainer_0" style="display: none;">
+                    <label for="remarks" class="form-label">Remarks</label>
+                    <textarea class="form-control" id="remarks_0" name="issues[0][remarks]" rows="2"></textarea>
+                </div>
+
+                <div class="mb-3">
                     <label for="department" class="form-label">Department</label>
                     <select class="form-select" id="department" name="issues[0][department]">
                         @foreach ($departments as $department)
@@ -94,6 +108,12 @@
     <script>
         let issueIndex = 1;
 
+        function toggleRemarks(index) {
+            const checkbox = document.getElementById(`needRemarks_${index}`);
+            const remarksContainer = document.getElementById(`remarksContainer_${index}`);
+            remarksContainer.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
         document.getElementById('addIssueButton').addEventListener('click', function() {
             const issueFormsContainer = document.getElementById('issueFormsContainer');
             const newIssueForm = issueFormsContainer.firstElementChild.cloneNode(true);
@@ -109,6 +129,22 @@
                     input.value = null;
                 }
             });
+
+            // ส่วนที่เพิ่มใหม่สำหรับ checkbox และ remarks
+            const newCheckbox = newIssueForm.querySelector('.form-check-input');
+            const newRemarksContainer = newIssueForm.querySelector('[id^=remarksContainer_]');
+            const newRemarksTextarea = newIssueForm.querySelector('[id^=remarks_]');
+
+            newCheckbox.id = `needRemarks_${issueIndex}`;
+            newCheckbox.checked = false;
+            newCheckbox.setAttribute('onchange', `toggleRemarks(${issueIndex})`);
+
+            newRemarksContainer.id = `remarksContainer_${issueIndex}`;
+            newRemarksContainer.style.display = 'none';
+
+            newRemarksTextarea.id = `remarks_${issueIndex}`;
+            newRemarksTextarea.name = `issues[${issueIndex}][remarks]`;
+            newRemarksTextarea.value = '';
 
             issueFormsContainer.appendChild(newIssueForm);
             issueIndex++;
