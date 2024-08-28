@@ -34,40 +34,40 @@ Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDa
 Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
 
 // For All Daily Report
-/* Route::get('/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll'); */
+Route::get('/daily/hotels/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
 /* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
 
 // Internet Speed Checking
 Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
 Route::get('/netspeed/addNetSpeed', [CreateController::class, 'AddNetSpeed']);
 Route::post('/insertNetSpeed', [CreateController::class, 'InsertNetSpeed']);
-Route::get('/{type}/updateNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeed'])->name('updateNetSpeed');
-Route::post('/{type}/updatePNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
-Route::delete('/{type}/deleteNetSpeed/{id}', [DeleteController::class, 'DeleteNetSpeed'])->name('deleteNetSpeed');
+Route::get('/daily/hotels/{type}/updateNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeed'])->name('updateNetSpeed');
+Route::post('/daily/hotels/{type}/updatePNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
+Route::delete('/daily/hotels/{type}/deleteNetSpeed/{id}', [DeleteController::class, 'DeleteNetSpeed'])->name('deleteNetSpeed');
 
 // Server Room Checking
 Route::get('/server/reportServer', [ReadController::class, 'TableReportServer'])->name("reportServer");
 Route::get('/server/addServer', [CreateController::class, 'AddServer'])->name('addServer');
 Route::post('/insertServer', [CreateController::class, 'InsertServer']);
-Route::get('/{type}/updateServer/{id}', [UpdateController::class, 'UpdateServer'])->name('updateServer');
-Route::post('/{type}/updatePServer/{id}', [UpdateController::class, 'UpdateServerProcess'])->name('updatePserver');
-Route::delete('/{type}/deleteServer/{id}', [DeleteController::class, 'DeleteServer'])->name('deleteServer');
+Route::get('/daily/hotels/{type}/updateServer/{id}', [UpdateController::class, 'UpdateServer'])->name('updateServer');
+Route::post('/daily/hotels/{type}/updatePServer/{id}', [UpdateController::class, 'UpdateServerProcess'])->name('updatePserver');
+Route::delete('/daily/hotels/{type}/deleteServer/{id}', [DeleteController::class, 'DeleteServer'])->name('deleteServer');
 
 // Switch Room Checking
 Route::get('/switchs/reportSwitch', [ReadController::class, 'TableReportSwitch'])->name("reportSwitch");
 Route::get('/switchs/addSwitch', [CreateController::class, 'AddSwitch'])->name('addSwitch');
 Route::post('/insertSwitch', [CreateController::class, 'InsertSwitch']);
-Route::get('/{type}/updateSwitch/{id}', [UpdateController::class, 'UpdateSwitch'])->name('updateSwitch');
-Route::post('/{type}/updatePSwitch/{id}', [UpdateController::class, 'UpdateSwitchProcess'])->name('updatePSwitch');
-Route::delete('/{type}/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
+Route::get('/daily/hotels/{type}/updateSwitch/{id}', [UpdateController::class, 'UpdateSwitch'])->name('updateSwitch');
+Route::post('/daily/hotels/{type}/updatePSwitch/{id}', [UpdateController::class, 'UpdateSwitchProcess'])->name('updatePSwitch');
+Route::delete('/daily/hotels/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
 
 // Guest Room Checking
 Route::get('/guest/reportGuest', [ReadController::class, 'TableReportGuest'])->name("reportGuest");
 Route::get('/guest/addGuest', [CreateController::class, 'AddGuest'])->name('addGuest');
 Route::post('/insertGuest', [CreateController::class, 'InsertGuest']);
-Route::get('/{type}/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])->name('updateGuest');
-Route::post('/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
-Route::delete('/{type}/deleteGuest/{id}', [DeleteController::class, 'DeleteGuest'])->name('deleteGuest');
+Route::get('/daily/hotels/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])->name('updateGuest');
+Route::post('/daily/hotels/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
+Route::delete('/daily/hotels/{type}/deleteGuest/{id}', [DeleteController::class, 'DeleteGuest'])->name('deleteGuest');
 
 Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status');
 

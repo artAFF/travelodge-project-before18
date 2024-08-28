@@ -45,7 +45,7 @@ class ReadController extends Controller
         return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order'));
     }
 
-    /*     public function TableReportAll(Request $request, $type)
+    public function TableReportAll(Request $request, $type)
     {
         $prefix = $this->getPrefixFromType($type);
         $source = $type;
@@ -69,8 +69,8 @@ class ReadController extends Controller
             ]);
         }
 
-        return view($source, compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
-    } */
+        return view("daily.hotels.{$source}", compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
+    }
 
     private function getPrefixFromType($type)
     {

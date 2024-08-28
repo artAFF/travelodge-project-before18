@@ -34,7 +34,7 @@ class DeleteController extends Controller
         $model = $this->getPrefixFromType($type, 'guest');
         /* $model = "{$prefix}guest"; */
         $model::where('id', $id)->delete();
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     function DeleteSwitch($type, $id)
@@ -42,7 +42,7 @@ class DeleteController extends Controller
         $model = $this->getPrefixFromType($type, 'switch');
         /* $model = "{$prefix}switch"; */
         $model::where('id', $id)->delete();
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     function DeleteServer($type, $id)
@@ -50,7 +50,7 @@ class DeleteController extends Controller
         $model = $this->getPrefixFromType($type, 'server');
         /* $model = "{$prefix}server"; */
         $model::where('id', $id)->delete();
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     function DeleteNetSpeed($type, $id)
@@ -58,7 +58,7 @@ class DeleteController extends Controller
         $model = $this->getPrefixFromType($type, 'net');
         /* $model = "{$prefix}net"; */
         $model::where('id', $id)->delete();
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     private function getPrefixFromType($type, $modelType)

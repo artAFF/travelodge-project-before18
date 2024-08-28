@@ -143,7 +143,7 @@ class CreateController extends Controller
         ];
 
         $model::insert($data);
-        return redirect("/{$hotel}");
+        return redirect("/daily/hotels/{$hotel}");
     }
 
     function AddSwitch()
@@ -173,7 +173,7 @@ class CreateController extends Controller
         ];
 
         $model::insert($data);
-        return redirect("/{$hotel}");
+        return redirect("/daily/hotels/{$hotel}");
     }
 
     function AddServer()
@@ -202,7 +202,7 @@ class CreateController extends Controller
         ];
 
         $model::insert($data);
-        return redirect("/{$hotel}");
+        return redirect("/daily/hotels/{$hotel}");
     }
 
     function AddNetSpeed()
@@ -230,7 +230,7 @@ class CreateController extends Controller
         ];
 
         $model::insert($data);
-        return redirect("/{$hotel}");
+        return redirect("/daily/hotels/{$hotel}");
     }
 
     private function getModelFromType($type, $modelType)

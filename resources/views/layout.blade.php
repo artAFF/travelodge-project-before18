@@ -140,17 +140,17 @@
                                     </a>
                                 </li>
                                 <li class="w-100">
-                                    <a href="/tlcmn" class="nav-link px-0">
+                                    <a href="/daily/hotels/tlcmn" class="nav-link px-0">
                                         <span class="d-none d-sm-inline px-3">TLCMN</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/ehcm" class="nav-link px-0">
+                                    <a href="/daily/hotels/ehcm" class="nav-link px-0">
                                         <span class="d-none d-sm-inline px-3">EHCM</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/uncm" class="nav-link px-0">
+                                    <a href="/daily/hotels/uncm" class="nav-link px-0">
                                         <span class="d-none d-sm-inline px-3">UNCM</span>
                                     </a>
                                 </li>

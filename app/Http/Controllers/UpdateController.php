@@ -127,7 +127,7 @@ class UpdateController extends Controller
 
         $model = $this->getModelFromType($type, 'guest');
         $model::where('id', $id)->update($data);
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     function UpdateSwitch($type, $id)
@@ -158,7 +158,7 @@ class UpdateController extends Controller
 
         $model = $this->getModelFromType($type, 'switch');
         $model::where('id', $id)->update($data);
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     function UpdateServer($type, $id)
@@ -188,7 +188,7 @@ class UpdateController extends Controller
 
         $model = $this->getModelFromType($type, 'server');
         $model::where('id', $id)->update($data);
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     function UpdateReportNetSpeed($type, $id)
@@ -217,7 +217,7 @@ class UpdateController extends Controller
 
         $model = $this->getModelFromType($type, 'net');
         $model::where('id', $id)->update($data);
-        return redirect("/{$type}");
+        return redirect("/daily/hotels/{$type}");
     }
 
     private function getModelFromType($type, $modelType)
