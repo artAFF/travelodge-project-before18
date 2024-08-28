@@ -9,12 +9,12 @@
             <div class="mb-3">
                 <label for="location" class="form-label">Location</label>
                 <select class="form-select" id="location" name="location">
-                    <option disabled>{{ $ReportNetSpeeds->location }}</option>
-
                     @foreach ($buildings as $building)
-                        <option value="{{ $building->name }}">{{ $building->name }}</option>
+                        <option value="{{ $building->name }}"
+                            {{ $ReportNetSpeeds->location == $building->name ? 'selected' : '' }}>
+                            {{ $building->name }}
+                        </option>
                     @endforeach
-
                 </select>
             </div>
 
@@ -41,7 +41,7 @@
             @enderror
 
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="/{{ $type }}" class="btn btn-secondary">Cancel</a>
+            <a href="/daily/hotels/{{ $type }}" class="btn btn-secondary">Cancel</a>
 
         </form>
     </div>

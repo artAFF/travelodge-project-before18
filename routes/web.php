@@ -59,13 +59,13 @@ Route::get('/switchs/addSwitch', [CreateController::class, 'AddSwitch'])->name('
 Route::post('/insertSwitch', [CreateController::class, 'InsertSwitch']);
 Route::get('/daily/hotels/{type}/updateSwitch/{id}', [UpdateController::class, 'UpdateSwitch'])->name('updateSwitch');
 Route::post('/daily/hotels/{type}/updatePSwitch/{id}', [UpdateController::class, 'UpdateSwitchProcess'])->name('updatePSwitch');
-Route::delete('/daily/hotels/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
+Route::delete('/daily/hotels/{type}/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
 
 // Guest Room Checking
 Route::get('/guest/reportGuest', [ReadController::class, 'TableReportGuest'])->name("reportGuest");
 Route::get('/guest/addGuest', [CreateController::class, 'AddGuest'])->name('addGuest');
 Route::post('/insertGuest', [CreateController::class, 'InsertGuest']);
-Route::get('/daily/hotels/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])->name('updateGuest');
+Route::get('/daily/hotels/{type}/updateGuest/{id}', [UpdateController::class, 'UpdateGuest'])->name('updateGuest');
 Route::post('/daily/hotels/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
 Route::delete('/daily/hotels/{type}/deleteGuest/{id}', [DeleteController::class, 'DeleteGuest'])->name('deleteGuest');
 
