@@ -76,7 +76,7 @@
         @enderror
 
         <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="/reportSwitch" class="btn btn-secondary">Cancel</a>
+        <a href="/daily/hotels/{{ $type }}" class="btn btn-secondary">Cancel</a>
 
     </form>
 

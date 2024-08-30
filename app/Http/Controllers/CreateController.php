@@ -112,10 +112,10 @@ class CreateController extends Controller
         return redirect('/reports/reportIssue');
     }
 
-    function AddGuest()
+    function AddGuest($type)
     {
         $buildings = Building::select('name')->get();
-        return view('/guest/addGuest', compact('buildings'));
+        return view('/guest/addGuest', compact('buildings', 'type'));
     }
 
     public function InsertGuest(Request $request)
@@ -146,10 +146,10 @@ class CreateController extends Controller
         return redirect("/daily/hotels/{$hotel}");
     }
 
-    function AddSwitch()
+    function AddSwitch($type)
     {
         $buildings = Building::select('name')->get();
-        return view('/switchs/addSwitch', compact('buildings'));
+        return view('/switchs/addSwitch', compact('buildings', 'type'));
     }
 
     public function InsertSwitch(Request $request)
@@ -176,9 +176,9 @@ class CreateController extends Controller
         return redirect("/daily/hotels/{$hotel}");
     }
 
-    function AddServer()
+    function AddServer($type)
     {
-        return view('/servers/addServer');
+        return view('/servers/addServer', compact('type'));
     }
 
     public function InsertServer(Request $request)
@@ -205,10 +205,10 @@ class CreateController extends Controller
         return redirect("/daily/hotels/{$hotel}");
     }
 
-    function AddNetSpeed()
+    function AddNetSpeed($type)
     {
         $buildings = Building::select('name')->get();
-        return view('/netspeed/addNetSpeed', compact('buildings'));
+        return view('/netspeed/addNetSpeed', compact('buildings', 'type'));
     }
 
     public function InsertNetSpeed(Request $request)

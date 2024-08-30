@@ -2,7 +2,7 @@
     @if (count($ReportServers) > 0)
 
         <h1 class="text text-center">All Report Daily Checklist at <b class='text-danger'>Server Room</b></h1><br>
-        <a href="/server/addServer" class="btn btn-primary">Add Server Room Check</a>
+        <a href="{{ route('addServer', ['type' => $source]) }}" class="btn btn-primary">Add Server Room Check</a>
         <table class="table table-striped table-hover ">
             <thead>
                 <tr>

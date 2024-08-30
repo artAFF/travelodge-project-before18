@@ -3,7 +3,7 @@
 
         <div class="container">
             <h1 class="text text-center">All Report Daily Checklist at <b class='text-danger'>Switch Room</b></h1><br>
-            <a href="/switchs/addSwitch" class="btn btn-primary">Add Switch Room Check</a>
+            <a href="{{ route('addSwitch', ['type' => $source]) }}" class="btn btn-primary">Add Switch Room Check</a>
             <table class="table table-striped table-hover ">
                 <thead>
                     <tr>

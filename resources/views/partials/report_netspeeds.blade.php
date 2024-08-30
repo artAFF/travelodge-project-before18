@@ -2,7 +2,7 @@
     @if (count($ReportNetSpeeds) > 0)
 
         <h1 class="text text-center">All <b class='text-danger'>Internet Checking</b> Report</h1><br>
-        <a href="/netspeed/addNetSpeed" class="btn btn-primary">Add Internet Check</a>
+        <a href="{{ route('addNetSpeed', ['type' => $source]) }}" class="btn btn-primary">Add Internet Check</a>
         <table class="table table-striped table-hover ">
             <thead>
                 <tr>
