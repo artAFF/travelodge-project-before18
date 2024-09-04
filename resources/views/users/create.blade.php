@@ -1,7 +1,5 @@
 @extends('layout')
-
 @section('title', 'Create New User')
-
 @section('content')
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -18,6 +16,21 @@
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                             <div class="mb-4">
+                                <label for="role" class="form-label">Role</label>
+                                <select class="form-control" id="role" name="role" required>
+                                    <option value="user">Regular User</option>
+                                    <option value="admin">Administrator</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="department_id" class="form-label">Department</label>
+                                <select class="form-control" id="department_id" name="department_id" required>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
@@ -25,13 +38,6 @@
                                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="password_confirmation"
                                     name="password_confirmation" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="role" class="form-label">Role</label>
-                                <select class="form-control" id="role" name="role" required>
-                                    <option value="user">Regular User</option>
-                                    <option value="admin">Administrator</option>
-                                </select>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary btn-lg">Create User</button>

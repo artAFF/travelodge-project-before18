@@ -69,138 +69,144 @@
                         class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 d-none d-sm-inline">IT Support Dashboard</span>
                     </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-                        id="menu">
-                        <li class="nav-item main-menu-item">
-                            <a href="{{ route('main') }}" class="nav-link align-middle px-0">
-                                <i class="bi bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                            </a>
-                        </li>
-                        <li class="nav-item main-menu-item">
-                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="bi bi-graph-up"></i>
-                                <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-                                <i class="bi bi-chevron-right ms-auto px-2"></i>
-                            </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="{{ route('dashboardStatus') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Status Report</span>
+                    @auth
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                            id="menu">
+                            <li class="nav-item main-menu-item">
+                                <a href="{{ route('main') }}" class="nav-link align-middle px-0">
+                                    <i class="bi bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                                </a>
+                            </li>
+                            @if (auth()->user()->role === 'admin')
+                                <li class="nav-item main-menu-item">
+                                    <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                        <i class="bi bi-graph-up"></i>
+                                        <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                                        <i class="bi bi-chevron-right ms-auto px-2"></i>
+                                    </a>
+                                    <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                        <li class="w-100">
+                                            <a href="{{ route('dashboardStatus') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Status Report</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('week.chart') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Issue By Weeks</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('month.chart') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Issue By Months</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('department.chart') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Issue By Departments</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('category.chart') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Issue By Categories</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('hotel.chart') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Issue By Hotels</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endif
+                            <li class="nav-item main-menu-item">
+                                <a href="{{ route('reportIssue') }}" class="nav-link px-0 align-middle">
+                                    <i class="bi bi-clipboard"></i> <span class="ms-1 d-none d-sm-inline">Report
+                                        Issue</span>
+                                </a>
+                            </li>
+                            @if (auth()->user()->role === 'admin')
+                                <li class="nav-item main-menu-item">
+                                    <a href="{{ route('filter.form') }}" class="nav-link px-0 align-middle">
+                                        <i class="bi bi-file-earmark-pdf"></i><span class="ms-1 d-none d-sm-inline">Filter
+                                            Report PDF</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('week.chart') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By Weeks</span>
+                                <li class="main-menu-item">
+                                    <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                        <i class="bi bi-calendar-check"></i>
+                                        <span class="ms-1 d-none d-sm-inline">Daily Checklist</span>
+                                        <i class="bi bi-chevron-right ms-auto px-2"></i>
                                     </a>
+                                    <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                        <li class="w-100">
+                                            <a href="/daily/search" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Search Daily</span>
+                                            </a>
+                                        </li>
+                                        <li class="w-100">
+                                            <a href="/daily/hotels/tlcmn" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">TLCMN</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/daily/hotels/ehcm" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">EHCM</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/daily/hotels/uncm" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">UNCM</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="{{ route('month.chart') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By Months</span>
+                                <li class="main-menu-item">
+                                    <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                        <i class="bi bi-gear"></i>
+                                        <span class="ms-1 d-none d-sm-inline">Structure Settings</span>
+                                        <i class="bi bi-chevron-right ms-auto px-2"></i>
                                     </a>
+                                    <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                        <li class="w-100">
+                                            <a href="{{ route('structure.buildings') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Buildings</span>
+                                            </a>
+                                        </li>
+                                        <li class="w-100">
+                                            <a href="{{ route('structure.categories') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Categories Issues</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('structure.departments') }}" class="nav-link px-0">
+                                                <span class="d-none d-sm-inline px-3">Departments</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('users.index') }}" class="nav-link px-0"><span
+                                                    class="d-none d-sm-inline px-3">Users</span></a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="{{ route('department.chart') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By Departments</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('category.chart') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By Categories</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('hotel.chart') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Issue By Hotels</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item main-menu-item">
-                            <a href="{{ route('reportIssue') }}" class="nav-link px-0 align-middle">
-                                <i class="bi bi-clipboard"></i> <span class="ms-1 d-none d-sm-inline">Report
-                                    Issue</span>
-                            </a>
-                        </li>
-                        <li class="nav-item main-menu-item">
-                            <a href="{{ route('filter.form') }}" class="nav-link px-0 align-middle">
-                                <i class="bi bi-file-earmark-pdf"></i><span class="ms-1 d-none d-sm-inline">Filter
-                                    Report PDF</span>
-                            </a>
-                        </li>
-                        <li class="main-menu-item">
-                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="bi bi-calendar-check"></i>
-                                <span class="ms-1 d-none d-sm-inline">Daily Checklist</span>
-                                <i class="bi bi-chevron-right ms-auto px-2"></i>
-                            </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="/daily/search" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Search Daily</span>
-                                    </a>
-                                </li>
-                                <li class="w-100">
-                                    <a href="/daily/hotels/tlcmn" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">TLCMN</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/daily/hotels/ehcm" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">EHCM</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/daily/hotels/uncm" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">UNCM</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="main-menu-item">
-                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="bi bi-gear"></i>
-                                <span class="ms-1 d-none d-sm-inline">Structure Settings</span>
-                                <i class="bi bi-chevron-right ms-auto px-2"></i>
-                            </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="{{ route('structure.buildings') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Buildings</span>
-                                    </a>
-                                </li>
-                                <li class="w-100">
-                                    <a href="{{ route('structure.categories') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Categories Issues</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('structure.departments') }}" class="nav-link px-0">
-                                        <span class="d-none d-sm-inline px-3">Departments</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('users.index') }}" class="nav-link px-0"><span
-                                            class="d-none d-sm-inline px-3">Users</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item main-menu-item">
-                            <a href="#userSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                                id="userDropdown">
-                                <i class="bi bi-person"></i>
-                                <span class="ms-1 d-none d-sm-inline">{{ Auth::user()->name }}</span>
-                                <i class="bi bi-chevron-right ms-auto"></i>
-                            </a>
-                            <ul class="collapse nav flex-column ms-1" id="userSubmenu" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="{{ route('logout') }}" class="nav-link px-0"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <span class="d-none d-sm-inline px-3">Sign out</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                            @endif
+                            <li class="nav-item main-menu-item">
+                                <a href="#userSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                    id="userDropdown">
+                                    <i class="bi bi-person"></i>
+                                    <span class="ms-1 d-none d-sm-inline">{{ Auth::user()->name }}</span>
+                                    <i class="bi bi-chevron-right ms-auto"></i>
+                                </a>
+                                <ul class="collapse nav flex-column ms-1" id="userSubmenu" data-bs-parent="#menu">
+                                    <li class="w-100">
+                                        <a href="{{ route('logout') }}" class="nav-link px-0"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <span class="d-none d-sm-inline px-3">Sign out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    @endauth
                 </div>
             </div>
 

@@ -12,4 +12,9 @@ class Department extends Model
     public $timestamps = false;
 
     protected $fillable = ['id', 'name'];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

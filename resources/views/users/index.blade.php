@@ -11,6 +11,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Department</th>
                     <th>Role</th>
                     <th>Actions</th>
                 </tr>
@@ -20,13 +21,23 @@
                     <tr>
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
-                        <td>{{ $user->role }}</td>
+                        <td>{{ $user->department ? $user->department->name : 'N/A' }}</td>
                         <td>
-                            <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary">Edit</a>
+                            @if ($user->role === 'admin')
+                                Administrator
+                            @elseif($user->role === 'user')
+                                User
+                            @else
+                                {{ $user->role }}
+                            @endif
+                        </td>
+
+                        <td>
+                            <a href="{{ route('users.edit', $user) }}" class="btn btn-primary">Edit</a>
                             <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger"
+                                <button type="submit" class="btn btn-danger"
                                     onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
                             </form>
                         </td>

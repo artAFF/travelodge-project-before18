@@ -87,6 +87,7 @@ class CreateController extends Controller
             $message = "New Issue Reported:\n";
             $message .= "  - Issue Category: " . $issueData['issue'] . "\n";
             $message .= "  - Detail: " . $issueData['detail'] . "\n";
+            $message .= "  - Remarks: " . (!empty($issueData['remarks']) ? $issueData['remarks'] : "No remarks") . "\n";
             $message .= "  - Department: " . $issueData['department'] . "\n";
             $message .= "  - Hotel: " . $issueData['hotel'] . "\n";
             $message .= "  - Location: " . $issueData['location'] . "\n";
