@@ -20,16 +20,33 @@
     </div>
 
     <div class="row mt-4">
-        @foreach (array_chunk($months, 6) as $monthChunk)
+        @php
+            $orderedMonths = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+        @endphp
+        @foreach (array_chunk($orderedMonths, 6) as $monthChunk)
             <div class="col-md-6">
                 <div class="row">
-                    @foreach ($monthChunk as $index => $month)
+                    @foreach ($monthChunk as $month)
                         <div class="col-md-4 mb-3">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $month }}</h5>
                                     <p class="card-text">Reports:
-                                        {{ $datasets[0]['data'][$index + ($loop->parent->iteration - 1) * 6] }}</p>
+                                        {{ $datasets[0]['data'][array_search($month, $months)] }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -43,9 +60,27 @@
         var barCtx = document.getElementById('barChart').getContext('2d');
         var pieCtx = document.getElementById('pieChart').getContext('2d');
 
+        var orderedMonths = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        var orderedData = orderedMonths.map(month => {
+            var index = <?php echo json_encode($months); ?>.indexOf(month);
+            return <?php echo json_encode($datasets[0]['data']); ?>[index];
+        });
+
+        var orderedPercentages = orderedMonths.map(month => {
+            var index = <?php echo json_encode($months); ?>.indexOf(month);
+            return <?php echo json_encode($percentages); ?>[index];
+        });
+
         var chartData = {
-            labels: <?php echo json_encode($months); ?>,
-            datasets: <?php echo json_encode($datasets); ?>
+            labels: orderedMonths,
+            datasets: [{
+                ...<?php echo json_encode($datasets[0]); ?>,
+                data: orderedData
+            }]
         };
 
         var chartOptions = {
@@ -73,9 +108,9 @@
         var pieChart = new Chart(pieCtx, {
             type: 'pie',
             data: {
-                labels: <?php echo json_encode($months); ?>,
+                labels: orderedMonths,
                 datasets: [{
-                    data: <?php echo json_encode($percentages); ?>,
+                    data: orderedPercentages,
                     backgroundColor: <?php echo json_encode($datasets[0]['backgroundColor']); ?>
                 }]
             },

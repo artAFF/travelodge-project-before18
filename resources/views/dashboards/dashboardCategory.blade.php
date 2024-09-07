@@ -19,19 +19,31 @@
         </div>
     </div>
 
-    <div class="row mt-4 justify-content-center">
-        @foreach (array_chunk($categories, ceil(count($categories) / 6)) as $categoryChunk)
-            <div class="col-auto mx-2 mb-3">
-                <ul class="list-group">
-                    @foreach ($categoryChunk as $index => $category)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ $category }}
-                            <span class="badge bg-primary rounded-pill ms-2">{{ $datasets[0]['data'][$index] }}</span>
-                        </li>
-                    @endforeach
-                </ul>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Category Reports</h3>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        @foreach ($categories as $index => $category)
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $category }}</h5>
+                                        <p class="card-text">
+                                            <span class="fs-4 fw-bold text-primary">
+                                                {{ $datasets[0]['data'][$index] }}
+                                            </span>
+                                            reports
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
-        @endforeach
+        </div>
     </div>
 
     <script>
