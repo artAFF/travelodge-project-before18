@@ -20,7 +20,7 @@
 
             <div class="mb-3">
                 <label for="download" class="form-label">Download</label>
-                <input type="number" step="0.1" class="form-control" id="download" name="download"
+                <input type="number" step="0.01" class="form-control" id="download" name="download"
                     value="{{ $ReportNetSpeeds->download }}">
             </div>
             @error('download')
@@ -31,7 +31,7 @@
 
             <div class="mb-3">
                 <label for="upload" class="form-label">Upload</label>
-                <input type="number" step="0.1" class="form-control" id="upload" name="upload"
+                <input type="number" step="0.01" class="form-control" id="upload" name="upload"
                     value="{{ $ReportNetSpeeds->upload }}">
             </div>
             @error('upload')

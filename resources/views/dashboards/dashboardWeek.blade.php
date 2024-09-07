@@ -1,60 +1,89 @@
 @extends('layout')
 @section('title', 'Dashboard Week')
 @section('content')
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-
     <h1 class="text text-center">Issue By Week</h1>
 
-    <div class="mb-3">
-        <select id="chartType" class="form-select" onchange="updateChart(this.value)">
-            <option value="bar" {{ $chartType == 'bar' ? 'selected' : '' }}>Bar Chart</option>
-            <option value="pie" {{ $chartType == 'pie' ? 'selected' : '' }}>Pie Chart</option>
-        </select>
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="text-center">Bar Chart</h2>
+            <div style="height: 400px; width: 100%;">
+                <canvas id='barChart'></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="text-center">Pie Chart</h2>
+            <div style="height: 400px; width: 100%;">
+                <canvas id='pieChart'></canvas>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <canvas id='chart' style="width:600px; margin: auto;"></canvas>
+    <div class="row mt-4">
+        @foreach ($days as $index => $day)
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $day }}</h5>
+                        <p class="card-text">Reports: {{ $datasets[0]['data'][$index] }}</p>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
 
     <script>
-        var ctx = document.getElementById('chart').getContext('2d');
+        var barCtx = document.getElementById('barChart').getContext('2d');
+        var pieCtx = document.getElementById('pieChart').getContext('2d');
+
         var chartData = {
-            labels: <?php echo json_encode(isset($status) ? $status : (isset($departments) ? $departments : (isset($categories) ? $categories : (isset($hotels) ? $hotels : [])))); ?>,
+            labels: <?php echo json_encode($days); ?>,
             datasets: <?php echo json_encode($datasets); ?>
         };
 
         var chartOptions = {
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
+            responsive: true,
+            maintainAspectRatio: false,
+        };
+
+        var barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                ...chartOptions,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y;
                             }
-                            if (context.parsed.y !== undefined) {
-                                label += context.parsed.y;
-                            } else if (context.parsed !== undefined) {
-                                label += context.parsed;
-                                label += '%';
-                            }
-                            return label;
                         }
                     }
                 }
             }
-        };
-
-        var myChart = new Chart(ctx, {
-            type: '<?php echo $chartType; ?>',
-            data: chartData,
-            options: chartOptions
         });
 
-        function updateChart(chartType) {
-            window.location.href = '{{ route('week.chart') }}?chart_type=' + chartType;
-        }
+        var pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode($days); ?>,
+                datasets: [{
+                    data: <?php echo json_encode($percentages); ?>,
+                    backgroundColor: <?php echo json_encode($datasets[0]['backgroundColor']); ?>
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
     </script>
-
 @endsection

@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-
+// Home
 Route::get('/home/main', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
+Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status');
 Route::get('/', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -33,16 +34,16 @@ Route::post('/insertIssue', [CreateController::class, 'InsertReportIssue']);
 Route::delete('/deletereport/{id}', [DeleteController::class, 'DeleteReportIssue'])->name("deletereport");
 Route::get('/reports/updateReport/{id}', [UpdateController::class, 'UpdateReportIssue'])->name("updateReport");
 Route::post('/reports/updatePreport/{id}', [UpdateController::class, 'UpdateIssue'])->name("updatePreport");
-Route::get('/reports/pdf-issue/{id}', [PdfController::class, 'pdfissue'])->name('pdfissue');
-Route::get('/reports/pdf-issue-all', [PdfController::class, 'printAllIssues'])->name('pdf-issue-all');
+
 Route::get('/reports/inprocess', [ReadController::class, 'inprocess'])->name('inprocess');
+
 Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDate');
 Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
 
 Route::middleware(['auth', 'check.role:admin'])->group(function () {
     // For All Daily Report
     Route::get('/daily/hotels/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
-    /* Route::get('/tlcmn', [ReadController::class, 'TableReportAll'])->name('table.report.all'); */
+
 
     // Internet Speed Checking
     Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::post('/daily/hotels/{type}/updatePNetSpeed/{id}', [UpdateController::class, 'UpdateReportNetSpeedProcess'])->name('updatePNetSpeed');
     Route::delete('/daily/hotels/{type}/deleteNetSpeed/{id}', [DeleteController::class, 'DeleteNetSpeed'])->name('deleteNetSpeed');
 
+
     // Server Room Checking
     Route::get('/server/reportServer', [ReadController::class, 'TableReportServer'])->name("reportServer");
     Route::get('/server/addServer/{type}', [CreateController::class, 'AddServer'])->name('addServer');
@@ -59,6 +61,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/daily/hotels/{type}/updateServer/{id}', [UpdateController::class, 'UpdateServer'])->name('updateServer');
     Route::post('/daily/hotels/{type}/updatePServer/{id}', [UpdateController::class, 'UpdateServerProcess'])->name('updatePserver');
     Route::delete('/daily/hotels/{type}/deleteServer/{id}', [DeleteController::class, 'DeleteServer'])->name('deleteServer');
+
 
     // Switch Room Checking
     Route::get('/switchs/reportSwitch', [ReadController::class, 'TableReportSwitch'])->name("reportSwitch");
@@ -68,6 +71,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::post('/daily/hotels/{type}/updatePSwitch/{id}', [UpdateController::class, 'UpdateSwitchProcess'])->name('updatePSwitch');
     Route::delete('/daily/hotels/{type}/deleteSwitch/{id}', [DeleteController::class, 'DeleteSwitch'])->name('deleteSwitch');
 
+
     // Guest Room Checking
     Route::get('/guest/reportGuest', [ReadController::class, 'TableReportGuest'])->name("reportGuest");
     Route::get('/guest/addGuest/{type}', [CreateController::class, 'AddGuest'])->name('addGuest');
@@ -76,7 +80,6 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::post('/daily/hotels/{type}/updatePGuest/{id}', [UpdateController::class, 'UpdateGuestProcess'])->name('updatePguest');
     Route::delete('/daily/hotels/{type}/deleteGuest/{id}', [DeleteController::class, 'DeleteGuest'])->name('deleteGuest');
 
-    Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status');
 
     // Dasboard
     Route::get('/dashboards/dashboardMonth', [ChartController::class, 'MonthChart'])->name('month.chart');
@@ -89,6 +92,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/filter/filter-form', [PdfController::class, 'showFilterForm'])->name('filter.form');
     Route::post('/filter/filter-data', [PdfController::class, 'filterData'])->name('filter.data');
     Route::get('/filter/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
+
 
     // Structure
     Route::get('/structure/buildings', [StructureController::class, 'buildings'])->name('structure.buildings');

@@ -130,7 +130,6 @@
                 }
             });
 
-            // ส่วนที่เพิ่มใหม่สำหรับ checkbox และ remarks
             const newCheckbox = newIssueForm.querySelector('.form-check-input');
             const newRemarksContainer = newIssueForm.querySelector('[id^=remarksContainer_]');
             const newRemarksTextarea = newIssueForm.querySelector('[id^=remarks_]');

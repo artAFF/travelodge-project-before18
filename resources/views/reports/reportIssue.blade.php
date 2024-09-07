@@ -78,8 +78,6 @@
                                             class="bi bi-eye"></i></button>
                                     <a href="{{ route('updateReport', $reporter->id) }}" class="btn btn-primary"><i
                                             class="bi bi-pencil-square"></i></a>
-                                    <a href="{{ route('pdfissue', $reporter->id) }}" class="btn btn-info"><i
-                                            class="bi bi-download"></i></a>
 
                                     {{-- <form action="{{ route('deletereport', $reporter->id) }}" method="POST"
                                     style="display: inline-block;">

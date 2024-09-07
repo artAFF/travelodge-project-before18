@@ -23,16 +23,14 @@ class ChartController extends Controller
 
     public function WeekChart(Request $request)
     {
-        $chartType = $request->input('chart_type', 'bar');
-
         $travelodges = Travelodge::selectRaw('DAYOFWEEK(created_at) as day_of_week, COUNT(*) as count')
             ->whereYear('created_at', '=', now()->year)
             ->groupBy('day_of_week')
             ->orderBy('day_of_week')
             ->get();
 
-        $status = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        $data = [0, 0, 0, 0, 0, 0, 0];
+        $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        $data = array_fill(0, 7, 0);
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9'];
 
         foreach ($travelodges as $travelodge) {
@@ -45,41 +43,32 @@ class ChartController extends Controller
         $datasets = [
             [
                 'label' => 'Issue',
-                'data' => $chartType == 'bar' ? $data : $percentages,
+                'data' => $data,
                 'backgroundColor' => $colors
             ]
         ];
 
-        return view('/dashboards/dashboardWeek', compact('datasets', 'status', 'chartType'));
+        return view('/dashboards/dashboardWeek', compact('datasets', 'days', 'percentages'));
     }
 
     public function MonthChart(Request $request)
     {
-        $chartType = $request->input('chart_type', 'bar');
-
         $travelodges = Travelodge::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->whereYear('created_at', date('Y'))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
-        $status = [];
+        $months = [];
         $data = [];
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2'];
 
-        for ($i = 1; $i < 13; $i++) {
+        for ($i = 1; $i <= 12; $i++) {
             $month = date('F', mktime(0, 0, 0, $i, 1));
-            $count = 0;
+            $count = $travelodges->firstWhere('month', $i)->count ?? 0;
 
-            foreach ($travelodges as $travelodge) {
-                if ($travelodge->month == $i) {
-                    $count = $travelodge->count;
-                    break;
-                }
-            }
-
-            array_push($status, $month);
-            array_push($data, $count);
+            $months[] = $month;
+            $data[] = $count;
         }
 
         $percentages = $this->calculatePercentages($data);
@@ -87,18 +76,16 @@ class ChartController extends Controller
         $datasets = [
             [
                 'label' => 'Issue',
-                'data' => $chartType == 'bar' ? $data : $percentages,
+                'data' => $data,
                 'backgroundColor' => $colors
             ]
         ];
 
-        return view('/dashboards/dashboardMonth', compact('datasets', 'status', 'chartType'));
+        return view('/dashboards/dashboardMonth', compact('datasets', 'months', 'percentages'));
     }
 
     public function DepartmentChart(Request $request)
     {
-        $chartType = $request->input('chart_type', 'bar');
-
         $departmentsWithCounts = Travelodge::select('department')
             ->selectRaw('COUNT(*) as count')
             ->groupBy('department')
@@ -106,7 +93,8 @@ class ChartController extends Controller
             ->get();
 
         $departments = $departmentsWithCounts->pluck('department')->toArray();
-        $data = $departmentsWithCounts->pluck('count')->toArray();
+        $data = array_combine($departments, $departmentsWithCounts->pluck('count')->toArray());
+
 
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2', '#007bff'];
         $colors = array_slice($colors, 0, count($departments));
@@ -116,18 +104,16 @@ class ChartController extends Controller
         $datasets = [
             [
                 'label' => 'Issue',
-                'data' => $chartType == 'bar' ? $data : $percentages,
+                'data' => $data,
                 'backgroundColor' => $colors
             ]
         ];
 
-        return view('/dashboards/dashboardDepartment', compact('datasets', 'departments', 'chartType'));
+        return view('/dashboards/dashboardDepartment', compact('datasets', 'departments', 'percentages'));
     }
 
     public function CategoryChart(Request $request)
     {
-        $chartType = $request->input('chart_type', 'bar');
-
         $categoriesWithCounts = Travelodge::select('issue as category')
             ->selectRaw('COUNT(*) as count')
             ->groupBy('issue')
@@ -145,45 +131,48 @@ class ChartController extends Controller
         $datasets = [
             [
                 'label' => 'Issue',
-                'data' => $chartType == 'bar' ? $data : $percentages,
+                'data' => $data,
                 'backgroundColor' => $colors
             ]
         ];
 
-        return view('/dashboards/dashboardCategory', compact('datasets', 'categories', 'chartType'));
+        return view('/dashboards/dashboardCategory', compact('datasets', 'categories', 'percentages'));
     }
 
     public function HotelChart(Request $request)
     {
-        $chartType = $request->input('chart_type', 'bar');
-
         $hotels = [
             'TLCMN' => 'Travelodge Nimman',
             'EHCM' => 'Eastin Tan',
             'UNCM' => 'U Nimman'
         ];
-
         $data = [];
         $colors = ['#E74C3C', '#2CA02C', '#3498DB'];
+        $latestReports = [];
 
         foreach ($hotels as $hotel => $hotelLabel) {
             $count = Travelodge::where('hotel', $hotel)->count();
             array_push($data, $count);
+
+            // Fetch the 5 latest reports for each hotel
+            $latestHotelReports = Travelodge::where('hotel', $hotel)
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get(['id', 'detail', 'created_at']);
+            $latestReports[$hotelLabel] = $latestHotelReports;
         }
 
         $percentages = $this->calculatePercentages($data);
-
         $datasets = [
             [
                 'label' => 'Hotels',
-                'data' => $chartType == 'bar' ? $data : $percentages,
+                'data' => $data,
                 'backgroundColor' => $colors
             ]
         ];
-
         $hotels = array_values($hotels);
 
-        return view('/dashboards/dashboardHotel', compact('datasets', 'hotels', 'chartType'));
+        return view('/dashboards/dashboardHotel', compact('datasets', 'hotels', 'percentages', 'latestReports'));
     }
 
     public function StatusChart(Request $request)

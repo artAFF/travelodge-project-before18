@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>เข้าสู่ระบบ</title>
+    <title>Login to MIS</title>
     <style>
         body {
             font-family: Arial, sans-serif;

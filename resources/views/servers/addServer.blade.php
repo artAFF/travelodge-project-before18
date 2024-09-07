@@ -26,7 +26,7 @@
 
         <div class="mb-3">
             <label for="ups_temp" class="form-label">UPS Temperature</label>
-            <input type="number" step="0.1" class="form-control" id="ups_temp" name="ups_temp"></input>
+            <input type="number" step="0.01" class="form-control" id="ups_temp" name="ups_temp"></input>
         </div>
         @error('ups_temp')
             <div class="my-error">
@@ -35,7 +35,7 @@
         @enderror
         <div class="mb-3">
             <label for="ups_battery" class="form-label">USP Battery Percentage</label>
-            <input type="number" step="0.1" class="form-control" id="ups_battery" name="ups_battery">
+            <input type="number" step="0.01" class="form-control" id="ups_battery" name="ups_battery">
         </div>
         @error('ups_battery')
             <div class="my-error">

@@ -33,6 +33,21 @@
         @enderror
 
         <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="needRemarks" onchange="toggleRemarks()"
+                    {{ $ReportIssues->remarks ? 'checked' : '' }}>
+                <label class="form-check-label" for="needRemarks">
+                    Add Remarks
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-3" id="remarksContainer" style="display: {{ $ReportIssues->remarks ? 'block' : 'none' }};">
+            <label for="remarks" class="form-label">Remarks</label>
+            <textarea class="form-control" id="remarks" name="remarks" rows="2">{{ $ReportIssues->remarks }}</textarea>
+        </div>
+
+        <div class="mb-3">
             <label for="department" class="form-label">Department</label>
             <select class="form-select" id="department" name="department">
                 <option value="{{ $ReportIssues->department }}" selected>{{ $ReportIssues->department }}</option>
@@ -80,6 +95,15 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="/reports/reportIssue" class="btn btn-secondary">Cancel</a>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
+
     </form>
+
+    <script>
+        function toggleRemarks() {
+            const checkbox = document.getElementById('needRemarks');
+            const remarksContainer = document.getElementById('remarksContainer');
+            remarksContainer.style.display = checkbox.checked ? 'block' : 'none';
+        }
+    </script>
 @endsection

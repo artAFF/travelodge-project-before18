@@ -30,6 +30,9 @@ class ReadController extends Controller
         $sort_by = $request->input('sort_by', 'id');
         $sort_order = $request->input('sort_order', 'desc');
 
+        // Get the authenticated user
+        $user = auth()->user();
+
         $ReportIssues = Travelodge::query()
             ->when($query, function ($q) use ($query) {
                 $q->where('issue', 'like', "%{$query}%")
@@ -37,6 +40,10 @@ class ReadController extends Controller
                     ->orWhere('department', 'like', "%{$query}%")
                     ->orWhere('hotel', 'like', "%{$query}%")
                     ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->when($user->role !== 'admin', function ($q) use ($user) {
+                // If the user is not an admin, filter by their department
+                $q->where('department', $user->department->name);
             })
             ->orderBy($sort_by, $sort_order)
             ->paginate(10)

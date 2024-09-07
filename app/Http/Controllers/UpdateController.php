@@ -46,9 +46,10 @@ class UpdateController extends Controller
     {
         $request->validate([
             'issue' => 'required',
-            'detail' => 'required'
-
+            'detail' => 'required',
+            'remarks' => 'nullable|string',
         ]);
+
         $data = [
             'issue' => $request->issue,
             'detail' => $request->detail,
@@ -56,9 +57,10 @@ class UpdateController extends Controller
             'hotel' => $request->hotel,
             'location' => $request->location,
             'status' => $request->status,
-            'updated_at' => $request->updated_at
-
+            'remarks' => $request->remarks,
+            'updated_at' => now()
         ];
+
         Travelodge::where('id', $id)->update($data);
 
         $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab'; //token for test PAjBExb3IfM1VtcuNJVLhrj2mdN2ZNlAUTJXmbGRXAh e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab
@@ -70,6 +72,7 @@ class UpdateController extends Controller
         $message .= "  - ID Issue: " . $request->id . "\n";
         $message .= "  - Issue Category: " . $request->issue . "\n";
         $message .= "  - Detail: " . $request->detail . "\n";
+        $message .= "  - Remarks: " . (!empty($request->remarks) ? $request->remarks : "No remarks") . "\n";
         /* $message .= "  - Department: " . $request->department . "\n";
         $message .= "  - Location: " . $request->location . "\n"; */
         $message .= "  - Hotel: " . $request->hotel . "\n";

@@ -90,7 +90,7 @@
 
         <div class="mb-3">
             <label for="ch_no" class="form-label">Channel Number</label>
-            <input type="number" step="0.1" class="form-control" id="ch_no" name="ch_no"
+            <input type="number" step="0.01" class="form-control" id="ch_no" name="ch_no"
                 value="{{ $ReportGuests->ch_no }}">
         </div>
         @error('ch_no')

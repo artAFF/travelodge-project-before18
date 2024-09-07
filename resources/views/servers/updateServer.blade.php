@@ -19,7 +19,7 @@
 
             <div class="mb-3">
                 <label for="ups_temp" class="form-label">UPS Temperature</label>
-                <input type="number" step="0.1" class="form-control" id="ups_temp" name="ups_temp"
+                <input type="number" step="0.01" class="form-control" id="ups_temp" name="ups_temp"
                     value="{{ $ReportServers->ups_temp }}">
             </div>
             @error('ups_temp')
@@ -30,7 +30,7 @@
 
             <div class="mb-3">
                 <label for="ups_battery" class="form-label">USP Battery Percentage</label>
-                <input type="number" step="0.1" class="form-control" id="ups_battery" name="ups_battery"
+                <input type="number" step="0.01" class="form-control" id="ups_battery" name="ups_battery"
                     value="{{ $ReportServers->ups_battery }}">
             </div>
             @error('ups_battery')
@@ -41,7 +41,7 @@
 
             <div class="mb-3">
                 <label for="ups_time" class="form-label">UPS Period Of Service Available</label>
-                <input type="number" step="0.1" class="form-control" id="ups_time" name="ups_time"
+                <input type="number" step="0.01" class="form-control" id="ups_time" name="ups_time"
                     value="{{ $ReportServers->ups_time }}">
             </div>
             @error('ups_time')

@@ -8,7 +8,7 @@
             <thead>
                 <th>Department</th>
                 <th>In-process</th>
-                <th>Succeed</th>
+                <th>Done</th>
                 <th>Total</th>
                 <th>View</th>
             </thead>
