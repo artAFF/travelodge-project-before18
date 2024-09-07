@@ -45,6 +45,8 @@
             </label>
         </div>
 
+        <input type="hidden" id="location" name="location" value="">
+
         <div class="mb-3">
             <label for="download" class="form-label">Download</label>
             <input type="number" step="0.01" class="form-control" id="download" name="download"></input>
@@ -70,17 +72,36 @@
     </form>
 
     <script>
-        document.getElementById('othersCheckbox').addEventListener('change', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form');
             var form1 = document.getElementById('form1');
             var form2 = document.getElementById('form2');
+            var location1 = document.getElementById('location1');
+            var location2 = document.getElementById('location2');
+            var locationHidden = document.createElement('input');
+            locationHidden.type = 'hidden';
+            locationHidden.name = 'location';
+            form.appendChild(locationHidden);
 
-            if (this.checked) {
-                form1.classList.add('hidden');
-                form2.classList.remove('hidden');
-            } else {
-                form1.classList.remove('hidden');
-                form2.classList.add('hidden');
-            }
+            var othersCheckbox = document.getElementById('othersCheckbox');
+
+            othersCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    form1.classList.add('hidden');
+                    form2.classList.remove('hidden');
+                } else {
+                    form1.classList.remove('hidden');
+                    form2.classList.add('hidden');
+                }
+            });
+
+            form.addEventListener('submit', function(e) {
+                if (othersCheckbox.checked) {
+                    locationHidden.value = location2.value;
+                } else {
+                    locationHidden.value = location1.value;
+                }
+            });
         });
     </script>
 
