@@ -21,8 +21,15 @@
                         <td>{{ $statuse['total'] }}</td>
                         <td>
                             @if (isset($departmentLinks[$department]))
-                                <a href="{{ $departmentLinks[$department] }}" class="btn btn-primary">
-                                    <i class="bi bi-hourglass-split"></i></a>
+                                @if (auth()->user()->role === 'admin' || auth()->user()->department->name === $department)
+                                    <a href="{{ $departmentLinks[$department] }}" class="btn btn-primary">
+                                        <i class="bi bi-hourglass-split"></i>
+                                    </a>
+                                @else
+                                    <button class="btn btn-secondary" disabled>
+                                        <i class="bi bi-hourglass-split"></i>
+                                    </button>
+                                @endif
                             @endif
                         </td>
                     </tr>

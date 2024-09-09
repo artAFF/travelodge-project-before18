@@ -6,7 +6,8 @@
     @if (count($in_process) > 0)
         <div class="container">
             <h3 class="text-center">Issues in the process</h3>
-            <form id="combinedForm" method="GET">
+            <form id="combinedForm" method="GET" action="{{ route('filterDate') }}">
+
                 <div class="row pb-3 align-items-end">
                     <div class="col-md-2">
                         <label>Start Date:</label>
@@ -17,7 +18,7 @@
                         <div class="input-group">
                             <input type="date" name="end_date" class="form-control">
                             <div class="input-group-append">
-                                <button type="button" onclick="submitFilter()" class="btn btn-primary">Filter</button>
+                                <button type="submit" class="btn btn-primary">Filter</button>
                             </div>
                         </div>
                     </div>

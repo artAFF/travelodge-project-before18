@@ -171,6 +171,12 @@ class ReadController extends Controller
 
     public function itsup_status($department)
     {
+        $user = auth()->user();
+
+        if ($user->role !== 'admin' && $user->department->name !== $department) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $itsup_statuses = Travelodge::where('department', $department)
             ->where('status', 0)
             ->paginate(15);
