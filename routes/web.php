@@ -38,6 +38,8 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     //Home
     Route::get('/home', [ChartController::class, 'HotelChart'])->name('hotel.chart');
     Route::get('/', [ChartController::class, 'HotelChart'])->name('hotel.chart');
+
+    //Dashboard
     Route::get('/dashboards/DashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
     Route::get('/dashboards/DashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
 
@@ -46,12 +48,6 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/filter/filter-form', [PdfController::class, 'showFilterForm'])->name('filter.form');
     Route::post('/filter/filter-data', [PdfController::class, 'filterData'])->name('filter.data');
     Route::get('/filter/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
-
-
-    // Dasboard
-    Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
-    Route::get('/dashboards/dashboardWeek', [ChartController::class, 'WeekChart'])->name('week.chart');
-    Route::get('/dashboards/dashboardMonth', [ChartController::class, 'MonthChart'])->name('month.chart');
 
 
     // For All Daily Report

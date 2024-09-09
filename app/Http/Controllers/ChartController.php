@@ -21,69 +21,6 @@ class ChartController extends Controller
         }, $data);
     }
 
-    public function WeekChart(Request $request)
-    {
-        $travelodges = Travelodge::selectRaw('DAYOFWEEK(created_at) as day_of_week, COUNT(*) as count')
-            ->whereYear('created_at', '=', now()->year)
-            ->groupBy('day_of_week')
-            ->orderBy('day_of_week')
-            ->get();
-
-        $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        $data = array_fill(0, 7, 0);
-        $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9'];
-
-        foreach ($travelodges as $travelodge) {
-            $index = ($travelodge->day_of_week + 5) % 7;
-            $data[$index] = $travelodge->count;
-        }
-
-        $percentages = $this->calculatePercentages($data);
-
-        $datasets = [
-            [
-                'label' => 'Issue',
-                'data' => $data,
-                'backgroundColor' => $colors
-            ]
-        ];
-
-        return view('/dashboards/dashboardWeek', compact('datasets', 'days', 'percentages'));
-    }
-
-    public function MonthChart(Request $request)
-    {
-        $travelodges = Travelodge::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        $months = [];
-        $data = [];
-        $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2'];
-
-        for ($i = 1; $i <= 12; $i++) {
-            $month = date('F', mktime(0, 0, 0, $i, 1));
-            $count = $travelodges->firstWhere('month', $i)->count ?? 0;
-
-            $months[] = $month;
-            $data[] = $count;
-        }
-
-        $percentages = $this->calculatePercentages($data);
-
-        $datasets = [
-            [
-                'label' => 'Issue',
-                'data' => $data,
-                'backgroundColor' => $colors
-            ]
-        ];
-
-        return view('/dashboards/dashboardMonth', compact('datasets', 'months', 'percentages'));
-    }
-
     public function DepartmentChart(Request $request)
     {
         $departmentsWithCounts = Travelodge::select('department')
