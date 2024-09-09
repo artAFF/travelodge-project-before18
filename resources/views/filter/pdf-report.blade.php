@@ -81,7 +81,7 @@
 
 <body>
     <h1>Report IT Support reportAll</h1>
-    w<table class="table table-striped table-hover">
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th scope="col" class="text-center">#</th>
