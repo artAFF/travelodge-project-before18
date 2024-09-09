@@ -39,7 +39,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/home', [ChartController::class, 'HotelChart'])->name('hotel.chart');
     Route::get('/', [ChartController::class, 'HotelChart'])->name('hotel.chart');
 
-    //Dashboard
+    //Dashbaord
     Route::get('/dashboards/DashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
     Route::get('/dashboards/DashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
 
