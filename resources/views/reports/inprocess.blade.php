@@ -52,9 +52,6 @@
                         <th class="text-center"><a class="text-dark text-decoration-none"
                                 href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'hotel', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Hotel</a>
                         </th>
-                        {{-- <th><a class="text-dark text-decoration-none"
-                                href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'location', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Location</a>
-                        </th> --}}
                         <th class="text-center">Status</th>
                         <th class="text-center"><a class="text-dark text-decoration-none"
                                 href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Created

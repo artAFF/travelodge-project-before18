@@ -12,7 +12,6 @@
                     <th scope="col">USP Battery</th>
                     <th scope="col">UPS Period Of Service</th>
                     <th scope="col">Created Time</th>
-                    {{-- <th scope="col"class="col-md-2">Updated time</th> --}}
                     <th scope="col">Action</th>
 
 
@@ -28,8 +27,6 @@
                         <td style="text-center">{{ $ReportServer->ups_time }}</td>
                         <td style="text-center">
                             {{ \Carbon\Carbon::parse($ReportServer->created_at)->format('d/m/Y H:i:s') }}</td>
-                        {{-- <td style="text-center">
-                            {{ \Carbon\Carbon::parse($ReportServer->updated_at)->format('d/m/Y H:i:s') }}</td> --}}
                         <td>
                             <a href="{{ route('updateServer', ['type' => $source, 'id' => $ReportServer->id]) }}"
                                 class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>

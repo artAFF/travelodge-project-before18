@@ -13,7 +13,6 @@
                         <th scope="col">UPS Period Of Service</th>
                         <th scope="col">Switch Temperature</th>
                         <th scope="col">Created Time</th>
-                        {{-- <th scope="col">Updated time</th> --}}
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -26,7 +25,6 @@
                             <td>{{ $ReportSwitch->ups_time }}</td>
                             <td>{{ $ReportSwitch->ups_temp }}</td>
                             <td>{{ \Carbon\Carbon::parse($ReportSwitch->created_at)->format('d/m/Y H:i:s') }}</td>
-                            {{-- <td>{{ \Carbon\Carbon::parse($ReportSwitch->updated_at)->format('d/m/Y H:i:s') }}</td> --}}
                             <td>
                                 <a href="{{ route('updateSwitch', ['type' => $source, 'id' => $ReportSwitch->id]) }}"
                                     class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>

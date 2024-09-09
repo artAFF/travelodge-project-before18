@@ -14,7 +14,6 @@
                     <th scope="col">Channel Number</th>
                     <th scope="col">Channel Name</th>
                     <th scope="col">Created Time</th>
-                    {{-- <th scope="col">Updated time</th> --}}
                     <th scope="col">Action</th>
 
                 </tr>
@@ -30,7 +29,6 @@
                         <td>{{ $ReportGuest->ch_no }}</td>
                         <td>{{ $ReportGuest->ch_name }}</td>
                         <td>{{ \Carbon\Carbon::parse($ReportGuest->created_at)->format('d/m/Y H:i:s') }}</td>
-                        {{-- <td>{{ \Carbon\Carbon::parse($ReportGuest->updated_at)->format('d/m/Y H:i:s') }}</td> --}}
                         <td>
                             <a href="{{ route('updateGuest', ['type' => $source, 'id' => $ReportGuest->id]) }}"
                                 class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i></a>

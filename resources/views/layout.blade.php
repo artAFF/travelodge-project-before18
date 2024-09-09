@@ -80,51 +80,10 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li class="nav-item main-menu-item">
-                                <a href="{{ route('main') }}" class="nav-link align-middle px-0">
+                                <a href="{{ route('hotel.chart') }}" class="nav-link align-middle px-0">
                                     <i class="bi bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
                                 </a>
                             </li>
-                            @if (auth()->user()->role === 'admin')
-                                <li class="nav-item main-menu-item">
-                                    <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                        <i class="bi bi-graph-up"></i>
-                                        <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-                                        <i class="bi bi-chevron-right ms-auto px-2"></i>
-                                    </a>
-                                    <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                        <li class="w-100">
-                                            <a href="{{ route('dashboardStatus') }}" class="nav-link px-0">
-                                                <span class="d-none d-sm-inline px-3">Status Report</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('week.chart') }}" class="nav-link px-0">
-                                                <span class="d-none d-sm-inline px-3">Issue By Weeks</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('month.chart') }}" class="nav-link px-0">
-                                                <span class="d-none d-sm-inline px-3">Issue By Months</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('department.chart') }}" class="nav-link px-0">
-                                                <span class="d-none d-sm-inline px-3">Issue By Departments</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('category.chart') }}" class="nav-link px-0">
-                                                <span class="d-none d-sm-inline px-3">Issue By Categories</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('hotel.chart') }}" class="nav-link px-0">
-                                                <span class="d-none d-sm-inline px-3">Issue By Hotels</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            @endif
                             <li class="nav-item main-menu-item">
                                 <a href="{{ route('reportIssue') }}" class="nav-link px-0 align-middle">
                                     <i class="bi bi-clipboard"></i> <span class="ms-1 d-none d-sm-inline">Report

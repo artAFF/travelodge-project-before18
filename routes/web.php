@@ -15,17 +15,9 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
 
-
-
-// Home
-Route::get('/home/main', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
-Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status');
-Route::get('/', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-
-/* Auth::routes(); */
 
 // Report Issue
 Route::get('/reports/reportIssue', [ReadController::class, 'TableReportIssue'])->name("reportIssue");
@@ -42,20 +34,29 @@ Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->n
 
 Route::middleware(['auth', 'check.role:admin'])->group(function () {
 
-    // Dasboard
-    Route::get('/dashboards/dashboardMonth', [ChartController::class, 'MonthChart'])->name('month.chart');
-    Route::get('/dashboards/dashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
-    Route::get('/dashboards/dashboardWeek', [ChartController::class, 'WeekChart'])->name('week.chart');
-    Route::get('/dashboards/dashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
-    Route::get('/dashboards/dashboardHotel', [ChartController::class, 'HotelChart'])->name('hotel.chart');
-    Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
 
+    //Home
+    Route::get('/home', [ChartController::class, 'HotelChart'])->name('hotel.chart');
+    Route::get('/', [ChartController::class, 'HotelChart'])->name('hotel.chart');
+    Route::get('/dashboards/DashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
+    Route::get('/dashboards/DashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
+
+
+    //Pdf
     Route::get('/filter/filter-form', [PdfController::class, 'showFilterForm'])->name('filter.form');
     Route::post('/filter/filter-data', [PdfController::class, 'filterData'])->name('filter.data');
     Route::get('/filter/download-pdf', [PdfController::class, 'downloadPDF'])->name('download.pdf');
 
+
+    // Dasboard
+    Route::get('/dashboards/dashboardStatus', [ChartController::class, 'StatusChart'])->name('dashboardStatus');
+    Route::get('/dashboards/dashboardWeek', [ChartController::class, 'WeekChart'])->name('week.chart');
+    Route::get('/dashboards/dashboardMonth', [ChartController::class, 'MonthChart'])->name('month.chart');
+
+
     // For All Daily Report
     Route::get('/daily/hotels/{type}', [ReadController::class, 'TableReportAll'])->name('TableReportAll');
+
 
     // Guest Room Checking
     Route::get('/guest/reportGuest', [ReadController::class, 'TableReportGuest'])->name("reportGuest");
@@ -82,6 +83,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/daily/hotels/{type}/updateServer/{id}', [UpdateController::class, 'UpdateServer'])->name('updateServer');
     Route::post('/daily/hotels/{type}/updatePServer/{id}', [UpdateController::class, 'UpdateServerProcess'])->name('updatePserver');
     Route::delete('/daily/hotels/{type}/deleteServer/{id}', [DeleteController::class, 'DeleteServer'])->name('deleteServer');
+
 
     // Internet Speed Checking
     Route::get('/netspeed/reportNet', [ReadController::class, 'TableReportNetSpeed'])->name("reportNet");
@@ -112,3 +114,8 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
+
+// Home_old
+/* Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status'); */
+/* Route::get('/', [ReadController::class, 'NumberOfCurrentStatus'])->name('main'); */
+/* Auth::routes(); */

@@ -40,18 +40,10 @@
                             <th class="col-md-1 text-center" scope="col"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'hotel', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Hotel</a>
                             </th>
-                            {{-- <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
-                                    href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'location', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Location</a>
-                            </th> --}}
+
                             <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'status', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Status</a>
                             </th>
-                            {{-- <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
-                                href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Created
-                                Time</a></th>
-                        <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
-                                href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'updated_at', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Updated
-                                time</a></th> --}}
                             <th scope="col" class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -63,7 +55,6 @@
                                 <td class="text-center">{{ Str::limit($reporter->detail, 40, '...') }}</td>
                                 <td class="text-center">{{ $reporter->department }}</td>
                                 <td class="text-center">{{ $reporter->hotel }}</td>
-                                {{-- <td class="text-center">{{ $reporter->location }}</td> --}}
                                 <td class="text-center">
                                     @if ($reporter->status === 0)
                                         <a href="#" class="btn btn-warning"><i class="bi bi-hourglass-split"></i></a>
@@ -71,8 +62,6 @@
                                         <a href="#" class="btn btn-success"><i class="bi bi-check2"></i></a>
                                     @endif
                                 </td>
-                                {{-- <td>{{ \Carbon\Carbon::parse($reporter->created_at)->format('d/m/Y H:i:s') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($reporter->updated_at)->format('d/m/Y H:i:s') }}</td> --}}
                                 <td class="text-center">
                                     <button class="btn btn-secondary preview-btn" data-id="{{ $reporter->id }}"><i
                                             class="bi bi-eye"></i></button>

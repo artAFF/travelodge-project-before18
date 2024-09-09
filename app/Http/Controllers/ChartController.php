@@ -172,7 +172,7 @@ class ChartController extends Controller
         ];
         $hotels = array_values($hotels);
 
-        return view('/dashboards/dashboardHotel', compact('datasets', 'hotels', 'percentages', 'latestReports'));
+        return view('/home', compact('datasets', 'hotels', 'percentages', 'latestReports'));
     }
 
     public function StatusChart(Request $request)
