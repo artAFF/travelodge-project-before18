@@ -42,6 +42,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     //Dashbaord
     Route::get('/dashboards/DashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
     Route::get('/dashboards/DashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
+    Route::get('/dashboard/{hotel}', [ChartController::class, 'HotelDashboard'])->name('hotel.dashboard');
 
 
     //Pdf

@@ -2,7 +2,7 @@
 @section('title', 'Dashboard Hotel')
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-    <h1 class="text text-center">Issue By Hotel</h1>
+    <h1 class="text text-center">Issue by Hotel</h1>
 
     <div class="row">
         <div class="col-md-6">
@@ -59,7 +59,7 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y;
+                                return context.label + ': ' + context.parsed.y;
                             }
                         }
                     }
@@ -89,5 +89,13 @@
                 }
             }
         });
+
+        // Add click event handlers for both charts
+        barChart.options.onClick = pieChart.options.onClick = function(event, elements) {
+            if (elements.length > 0) {
+                var hotelCode = chartData.labels[elements[0].index];
+                window.location.href = "{{ url('/dashboard') }}/" + hotelCode;
+            }
+        };
     </script>
 @endsection

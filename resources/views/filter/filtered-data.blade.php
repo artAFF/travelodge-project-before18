@@ -35,9 +35,13 @@
             </tbody>
         </table>
 
-        <form action="{{ route('download.pdf') }}" method="GET">
-            <input type="hidden" name="issues" value="{{ json_encode($issues) }}">
-            <button type="submit">Download PDF</button>
-        </form>
+        @if (count($issues) > 0)
+            <form action="{{ route('download.pdf') }}" method="GET">
+                <input type="hidden" name="issues" value="{{ json_encode($issues) }}">
+                <button type="submit" class="btn btn-primary">Download PDF</button>
+            </form>
+        @else
+            <p>No data available for download.</p>
+        @endif
     </div>
 @endsection

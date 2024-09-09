@@ -7,13 +7,15 @@
         <div class="container">
             <h3 class="text-center">Issues in the process</h3>
             <div class="col-md-4">
-                <div class="input-group">
-                    <input type="text" name="query" class="form-control" placeholder="Search"
-                        value="{{ request('query') }}">
-                    <div class="input-group-append">
-                        <button type="button" onclick="submitSearch()" class="btn btn-info">Search</button>
+                <form action="{{ route('inprocess') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="query" class="form-control" placeholder="Search"
+                            value="{{ request('query') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-info">Search</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -53,7 +55,6 @@
                         <td class="text-center">{{ $in_process1->detail }}</td>
                         <td class="text-center">{{ $in_process1->department }}</td>
                         <td class="text-center">{{ $in_process1->hotel }}</td>
-                        {{-- <td>{{ $in_process1->location }}</td> --}}
                         <td class="text-center">
                             @if ($in_process1->status === 0)
                                 <a href="#" class="btn btn-warning"><i class="bi bi-hourglass-split"></i></a>
@@ -95,6 +96,10 @@
         </div>
     </div>
     <script>
+        function submitSearch() {
+            document.querySelector('form').submit();
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll('.preview-btn').forEach(button => {
                 button.addEventListener('click', function() {

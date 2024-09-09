@@ -46,8 +46,12 @@ class PdfController extends Controller
             $query->where('status', $request->status);
         }
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+        if ($request->start_date) {
+            if ($request->end_date) {
+                $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+            } else {
+                $query->where('created_at', '>=', $request->start_date);
+            }
         }
 
         $issues = $query->get();
@@ -57,7 +61,15 @@ class PdfController extends Controller
 
     public function downloadPDF(Request $request)
     {
-        $issues = json_decode($request->issues, true);
+        $issuesJson = $request->issues;
+        if (empty($issuesJson)) {
+            return redirect()->back()->with('error', 'No data available for download.');
+        }
+
+        $issues = json_decode($issuesJson, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return redirect()->back()->with('error', 'Invalid data format.');
+        }
 
         $pdf = FacadePdf::loadView('/filter/pdf-report', compact('issues'));
 
@@ -137,6 +149,9 @@ class PdfController extends Controller
             ->when($start_date && $end_date, function ($q) use ($start_date, $end_date) {
                 return $q->whereBetween('created_at', [$start_date, $end_date]);
             })
+            ->when($start_date && !$end_date, function ($q) use ($start_date) {
+                return $q->where('created_at', '>=', $start_date);
+            })
             ->when($query, function ($q) use ($query) {
                 return $q->where('room_no', 'like', "%{$query}%")
                     ->orWhere('location', 'like', "%{$query}%")
@@ -146,11 +161,14 @@ class PdfController extends Controller
         return $paginate ? $query->paginate(10, ['*'], 'guests_page') : $query->get();
     }
 
-    function getNetSpeeds($prefix, $start_date, $end_date, $query, $paginate = true)
+    private function getNetSpeeds($prefix, $start_date, $end_date, $query, $paginate = true)
     {
         $query = DB::table("{$prefix}nets")
             ->when($start_date && $end_date, function ($q) use ($start_date, $end_date) {
                 return $q->whereBetween('created_at', [$start_date, $end_date]);
+            })
+            ->when($start_date && !$end_date, function ($q) use ($start_date) {
+                return $q->where('created_at', '>=', $start_date);
             })
             ->when($query, function ($q) use ($query) {
                 return $q->where('location', 'like', "%{$query}%");
@@ -165,6 +183,9 @@ class PdfController extends Controller
             ->when($start_date && $end_date, function ($q) use ($start_date, $end_date) {
                 return $q->whereBetween('created_at', [$start_date, $end_date]);
             })
+            ->when($start_date && !$end_date, function ($q) use ($start_date) {
+                return $q->where('created_at', '>=', $start_date);
+            })
             ->when($query, function ($q) use ($query) {
                 return $q->where('server_temp', 'like', "%{$query}%");
             });
@@ -177,6 +198,9 @@ class PdfController extends Controller
         $query = DB::table("{$prefix}switches")
             ->when($start_date && $end_date, function ($q) use ($start_date, $end_date) {
                 return $q->whereBetween('created_at', [$start_date, $end_date]);
+            })
+            ->when($start_date && !$end_date, function ($q) use ($start_date) {
+                return $q->where('created_at', '>=', $start_date);
             })
             ->when($query, function ($q) use ($query) {
                 return $q->where('location', 'like', "%{$query}%");
