@@ -9,24 +9,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .bg-dark {
+            background-color: #2c3e50 !important;
+        }
+
         .nav-link {
             color: #fff;
             display: flex;
             align-items: center;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
         .nav-link:hover {
-            background-color: #495057;
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateX(5px);
         }
 
         .nav-link.active {
-            background-color: #0d6efd;
+            background-color: var(--secondary-color);
         }
 
         .nav-link i.bi-chevron-right,
         .nav-link i.bi-chevron-down {
             margin-left: auto;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-submenu {
@@ -54,7 +77,7 @@
         }
 
         #userDropdown:hover {
-            background-color: #495057;
+            background-color: var(--primary-color);
         }
 
         .sticky-sidebar {
@@ -62,6 +85,31 @@
             top: 0;
             height: 100vh;
             overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .fs-5 {
+            font-size: 1.25rem !important;
+            font-weight: 500;
+        }
+
+        .collapse {
+            transition: height 0.3s ease;
+        }
+
+        .col.py-3 {
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .sticky-sidebar {
+                position: static;
+                height: auto;
+            }
+
+            .col.py-3 {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
@@ -201,7 +249,7 @@
                 collapse.addEventListener('show.bs.collapse', function() {
                     const icon = toggle.querySelector('.bi-chevron-right');
                     if (icon) {
-                        icon.classList.replace('bi-chevron-right', 'bi-chevron-down');
+                        icon.style.transform = 'rotate(90deg)';
                     }
 
                     dropdownToggles.forEach(otherToggle => {
@@ -218,9 +266,9 @@
                 });
 
                 collapse.addEventListener('hide.bs.collapse', function() {
-                    const icon = toggle.querySelector('.bi-chevron-down');
+                    const icon = toggle.querySelector('.bi-chevron-right');
                     if (icon) {
-                        icon.classList.replace('bi-chevron-down', 'bi-chevron-right');
+                        icon.style.transform = 'rotate(0deg)';
                     }
                 });
             });
