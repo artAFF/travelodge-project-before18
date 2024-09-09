@@ -14,18 +14,21 @@
             </thead>
             <tbody>
                 @foreach ($departments as $department => $statuse)
-                    <tr>
-                        <td>{{ $department }}</td>
-                        <td>{{ $statuse['0'] }}</td>
-                        <td>{{ $statuse['1'] }}</td>
-                        <td>{{ $statuse['total'] }}</td>
-                        <td>
-                            @if (isset($departmentLinks[$department]))
-                                <a href="{{ $departmentLinks[$department] }}" class="btn btn-primary">
-                                    <i class="bi bi-hourglass-split"></i></a>
-                            @endif
-                        </td>
-                    </tr>
+                    @if (auth()->user()->role === 'admin' || auth()->user()->department->name === $department)
+                        <tr>
+                            <td>{{ $department }}</td>
+                            <td>{{ $statuse['0'] }}</td>
+                            <td>{{ $statuse['1'] }}</td>
+                            <td>{{ $statuse['total'] }}</td>
+                            <td>
+                                @if (isset($departmentLinks[$department]))
+                                    <a href="{{ $departmentLinks[$department] }}" class="btn btn-primary">
+                                        <i class="bi bi-hourglass-split"></i>
+                                    </a>
+                                @endif
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
                 <tr>
                     <td>Total All</td>

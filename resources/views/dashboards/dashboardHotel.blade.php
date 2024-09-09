@@ -22,7 +22,7 @@
     <div class="row mt-4">
         @foreach ($latestReports as $hotel => $reports)
             <div class="col-md-4">
-                <h4>{{ $hotel }} - Latest 5 Reports</h3>
+                <h5>{{ $hotel }} - Latest 5 Reports</h3>
                     <ul class="list-group">
                         @foreach ($reports as $report)
                             <li class="list-group-item">

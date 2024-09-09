@@ -6,6 +6,7 @@
         @csrf
         <div id="issueFormsContainer">
             <div class="issue-form">
+                <h3 class="issue-title">Issue #1</h3>
                 <div class="mb-3">
                     <label for="issue" class="form-label">Issue Category</label>
                     <select class="form-select" id="issue" name="issues[0][issue]">
@@ -63,7 +64,7 @@
                     <select class="form-select" id="hotel" name="issues[0][hotel]">
                         <option value="TLCMN">TLCMN</option>
                         <option value="EHCM">EHCM</option>
-                        <option value="UNMC">UNMC</option>
+                        <option value="UNCM">UNCM</option>
                     </select>
                 </div>
                 @error('issues.0.hotel')
@@ -99,8 +100,8 @@
                 <br>
             </div>
         </div>
-        <button type="button" id="addIssueButton" class="btn btn-warning"><i class="bi bi-plus-circle"></i>
-        </button>
+        <button type="button" id="addIssueButton" class="btn btn-warning"><i class="bi bi-plus-circle"></i></button>
+        <button type="button" id="removeIssueButton" class="btn btn-danger"><i class="bi bi-dash-circle"></i></button>
         <button type="submit" class="btn btn-primary">Submit</button>
         <a href="/reports/reportIssue" class="btn btn-secondary">Cancel</a>
     </form>
@@ -114,9 +115,11 @@
             remarksContainer.style.display = checkbox.checked ? 'block' : 'none';
         }
 
-        document.getElementById('addIssueButton').addEventListener('click', function() {
+        function addIssueForm() {
             const issueFormsContainer = document.getElementById('issueFormsContainer');
             const newIssueForm = issueFormsContainer.firstElementChild.cloneNode(true);
+
+            newIssueForm.querySelector('.issue-title').textContent = `Issue #${issueIndex + 1}`;
 
             Array.from(newIssueForm.querySelectorAll('input, select, textarea')).forEach((input) => {
                 const name = input.getAttribute('name');
@@ -147,6 +150,38 @@
 
             issueFormsContainer.appendChild(newIssueForm);
             issueIndex++;
+
+            updateIssueTitles();
+            checkRemoveButtonState();
+        }
+
+        function removeLastIssue() {
+            const issueFormsContainer = document.getElementById('issueFormsContainer');
+            if (issueFormsContainer.children.length > 1) {
+                issueFormsContainer.removeChild(issueFormsContainer.lastElementChild);
+                issueIndex--;
+                updateIssueTitles();
+                checkRemoveButtonState();
+            }
+        }
+
+        function checkRemoveButtonState() {
+            const issueFormsContainer = document.getElementById('issueFormsContainer');
+            document.getElementById('removeIssueButton').disabled = issueFormsContainer.children.length <= 1;
+        }
+
+        function updateIssueTitles() {
+            const issueForms = document.querySelectorAll('.issue-form');
+            issueForms.forEach((form, index) => {
+                form.querySelector('.issue-title').textContent = `Issue #${index + 1}`;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('addIssueButton').addEventListener('click', addIssueForm);
+            document.getElementById('removeIssueButton').addEventListener('click', removeLastIssue);
+            checkRemoveButtonState();
+            updateIssueTitles();
         });
     </script>
 @endsection

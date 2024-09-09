@@ -65,7 +65,7 @@
                 <option value="{{ $ReportIssues->hotel }}" selected>{{ $ReportIssues->hotel }}</option>
                 <option value="TLCMN" @if ($ReportIssues->hotel == 'TLCMN') selected @endif>TLCMN</option>
                 <option value="EHCM" @if ($ReportIssues->hotel == 'EHCM') selected @endif>EHCM</option>
-                <option value="UNMC" @if ($ReportIssues->hotel == 'UNMC') selected @endif>UNMC</option>
+                <option value="UNCM" @if ($ReportIssues->hotel == 'UNCM') selected @endif>UNCM</option>
             </select>
         </div>
         @error('hotel')
