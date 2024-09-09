@@ -70,10 +70,21 @@
         }
 
         #userDropdown {
-            width: 100%;
-            text-align: left;
-            padding: 8px;
-            color: #fff;
+            position: relative;
+        }
+
+        #userDropdown:hover::after {
+            content: attr(title);
+            font-size: 0.8em;
+            opacity: 0.8;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            background-color: #2c3e50;
+            padding: 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+            z-index: 1000;
         }
 
         #userDropdown:hover {
@@ -205,9 +216,12 @@
                             @endif
                             <li class="nav-item main-menu-item">
                                 <a href="#userSubmenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                                    id="userDropdown">
+                                    id="userDropdown"
+                                    title="{{ Auth::user()->name }}{{ Auth::user()->department ? ', ' . Auth::user()->department->name : '' }}">
                                     <i class="bi bi-person"></i>
-                                    <span class="ms-1 d-none d-sm-inline">{{ Auth::user()->name }}</span>
+                                    <span class="ms-1 d-none d-sm-inline">
+                                        {{ Auth::user()->name }}
+                                    </span>
                                     <i class="bi bi-chevron-right ms-auto"></i>
                                 </a>
                                 <ul class="collapse nav flex-column ms-1" id="userSubmenu" data-bs-parent="#menu">
