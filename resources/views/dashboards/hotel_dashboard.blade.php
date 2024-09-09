@@ -104,6 +104,12 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            showDetailTable(data.labels[index]);
+                        }
+                    }
                 }
             });
         }
@@ -126,6 +132,12 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            showDetailTable(data.labels[index]);
+                        }
+                    }
                 }
             });
         }
@@ -138,20 +150,60 @@
                 var card = document.createElement('div');
                 card.className = 'col';
                 card.innerHTML = `
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">${label}</h5>
-                    <p class="card-text">
-                        <span class="fs-4 fw-bold text-primary">${data.data[index]}</span>
-                        reports
-                    </p>
-                </div>
-            </div>
-        `;
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">${label}</h5>
+                            <p class="card-text">
+                                <span class="fs-4 fw-bold text-primary">${data.data[index]}</span>
+                                reports
+                            </p>
+                        </div>
+                    </div>
+                `;
                 reportCards.appendChild(card);
             });
 
             document.getElementById('reportTitle').textContent = currentView.charAt(0).toUpperCase() + currentView.slice(1);
+        }
+
+        function showDetailTable(label) {
+            fetch(`/api/issues/${currentView}/${label}`)
+                .then(response => response.json())
+                .then(data => {
+                    const modalContent = `
+                        <h3>${label} Issues</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Issue</th>
+                                    <th>Detail</th>
+                                    <th>Department</th>
+                                    <th>Hotel</th>
+                                    <th>Status</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map(issue => `
+                                                    <tr>
+                                                        <td>${issue.id}</td>
+                                                        <td>${issue.issue}</td>
+                                                        <td>${issue.detail}</td>
+                                                        <td>${issue.department}</td>
+                                                        <td>${issue.hotel}</td>
+                                                        <td>${issue.status === 0 ? 'In Process' : 'Completed'}</td>
+
+                                                    </tr>
+                                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+
+                    const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                    document.getElementById('detailModalContent').innerHTML = modalContent;
+                    modal.show();
+                });
         }
 
         document.getElementById('viewSelector').addEventListener('change', function() {
@@ -162,4 +214,17 @@
         // Initial chart render
         updateCharts();
     </script>
+
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Issue Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="detailModalContent">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

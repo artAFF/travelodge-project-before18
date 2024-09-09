@@ -111,6 +111,21 @@ class ChartController extends Controller
         ];
     }
 
+    public function getIssueDetails($type, $label)
+    {
+        $query = Travelodge::query();
+
+        if ($type === 'category') {
+            $query->where('issue', $label);
+        } elseif ($type === 'department') {
+            $query->where('department', $label);
+        }
+
+        $issues = $query->get();
+
+        return response()->json($issues);
+    }
+
     private function calculatePercentages($data)
     {
         $total = array_sum($data);
