@@ -50,7 +50,6 @@ class ChartController extends Controller
 
     public function HotelDashboard(Request $request, $hotel)
     {
-
         $hotel_names = [
             'TLCMN' => 'Travelodge Nimman',
             'EHCM' => 'Eastin Tan',
@@ -62,6 +61,7 @@ class ChartController extends Controller
 
         return view('dashboards.hotel_dashboard', [
             'hotel_name' => $hotel_names[$hotel],
+            'hotel_code' => $hotel,
             'category_data' => $category_data,
             'department_data' => $department_data
         ]);
@@ -111,10 +111,18 @@ class ChartController extends Controller
         ];
     }
 
-    public function getIssueDetails($type, $label)
+    public function getIssueDetails($type, $label, Request $request)
     {
+        $hotel = $request->query('hotel');
+
         $query = Travelodge::query();
 
+        // Filter by hotel
+        if ($hotel) {
+            $query->where('hotel', $hotel);
+        }
+
+        // Filter by type (category or department)
         if ($type === 'category') {
             $query->where('issue', $label);
         } elseif ($type === 'department') {

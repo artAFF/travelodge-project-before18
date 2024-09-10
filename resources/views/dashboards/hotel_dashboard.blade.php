@@ -167,43 +167,9 @@
         }
 
         function showDetailTable(label) {
-            fetch(`/api/issues/${currentView}/${label}`)
-                .then(response => response.json())
-                .then(data => {
-                    const modalContent = `
-                        <h3>${label} Issues</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Issue</th>
-                                    <th>Detail</th>
-                                    <th>Department</th>
-                                    <th>Hotel</th>
-                                    <th>Status</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${data.map(issue => `
-                                                    <tr>
-                                                        <td>${issue.id}</td>
-                                                        <td>${issue.issue}</td>
-                                                        <td>${issue.detail}</td>
-                                                        <td>${issue.department}</td>
-                                                        <td>${issue.hotel}</td>
-                                                        <td>${issue.status === 0 ? 'In Process' : 'Completed'}</td>
-
-                                                    </tr>
-                                                `).join('')}
-                            </tbody>
-                        </table>
-                    `;
-
-                    const modal = new bootstrap.Modal(document.getElementById('detailModal'));
-                    document.getElementById('detailModalContent').innerHTML = modalContent;
-                    modal.show();
-                });
+            const hotelCode = '{{ $hotel_code }}'; // เพิ่มตัวแปรนี้ใน Controller และส่งมาที่ view
+            window.location.href =
+                `/dashboards/issue-preview?type=${currentView}&label=${encodeURIComponent(label)}&hotel=${encodeURIComponent(hotelCode)}`;
         }
 
         document.getElementById('viewSelector').addEventListener('change', function() {
@@ -215,16 +181,4 @@
         updateCharts();
     </script>
 
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailModalLabel">Issue Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="detailModalContent">
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
