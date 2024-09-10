@@ -12,22 +12,33 @@
                     <th>Department</th>
                     <th>Hotel</th>
                     <th>Status</th>
+                    <th>Created At</th>
                 </tr>
             </thead>
             <tbody id="previewTableBody">
             </tbody>
         </table>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const type = urlParams.get('type');
             const label = urlParams.get('label');
             const hotel = urlParams.get('hotel');
+            const dateFilter = urlParams.get('dateFilter');
+            const startDate = urlParams.get('start');
+            const endDate = urlParams.get('end');
 
             if (type && label && hotel) {
-                fetch(`/api/issues/${type}/${label}?hotel=${encodeURIComponent(hotel)}`)
+                let apiUrl = `/api/issues/${type}/${label}?hotel=${encodeURIComponent(hotel)}`;
+
+                if (dateFilter) {
+                    apiUrl += `&dateFilter=${dateFilter}`;
+                } else if (startDate && endDate) {
+                    apiUrl += `&start=${startDate}&end=${endDate}`;
+                }
+
+                fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
                         const hotelNames = {
@@ -47,6 +58,7 @@
                         <td>${issue.department}</td>
                         <td>${issue.hotel}</td>
                         <td>${issue.status === 0 ? 'In Process' : 'Completed'}</td>
+                        <td>${new Date(issue.created_at).toLocaleString()}</td>
                     </tr>
                 `).join('');
                     });

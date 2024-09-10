@@ -4,7 +4,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
     <style>
-        #viewSelector {
+        #viewSelector,
+        #dateFilter {
             width: auto;
             min-width: 150px;
             max-width: 200px;
@@ -17,28 +18,40 @@
         .form-group {
             margin-left: 20px;
         }
-
-        @media (max-width: 768px) {
-            .row>div {
-                flex-direction: column;
-            }
-
-            #viewSelector {
-                margin-top: 10px;
-                margin-left: 0;
-            }
-        }
     </style>
 
     <div class="container-fluid px-4">
         <div class="row mb-3">
-            <div class="col-12 d-flex justify-content-between align-items-center">
+            <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
                 <h1>Dashboard for {{ $hotel_name }}</h1>
-                <div class="form-group mb-0">
-                    <select id="viewSelector" class="form-control">
-                        <option value="category">Category</option>
-                        <option value="department">Department</option>
-                    </select>
+                <div class="d-flex">
+                    <div class="form-group mb-0">
+                        <select id="viewSelector" class="form-control">
+                            <option value="category">Category</option>
+                            <option value="department">Department</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0 ml-3">
+                        <select id="dateFilter" class="form-control">
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="this_week">This week</option>
+                            <option value="last_week">Last week</option>
+                            <option value="this_month">This month</option>
+                            <option value="last_month">Last month</option>
+                            <option value="last_30_days">Last 30 days</option>
+                            <option value="this_quarter">This quarter</option>
+                            <option value="last_quarter">Last quarter</option>
+                            <option value="this_year">This year</option>
+                            <option value="last_year">Last year</option>
+                            <option value="last_365_days">Last 365 days</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div id="customDateRange" style="display: none;">
+                        <input type="date" id="startDate" class="form-control ml-3">
+                        <input type="date" id="endDate" class="form-control ml-3">
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,8 +91,7 @@
 
         var barChart, pieChart;
 
-        function updateCharts() {
-            var data = currentView === 'category' ? categoryData : departmentData;
+        function updateCharts(data) {
             updateBarChart(data);
             updatePieChart(data);
             updateReportCards(data);
@@ -167,18 +179,61 @@
         }
 
         function showDetailTable(label) {
-            const hotelCode = '{{ $hotel_code }}'; // เพิ่มตัวแปรนี้ใน Controller และส่งมาที่ view
+            const hotelCode = '{{ $hotel_code }}';
+            const dateFilter = document.getElementById('dateFilter').value;
+            let dateParams = '';
+
+            if (dateFilter === 'custom') {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                dateParams = `&start=${startDate}&end=${endDate}`;
+            } else {
+                dateParams = `&dateFilter=${dateFilter}`;
+            }
+
             window.location.href =
-                `/dashboards/issue-preview?type=${currentView}&label=${encodeURIComponent(label)}&hotel=${encodeURIComponent(hotelCode)}`;
+                `/dashboards/issue-preview?type=${currentView}&label=${encodeURIComponent(label)}&hotel=${encodeURIComponent(hotelCode)}${dateParams}`;
         }
 
         document.getElementById('viewSelector').addEventListener('change', function() {
             currentView = this.value;
-            updateCharts();
+            updateChartsWithDateFilter(document.getElementById('dateFilter').value);
         });
 
+        document.getElementById('dateFilter').addEventListener('change', function() {
+            if (this.value === 'custom') {
+                document.getElementById('customDateRange').style.display = 'flex';
+            } else {
+                document.getElementById('customDateRange').style.display = 'none';
+                updateChartsWithDateFilter(this.value);
+            }
+        });
+
+        document.getElementById('startDate').addEventListener('change', updateChartsWithCustomDate);
+        document.getElementById('endDate').addEventListener('change', updateChartsWithCustomDate);
+
+        function updateChartsWithDateFilter(filterType) {
+            fetch(`/api/hotel-data/${currentView}/${filterType}?hotel={{ $hotel_code }}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateCharts(data);
+                });
+        }
+
+        function updateChartsWithCustomDate() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            if (startDate && endDate) {
+                fetch(`/api/hotel-data/${currentView}/custom?hotel={{ $hotel_code }}&start=${startDate}&end=${endDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateCharts(data);
+                    });
+            }
+        }
+
         // Initial chart render
-        updateCharts();
+        updateCharts(categoryData);
     </script>
 
 @endsection

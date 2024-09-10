@@ -47,7 +47,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/dashboards/issue-preview', function () {
         return view('dashboards.issue_preview');
     })->name('issue.preview');
-
+    Route::get('/api/hotel-data/{view}/{filterType}', [ChartController::class, 'getHotelDataByDate']);
 
 
     //Pdf
