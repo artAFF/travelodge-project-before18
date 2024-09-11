@@ -23,6 +23,7 @@ use App\Models\Uncm_guest;
 use App\Models\Uncm_net;
 use App\Models\Uncm_server;
 use App\Models\Uncm_switch;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class CreateController extends Controller
@@ -37,7 +38,12 @@ class CreateController extends Controller
         $buildings = Building::select('name')->get();
         $departments = Department::select('name')->get();
         $categories = Category::select('name')->get();
-        return view('/reports/addIssue', compact('buildings', 'departments', 'categories'));
+        $itSupportUsers = User::where('department_id', function ($query) {
+            $query->select('id')
+                ->from('departments')
+                ->where('name', 'IT Support');
+        })->get();
+        return view('/reports/addIssue', compact('buildings', 'departments', 'categories', 'itSupportUsers'));
     }
 
     function InsertReportIssue(Request $request)
@@ -46,6 +52,7 @@ class CreateController extends Controller
             'issues.*.issue' => 'required',
             'issues.*.detail' => 'required',
             'issues.*.file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'issues.*.assignee' => 'required|exists:users,id',
         ]);
 
         $issues = $request->input('issues');
@@ -56,8 +63,8 @@ class CreateController extends Controller
                 'detail' => $issueData['detail'],
                 'department' => $issueData['department'],
                 'hotel' => $issueData['hotel'],
-                'location' => $issueData['location'],
                 'status' => $issueData['status'],
+                'assignee_id' => $issueData['assignee'],
                 'created_at' => now()
             ];
 
@@ -90,8 +97,8 @@ class CreateController extends Controller
             $message .= "  - Remarks: " . (!empty($issueData['remarks']) ? $issueData['remarks'] : "No remarks") . "\n";
             $message .= "  - Department: " . $issueData['department'] . "\n";
             $message .= "  - Hotel: " . $issueData['hotel'] . "\n";
-            $message .= "  - Location: " . $issueData['location'] . "\n";
             $message .= "  - Attachment: " . ($hasAttachment ? 'Yes' : 'No') . "\n";
+            $message .= "  - Assignee: " . User::find($issueData['assignee'])->name . "\n";
             $message .= "  - Status: " . ($issueData['status'] == 0 ? 'In-progress' : 'Done');
 
 

@@ -44,6 +44,9 @@
                             <th scope="col" class="text-center"><a class="text-dark text-decoration-none"
                                     href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'status', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Status</a>
                             </th>
+                            <th class="  text-center" scope="col"><a class="text-dark text-decoration-none"
+                                    href="{{ route('reportIssue', array_merge(request()->all(), ['sort_by' => 'assignee_id', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Assignee</a>
+                            </th>
                             <th scope="col" class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -62,6 +65,8 @@
                                         <a href="#" class="btn btn-success"><i class="bi bi-check2"></i></a>
                                     @endif
                                 </td>
+                                <td class="text-center">
+                                    {{ $reporter->assignee ? $reporter->assignee->name : 'N/A' }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-secondary preview-btn" data-id="{{ $reporter->id }}"><i
                                             class="bi bi-eye"></i></button>

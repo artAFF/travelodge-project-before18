@@ -74,10 +74,10 @@
                 @enderror
 
                 <div class="mb-3">
-                    <label for="location" class="form-label">Location</label>
-                    <select class="form-select" id="location" name="issues[0][location]">
-                        @foreach ($buildings as $building)
-                            <option value="{{ $building->name }}">{{ $building->name }}</option>
+                    <label for="assignee" class="form-label">Assignee</label>
+                    <select class="form-select" id="assignee" name="issues[0][assignee]">
+                        @foreach ($itSupportUsers as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </select>
                 </div>

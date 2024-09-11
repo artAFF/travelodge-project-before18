@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function assignedIssues()
+    {
+        return $this->hasMany(Travelodge::class, 'assignee_id');
+    }
 }

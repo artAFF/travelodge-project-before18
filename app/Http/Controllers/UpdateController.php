@@ -23,6 +23,7 @@ use App\Models\Uncm_guest;
 use App\Models\Uncm_net;
 use App\Models\Uncm_server;
 use App\Models\Uncm_switch;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class UpdateController extends Controller
@@ -38,8 +39,13 @@ class UpdateController extends Controller
         $buildings = Building::select('name')->get();
         $departments = Department::select('name')->get();
         $categories = Category::select('name')->get();
+        $itSupportUsers = User::where('department_id', function ($query) {
+            $query->select('id')
+                ->from('departments')
+                ->where('name', 'IT Support');
+        })->get();
 
-        return view('/reports/updateReport', compact('ReportIssues', 'buildings', 'departments', 'categories'));
+        return view('/reports/updateReport', compact('ReportIssues', 'buildings', 'departments', 'categories', 'itSupportUsers'));
     }
 
     function UpdateIssue(Request $request, $id)
@@ -48,6 +54,7 @@ class UpdateController extends Controller
             'issue' => 'required',
             'detail' => 'required',
             'remarks' => 'nullable|string',
+            'assignee' => 'required|exists:users,id',
         ]);
 
         $data = [
@@ -55,9 +62,9 @@ class UpdateController extends Controller
             'detail' => $request->detail,
             'department' => $request->department,
             'hotel' => $request->hotel,
-            'location' => $request->location,
             'status' => $request->status,
             'remarks' => $request->remarks,
+            'assignee_id' => $request->assignee,
             'updated_at' => now()
         ];
 
@@ -73,9 +80,8 @@ class UpdateController extends Controller
         $message .= "  - Issue Category: " . $request->issue . "\n";
         $message .= "  - Detail: " . $request->detail . "\n";
         $message .= "  - Remarks: " . (!empty($request->remarks) ? $request->remarks : "No remarks") . "\n";
-        /* $message .= "  - Department: " . $request->department . "\n";
-        $message .= "  - Location: " . $request->location . "\n"; */
         $message .= "  - Hotel: " . $request->hotel . "\n";
+        $message .= "  - Assignee: " . User::find($request->assignee)->name . "\n";
         $message .= "  - Status: " . ($request->status == 0 ? 'In-progress' : 'Done');
 
         $response = $client->post($messageUrl, [

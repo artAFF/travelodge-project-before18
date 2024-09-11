@@ -26,7 +26,6 @@
                         <td>{{ $issue->detail }}</td>
                         <td>{{ $issue->department }}</td>
                         <td>{{ $issue->hotel }}</td>
-                        <td>{{ $issue->location }}</td>
                         <td>{{ $issue->status == 0 ? 'In-progress' : 'Done' }}</td>
                         <td>{{ \Carbon\Carbon::parse($issue->created_at)->format('d/m/Y H:i:s') }}</td>
                         <td>{{ \Carbon\Carbon::parse($issue->updated_at)->format('d/m/Y H:i:s') }}</td>

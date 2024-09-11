@@ -75,13 +75,12 @@
         @enderror
 
         <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <select class="form-select" id="location" name="location">
-                <option value="{{ $ReportIssues->location }}" selected>{{ $ReportIssues->location }}</option>
-                @foreach ($buildings as $building)
-                    @if ($building->name !== $ReportIssues->location)
-                        <option value="{{ $building->name }}">{{ $building->name }}</option>
-                    @endif
+            <label for="assignee" class="form-label">Assignee</label>
+            <select class="form-select" id="assignee" name="assignee">
+                @foreach ($itSupportUsers as $user)
+                    <option value="{{ $user->id }}" {{ $ReportIssues->assignee_id == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
                 @endforeach
             </select>
         </div>

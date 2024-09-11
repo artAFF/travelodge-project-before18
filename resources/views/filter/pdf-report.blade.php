@@ -89,7 +89,6 @@
                 <th class="col-md-2 text-center" scope="col">Detail</th>
                 <th class="col-md-1 text-center" scope="col">Department</th>
                 <th class="col-md-1 text-center" scope="col">Hotel</th>
-                <th scope="col" class="text-center">Location</th>
                 <th scope="col" class="text-center">Status</th>
                 <th scope="col" class="text-center">Created Time</th>
                 <th scope="col" class="text-center">Updated Time</th>
@@ -103,7 +102,6 @@
                     <td>{{ $issue['detail'] }}</td>
                     <td>{{ $issue['department'] }}</td>
                     <td>{{ $issue['hotel'] }}</td>
-                    <td>{{ $issue['location'] }}</td>
                     <td class="text-center">
                         @if ($issue['status'] === 0)
                             In-progress

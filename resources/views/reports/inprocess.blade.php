@@ -39,6 +39,9 @@
                     </th>
                     <th class="text-center">Status</th>
                     <th class="text-center"><a class="text-dark text-decoration-none"
+                            href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'assignee_id', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Assignee</a>
+                    </th>
+                    <th class="text-center"><a class="text-dark text-decoration-none"
                             href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Created
                             At</a></th>
                     {{-- <th><a class="text-dark text-decoration-none"
@@ -62,6 +65,7 @@
                                 <a href="#" class="btn btn-success"><i class="bi bi-check2"></i></a>
                             @endif
                         </td>
+                        <td class="text-center">{{ $in_process1->assignee->name ?? 'N/A' }}</td>
                         <td class="text-center">
                             {{ \Carbon\Carbon::parse($in_process1->created_at)->format('d/m/Y H:i:s') }}</td>
                         {{-- <td>{{ \Carbon\Carbon::parse($in_process1->updated_at)->format('d-m-Y H:i:s') }}</td> --}}

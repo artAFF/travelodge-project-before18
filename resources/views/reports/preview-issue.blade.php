@@ -4,7 +4,9 @@
             <p><strong>ID:</strong> {{ $report->id }}</p>
             <p><strong>Detail:</strong> {{ $report->detail }}</p>
             <p><strong>Department:</strong> {{ $report->department }}</p>
-            <p><strong>Location:</strong> {{ $report->location }}</p>
+            <p>
+                <strong>Assignee:</strong> {{ $report->assignee->name ?? 'N/A' }}
+            </p>
         </div>
         <div class="col-md-6">
             <p><strong>Issue:</strong> {{ $report->issue }}</p>
