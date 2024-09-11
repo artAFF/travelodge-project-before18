@@ -18,6 +18,27 @@
         .form-group {
             margin-left: 20px;
         }
+
+        @media (max-width: 768px) {
+            .row>div {
+                flex-direction: column;
+            }
+
+            #viewSelector,
+            #dateFilter,
+            #customDateRange {
+                margin-top: 10px;
+                margin-left: 0;
+            }
+
+            #customDateRange {
+                flex-direction: column;
+            }
+
+            #customDateRange input {
+                margin-top: 10px;
+            }
+        }
     </style>
 
     <div class="container-fluid px-4">
@@ -33,6 +54,7 @@
                     </div>
                     <div class="form-group mb-0 ml-3">
                         <select id="dateFilter" class="form-control">
+                            <option value="all_time">All Time</option>
                             <option value="today">Today</option>
                             <option value="yesterday">Yesterday</option>
                             <option value="this_week">This week</option>
@@ -213,11 +235,15 @@
         document.getElementById('endDate').addEventListener('change', updateChartsWithCustomDate);
 
         function updateChartsWithDateFilter(filterType) {
-            fetch(`/api/hotel-data/${currentView}/${filterType}?hotel={{ $hotel_code }}`)
-                .then(response => response.json())
-                .then(data => {
-                    updateCharts(data);
-                });
+            if (filterType === 'all_time') {
+                updateCharts(currentView === 'category' ? categoryData : departmentData);
+            } else {
+                fetch(`/api/hotel-data/${currentView}/${filterType}?hotel={{ $hotel_code }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateCharts(data);
+                    });
+            }
         }
 
         function updateChartsWithCustomDate() {

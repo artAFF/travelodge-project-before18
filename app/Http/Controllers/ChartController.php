@@ -68,48 +68,22 @@ class ChartController extends Controller
         ]);
     }
 
-    private function getCategoryData($hotel)
+    public function getHotelDataByDate($view, $filterType, Request $request)
     {
-        $categoriesWithCounts = Travelodge::where('hotel', $hotel)
-            ->select('issue as category')
-            ->selectRaw('COUNT(*) as count')
-            ->groupBy('issue')
-            ->orderByDesc('count')
-            ->get();
+        $hotel = $request->query('hotel');
+        $query = Travelodge::where('hotel', $hotel);
 
-        $categories = $categoriesWithCounts->pluck('category')->toArray();
-        $data = $categoriesWithCounts->pluck('count')->toArray();
+        if ($filterType !== 'all_time') {
+            $this->applyDateFilter($query, $filterType);
+        }
 
-        $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#6495ED', '#20B2AA', '#FFA07A', '#808080', '#7FFFD4', '#D3D3D3', '#90CAF9'];
-        $colors = array_slice($colors, 0, count($categories));
+        if ($view === 'category') {
+            $data = $this->getCategoryDataFromQuery($query);
+        } else {
+            $data = $this->getDepartmentDataFromQuery($query);
+        }
 
-        return [
-            'labels' => $categories,
-            'data' => $data,
-            'backgroundColor' => $colors
-        ];
-    }
-
-    private function getDepartmentData($hotel)
-    {
-        $departmentsWithCounts = Travelodge::where('hotel', $hotel)
-            ->select('department')
-            ->selectRaw('COUNT(*) as count')
-            ->groupBy('department')
-            ->orderByDesc('count')
-            ->get();
-
-        $departments = $departmentsWithCounts->pluck('department')->toArray();
-        $data = $departmentsWithCounts->pluck('count')->toArray();
-
-        $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2', '#007bff'];
-        $colors = array_slice($colors, 0, count($departments));
-
-        return [
-            'labels' => $departments,
-            'data' => $data,
-            'backgroundColor' => $colors
-        ];
+        return response()->json($data);
     }
 
     public function getIssueDetails($type, $label, Request $request)
@@ -134,7 +108,7 @@ class ChartController extends Controller
         }
 
         // Apply date filter
-        if ($dateFilter) {
+        if ($dateFilter && $dateFilter !== 'all_time') {
             $this->applyDateFilter($query, $dateFilter);
         } elseif ($startDate && $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
@@ -187,70 +161,16 @@ class ChartController extends Controller
         }
     }
 
-    private function calculatePercentages($data)
+    private function getCategoryData($hotel)
     {
-        $total = array_sum($data);
-        return array_map(function ($value) use ($total) {
-            return round(($value / $total) * 100, 2);
-        }, $data);
+        $query = Travelodge::where('hotel', $hotel);
+        return $this->getCategoryDataFromQuery($query);
     }
 
-    public function getHotelDataByDate($view, $filterType, Request $request)
+    private function getDepartmentData($hotel)
     {
-        $hotel = $request->query('hotel');
         $query = Travelodge::where('hotel', $hotel);
-
-        switch ($filterType) {
-            case 'today':
-                $query->whereDate('created_at', Carbon::today());
-                break;
-            case 'yesterday':
-                $query->whereDate('created_at', Carbon::yesterday());
-                break;
-            case 'this_week':
-                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                break;
-            case 'last_week':
-                $query->whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]);
-                break;
-            case 'this_month':
-                $query->whereMonth('created_at', Carbon::now()->month);
-                break;
-            case 'last_month':
-                $query->whereMonth('created_at', Carbon::now()->subMonth()->month);
-                break;
-            case 'last_30_days':
-                $query->where('created_at', '>=', Carbon::now()->subDays(30));
-                break;
-            case 'this_quarter':
-                $query->whereBetween('created_at', [Carbon::now()->startOfQuarter(), Carbon::now()->endOfQuarter()]);
-                break;
-            case 'last_quarter':
-                $query->whereBetween('created_at', [Carbon::now()->subQuarter()->startOfQuarter(), Carbon::now()->subQuarter()->endOfQuarter()]);
-                break;
-            case 'this_year':
-                $query->whereYear('created_at', Carbon::now()->year);
-                break;
-            case 'last_year':
-                $query->whereYear('created_at', Carbon::now()->subYear()->year);
-                break;
-            case 'last_365_days':
-                $query->where('created_at', '>=', Carbon::now()->subDays(365));
-                break;
-            case 'custom':
-                $startDate = $request->query('start');
-                $endDate = $request->query('end');
-                $query->whereBetween('created_at', [$startDate, $endDate]);
-                break;
-        }
-
-        if ($view === 'category') {
-            $data = $this->getCategoryDataFromQuery($query);
-        } else {
-            $data = $this->getDepartmentDataFromQuery($query);
-        }
-
-        return response()->json($data);
+        return $this->getDepartmentDataFromQuery($query);
     }
 
     private function getCategoryDataFromQuery($query)
@@ -293,5 +213,13 @@ class ChartController extends Controller
             'data' => $data,
             'backgroundColor' => $colors
         ];
+    }
+
+    private function calculatePercentages($data)
+    {
+        $total = array_sum($data);
+        return array_map(function ($value) use ($total) {
+            return round(($value / $total) * 100, 2);
+        }, $data);
     }
 }

@@ -32,7 +32,7 @@
             if (type && label && hotel) {
                 let apiUrl = `/api/issues/${type}/${label}?hotel=${encodeURIComponent(hotel)}`;
 
-                if (dateFilter) {
+                if (dateFilter && dateFilter !== 'all_time') {
                     apiUrl += `&dateFilter=${dateFilter}`;
                 } else if (startDate && endDate) {
                     apiUrl += `&start=${startDate}&end=${endDate}`;
