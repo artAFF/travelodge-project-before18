@@ -33,24 +33,24 @@ class CreateController extends Controller
         $this->middleware('auth');
     }
 
-    function AddReportIssue()
+    public function AddReportIssue()
     {
-        $buildings = Building::select('name')->get();
-        $departments = Department::select('name')->get();
-        $categories = Category::select('name')->get();
-        $itSupportUsers = User::where('department_id', function ($query) {
-            $query->select('id')
-                ->from('departments')
-                ->where('name', 'IT Support');
+        $categories = Category::all();
+        $departments = Department::all();
+        $itSupportUsers = User::whereHas('department', function ($query) {
+            $query->where('name', 'IT Support');
         })->get();
-        return view('/reports/addIssue', compact('buildings', 'departments', 'categories', 'itSupportUsers'));
+
+        return view('/reports/addIssue', compact('categories', 'departments', 'itSupportUsers'));
     }
 
-    function InsertReportIssue(Request $request)
+    public function InsertReportIssue(Request $request)
     {
         $request->validate([
-            'issues.*.issue' => 'required',
+            'issues.*.category_id' => 'required|exists:categories,id',
+            'issues.*.department_id' => 'required|exists:departments,id',
             'issues.*.detail' => 'required',
+            'issues.*.hotel' => 'required',
             'issues.*.file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'issues.*.assignee' => 'required|exists:users,id',
         ]);
@@ -58,50 +58,48 @@ class CreateController extends Controller
         $issues = $request->input('issues');
 
         foreach ($issues as $index => $issueData) {
-            $data = [
-                'issue' => $issueData['issue'],
+            $travelodge = Travelodge::create([
+                'category_id' => $issueData['category_id'],
+                'department_id' => $issueData['department_id'],
                 'detail' => $issueData['detail'],
-                'department' => $issueData['department'],
                 'hotel' => $issueData['hotel'],
                 'status' => $issueData['status'],
                 'assignee_id' => $issueData['assignee'],
-                'created_at' => now()
-            ];
+                'remarks' => $issueData['remarks'] ?? null,
+            ]);
 
             if ($request->hasFile("issues.{$index}.file")) {
                 $file = $request->file("issues.{$index}.file");
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('uploads', $filename, 'public');
-                $data['file_path'] = $filePath;
+                $travelodge->update(['file_path' => $filePath]);
             }
 
-            $hasAttachment = false;
-            if ($request->hasFile("issues.{$index}.file")) {
-                $file = $request->file("issues.{$index}.file");
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads', $filename, 'public');
-                $data['file_path'] = $filePath;
-                $hasAttachment = true;
-            }
+            // Send Line Notification
+            $this->sendLineNotification($travelodge, $issueData);
+        }
 
-            Travelodge::insert($data);
+        return redirect('/reports/reportIssue');
+    }
 
-            $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
-            $messageUrl = 'https://notify-api.line.me/api/notify';
+    private function sendLineNotification($travelodge, $issueData)
+    {
+        $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
+        $messageUrl = 'https://notify-api.line.me/api/notify';
 
-            $client = new \GuzzleHttp\Client();
+        $client = new \GuzzleHttp\Client();
 
-            $message = "New Issue Reported:\n";
-            $message .= "  - Issue Category: " . $issueData['issue'] . "\n";
-            $message .= "  - Detail: " . $issueData['detail'] . "\n";
-            $message .= "  - Remarks: " . (!empty($issueData['remarks']) ? $issueData['remarks'] : "No remarks") . "\n";
-            $message .= "  - Department: " . $issueData['department'] . "\n";
-            $message .= "  - Hotel: " . $issueData['hotel'] . "\n";
-            $message .= "  - Attachment: " . ($hasAttachment ? 'Yes' : 'No') . "\n";
-            $message .= "  - Assignee: " . User::find($issueData['assignee'])->name . "\n";
-            $message .= "  - Status: " . ($issueData['status'] == 0 ? 'In-progress' : 'Done');
+        $message = "New Issue Reported:\n";
+        $message .= "  - Issue Category: " . Category::find($travelodge->category_id)->name . "\n";
+        $message .= "  - Detail: " . $travelodge->detail . "\n";
+        $message .= "  - Remarks: " . ($travelodge->remarks ?? "No remarks") . "\n";
+        $message .= "  - Department: " . Department::find($travelodge->department_id)->name . "\n";
+        $message .= "  - Hotel: " . $travelodge->hotel . "\n";
+        $message .= "  - Attachment: " . ($travelodge->file_path ? 'Yes' : 'No') . "\n";
+        $message .= "  - Assignee: " . User::find($travelodge->assignee_id)->name . "\n";
+        $message .= "  - Status: " . ($travelodge->status == 0 ? 'In-progress' : 'Done');
 
-
+        try {
             $response = $client->post($messageUrl, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $accessToken,
@@ -115,9 +113,9 @@ class CreateController extends Controller
             if ($response->getStatusCode() !== 200) {
                 /* \Log::error('Line Notify error: ' . $response->getBody()); */
             }
+        } catch (\Exception $e) {
+            /* \Log::error('Line Notify error: ' . $e->getMessage()); */
         }
-
-        return redirect('/reports/reportIssue');
     }
 
     function AddGuest($type)

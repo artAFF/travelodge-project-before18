@@ -29,21 +29,19 @@ class ReadController extends Controller
         $query = $request->input('query');
         $sort_by = $request->input('sort_by', 'id');
         $sort_order = $request->input('sort_order', 'desc');
-
-        // Get the authenticated user
         $user = auth()->user();
 
-        $ReportIssues = Travelodge::query()
+        $ReportIssues = Travelodge::with(['category', 'department', 'assignee'])
             ->when($query, function ($q) use ($query) {
-                $q->where('issue', 'like', "%{$query}%")
-                    ->orWhere('detail', 'like', "%{$query}%")
-                    ->orWhere('department', 'like', "%{$query}%")
-                    ->orWhere('hotel', 'like', "%{$query}%")
-                    ->orWhere('location', 'like', "%{$query}%");
+                $q->whereHas('category', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%");
+                })->orWhereHas('department', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%");
+                })->orWhere('detail', 'like', "%{$query}%")
+                    ->orWhere('hotel', 'like', "%{$query}%");
             })
             ->when($user->role !== 'admin', function ($q) use ($user) {
-                // If the user is not an admin, filter by their department
-                $q->where('department', $user->department->name);
+                $q->where('department_id', $user->department_id);
             })
             ->orderBy($sort_by, $sort_order)
             ->paginate(10)

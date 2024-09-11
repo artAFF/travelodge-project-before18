@@ -2,21 +2,21 @@
 @section('title', 'Update Issue')
 
 @section('content')
-    <form action="{{ route('updatePreport', $ReportIssues->id) }}" method="POST">
+    <form action="{{ route('updatePreport', $ReportIssues->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
+
         <div class="mb-3">
             <label for="issue" class="form-label">Issue Category</label>
-            <select class="form-select" id="issue" name="issue">
-                <option value="{{ $ReportIssues->issue }}" selected>{{ $ReportIssues->issue }}</option>
+            <select class="form-select" id="issue" name="category_id">
                 @foreach ($categories as $category)
-                    @if ($category->name !== $ReportIssues->issue)
-                        <option value="{{ $category->name }}">{{ $category->name }}</option>
-                    @endif
+                    <option value="{{ $category->id }}" {{ $ReportIssues->category_id == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
                 @endforeach
             </select>
         </div>
-        @error('issue')
+        @error('category_id')
             <div class="my-error">
                 <span class="text-danger">{{ $message }}</span>
             </div>
@@ -47,25 +47,25 @@
             <textarea class="form-control" id="remarks" name="remarks" rows="2">{{ $ReportIssues->remarks }}</textarea>
         </div>
 
+
         <div class="mb-3">
             <label for="department" class="form-label">Department</label>
-            <select class="form-select" id="department" name="department">
-                <option value="{{ $ReportIssues->department }}" selected>{{ $ReportIssues->department }}</option>
+            <select class="form-select" id="department" name="department_id">
                 @foreach ($departments as $department)
-                    @if ($department->name !== $ReportIssues->department)
-                        <option value="{{ $department->name }}">{{ $department->name }}</option>
-                    @endif
+                    <option value="{{ $department->id }}"
+                        {{ $ReportIssues->department_id == $department->id ? 'selected' : '' }}>
+                        {{ $department->name }}
+                    </option>
                 @endforeach
             </select>
         </div>
 
         <div class="mb-3">
-            <label for="issue" class="form-label">Hotel</label>
+            <label for="hotel" class="form-label">Hotel</label>
             <select class="form-select" id="hotel" name="hotel">
-                <option value="{{ $ReportIssues->hotel }}" selected>{{ $ReportIssues->hotel }}</option>
-                <option value="TLCMN" @if ($ReportIssues->hotel == 'TLCMN') selected @endif>TLCMN</option>
-                <option value="EHCM" @if ($ReportIssues->hotel == 'EHCM') selected @endif>EHCM</option>
-                <option value="UNCM" @if ($ReportIssues->hotel == 'UNCM') selected @endif>UNCM</option>
+                <option value="TLCMN" {{ $ReportIssues->hotel == 'TLCMN' ? 'selected' : '' }}>TLCMN</option>
+                <option value="EHCM" {{ $ReportIssues->hotel == 'EHCM' ? 'selected' : '' }}>EHCM</option>
+                <option value="UNCM" {{ $ReportIssues->hotel == 'UNCM' ? 'selected' : '' }}>UNCM</option>
             </select>
         </div>
         @error('hotel')
@@ -88,14 +88,25 @@
         <div class="mb-3">
             <label for="status" class="form-label">Status</label>
             <select class="form-select" id="status" name="status">
-                <option value="0" @if ($ReportIssues->status === 0) selected @endif>In-process</option>
-                <option value="1" @if ($ReportIssues->status === 1) selected @endif>Done</option>
+                <option value="0" {{ $ReportIssues->status === 0 ? 'selected' : '' }}>In-progress</option>
+                <option value="1" {{ $ReportIssues->status === 1 ? 'selected' : '' }}>Done</option>
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
+        <div class="mb-3">
+            <label for="file" class="form-label">Upload New File (PDF or Image)</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png">
+        </div>
 
+        @if ($ReportIssues->file_path)
+            <div class="mb-3">
+                <p>Current file: <a href="{{ asset('storage/' . $ReportIssues->file_path) }}" target="_blank">View File</a>
+                </p>
+            </div>
+        @endif
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
     </form>
 
     <script>

@@ -54,9 +54,9 @@
                         @foreach ($ReportIssues as $reporter)
                             <tr>
                                 <th class="text-center" scope="row">{{ $reporter->id }}</th>
-                                <td class="text-center">{{ $reporter->issue }}</td>
+                                <td class="text-center">{{ $reporter->category->name ?? 'N/A' }}</td>
                                 <td class="text-center">{{ Str::limit($reporter->detail, 40, '...') }}</td>
-                                <td class="text-center">{{ $reporter->department }}</td>
+                                <td class="text-center">{{ $reporter->department->name ?? 'N/A' }}</td>
                                 <td class="text-center">{{ $reporter->hotel }}</td>
                                 <td class="text-center">
                                     @if ($reporter->status === 0)

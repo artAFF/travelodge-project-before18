@@ -54,9 +54,9 @@
                 @foreach ($in_process as $in_process1)
                     <tr>
                         <td class="text-center">{{ $in_process1->id }}</td>
-                        <td class="text-center">{{ $in_process1->issue }}</td>
+                        <td class="text-center">{{ $in_process1->category->name ?? 'N/A' }}</td>
                         <td class="text-center">{{ $in_process1->detail }}</td>
-                        <td class="text-center">{{ $in_process1->department }}</td>
+                        <td class="text-center">{{ $in_process1->department->name ?? 'N/A' }}</td>
                         <td class="text-center">{{ $in_process1->hotel }}</td>
                         <td class="text-center">
                             @if ($in_process1->status === 0)

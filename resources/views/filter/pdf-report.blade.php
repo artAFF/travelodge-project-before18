@@ -98,9 +98,9 @@
             @foreach ($issues as $issue)
                 <tr>
                     <th scope="row">{{ $issue['id'] }}</th>
-                    <td>{{ $issue['issue'] }}</td>
-                    <td>{{ $issue['detail'] }}</td>
-                    <td>{{ $issue['department'] }}</td>
+                    <td>{{ $issue->category->name ?? 'N/A' }}</td>
+                    <td>{{ $issue->detail }}</td>
+                    <td>{{ $issue->department->name ?? 'N/A' }}</td>
                     <td>{{ $issue['hotel'] }}</td>
                     <td class="text-center">
                         @if ($issue['status'] === 0)

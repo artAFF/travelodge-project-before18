@@ -3,13 +3,11 @@
         <div class="col-md-6">
             <p><strong>ID:</strong> {{ $report->id }}</p>
             <p><strong>Detail:</strong> {{ $report->detail }}</p>
-            <p><strong>Department:</strong> {{ $report->department }}</p>
-            <p>
-                <strong>Assignee:</strong> {{ $report->assignee->name ?? 'N/A' }}
-            </p>
+            <p><strong>Department:</strong> {{ $report->department->name ?? 'N/A' }}</p>
+            <p><strong>Assignee:</strong> {{ $report->assignee->name ?? 'N/A' }}</p>
         </div>
         <div class="col-md-6">
-            <p><strong>Issue:</strong> {{ $report->issue }}</p>
+            <p><strong>Issue:</strong> {{ $report->category->name ?? 'N/A' }}</p>
             <p><strong>Remarks:</strong>
                 @if ($report->remarks)
                     {{ $report->remarks }}

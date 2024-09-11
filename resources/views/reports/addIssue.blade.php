@@ -9,13 +9,13 @@
                 <h3 class="issue-title">Issue #1</h3>
                 <div class="mb-3">
                     <label for="issue" class="form-label">Issue Category</label>
-                    <select class="form-select" id="issue" name="issues[0][issue]">
+                    <select class="form-select" id="issue" name="issues[0][category_id]">
                         @foreach ($categories as $category)
-                            <option value="{{ $category->name }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                @error('issues.0.issue')
+                @error('issues.0.category_id')
                     <div class="my-error">
                         <span class="text-danger">{{ $message }}</span>
                     </div>
@@ -47,13 +47,13 @@
 
                 <div class="mb-3">
                     <label for="department" class="form-label">Department</label>
-                    <select class="form-select" id="department" name="issues[0][department]">
+                    <select class="form-select" id="department" name="issues[0][department_id]">
                         @foreach ($departments as $department)
-                            <option value="{{ $department->name }}">{{ $department->name }}</option>
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                @error('issues.0.department')
+                @error('issues.0.department_id')
                     <div class="my-error">
                         <span class="text-danger">{{ $message }}</span>
                     </div>

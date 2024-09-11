@@ -8,15 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Travelodge extends Model
 {
     protected $fillable = [
-        'issue',
+        'category_id',
         'detail',
         'remarks',
-        'department',
+        'department_id',
         'hotel',
         'status',
         'file_path',
         'assignee_id'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 
     public function assignee()
     {

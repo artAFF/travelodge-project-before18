@@ -7,21 +7,21 @@
         <form action="{{ route('filter.data') }}" method="POST" class="row g-3">
             @csrf
             <div class="col-md-6">
-                <label for="issue" class="form-label">Issue</label>
-                <select name="issue" id="issue" class="form-select">
-                    <option value="All">All</option>
+                <label for="category_id" class="form-label">Issue Category</label>
+                <select name="category_id" id="category_id" class="form-select">
+                    <option value="">All</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
             </div>
 
             <div class="col-md-6">
-                <label for="department" class="form-label">Department</label>
-                <select name="department" id="department" class="form-select">
-                    <option value="All">All</option>
+                <label for="department_id" class="form-label">Department</label>
+                <select name="department_id" id="department_id" class="form-select">
+                    <option value="">All</option>
                     @foreach ($departments as $department)
-                        <option value="{{ $department->name }}">{{ $department->name }}</option>
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
                     @endforeach
                 </select>
             </div>

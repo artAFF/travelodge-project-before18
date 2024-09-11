@@ -13,6 +13,11 @@ class Department extends Model
 
     protected $fillable = ['id', 'name'];
 
+    public function travelodges()
+    {
+        return $this->hasMany(Travelodge::class);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);

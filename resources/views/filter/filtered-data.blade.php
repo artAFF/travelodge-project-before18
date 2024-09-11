@@ -12,7 +12,6 @@
                     <th scope="col" class="text-center">Detail</th>
                     <th scope="col" class="text-center">Department</th>
                     <th scope="col" class="text-center">Hotel</th>
-                    <th scope="col" class="text-center">Location</th>
                     <th scope="col" class="text-center">Status</th>
                     <th scope="col" class="text-center">Created At</th>
                     <th scope="col" class="text-center">Updated At</th>
@@ -21,14 +20,14 @@
             <tbody>
                 @foreach ($issues as $issue)
                     <tr>
-                        <td>{{ $issue->id }}</td>
-                        <td>{{ $issue->issue }}</td>
-                        <td>{{ $issue->detail }}</td>
-                        <td>{{ $issue->department }}</td>
-                        <td>{{ $issue->hotel }}</td>
-                        <td>{{ $issue->status == 0 ? 'In-progress' : 'Done' }}</td>
-                        <td>{{ \Carbon\Carbon::parse($issue->created_at)->format('d/m/Y H:i:s') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($issue->updated_at)->format('d/m/Y H:i:s') }}</td>
+                        <td class="text-center">{{ $issue->id }}</td>
+                        <td class="text-center">{{ $issue->category->name ?? 'N/A' }}</td>
+                        <td class="text-center">{{ $issue->detail }}</td>
+                        <td class="text-center">{{ $issue->department->name ?? 'N/A' }}</td>
+                        <td class="text-center">{{ $issue->hotel }}</td>
+                        <td class="text-center">{{ $issue->status == 0 ? 'In-progress' : 'Done' }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($issue->created_at)->format('d/m/Y H:i:s') }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($issue->updated_at)->format('d/m/Y H:i:s') }}</td>
                     </tr>
                 @endforeach
             </tbody>

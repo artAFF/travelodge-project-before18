@@ -25,6 +25,7 @@ use App\Models\Uncm_server;
 use App\Models\Uncm_switch;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateController extends Controller
 {
@@ -33,75 +34,94 @@ class UpdateController extends Controller
         $this->middleware('auth');
     }
 
-    function UpdateReportIssue($id)
+    public function UpdateReportIssue($id)
     {
-        $ReportIssues = Travelodge::where('id', $id)->first();
-        $buildings = Building::select('name')->get();
-        $departments = Department::select('name')->get();
-        $categories = Category::select('name')->get();
-        $itSupportUsers = User::where('department_id', function ($query) {
-            $query->select('id')
-                ->from('departments')
-                ->where('name', 'IT Support');
+        $ReportIssues = Travelodge::findOrFail($id);
+        $categories = Category::all();
+        $departments = Department::all();
+        $itSupportUsers = User::whereHas('department', function ($query) {
+            $query->where('name', 'IT Support');
         })->get();
 
-        return view('/reports/updateReport', compact('ReportIssues', 'buildings', 'departments', 'categories', 'itSupportUsers'));
+        return view('/reports/updateReport', compact('ReportIssues', 'categories', 'departments', 'itSupportUsers'));
     }
 
-    function UpdateIssue(Request $request, $id)
+    public function UpdateIssue(Request $request, $id)
     {
         $request->validate([
-            'issue' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'department_id' => 'required|exists:departments,id',
             'detail' => 'required',
             'remarks' => 'nullable|string',
+            'hotel' => 'required',
             'assignee' => 'required|exists:users,id',
+            'status' => 'required|in:0,1',
         ]);
 
-        $data = [
-            'issue' => $request->issue,
+        $travelodge = Travelodge::findOrFail($id);
+
+        $travelodge->update([
+            'category_id' => $request->category_id,
+            'department_id' => $request->department_id,
             'detail' => $request->detail,
-            'department' => $request->department,
+            'remarks' => $request->remarks,
             'hotel' => $request->hotel,
             'status' => $request->status,
-            'remarks' => $request->remarks,
             'assignee_id' => $request->assignee,
-            'updated_at' => now()
-        ];
+        ]);
 
-        Travelodge::where('id', $id)->update($data);
+        // Handle file upload if a new file is provided
+        if ($request->hasFile('file')) {
+            // Delete old file if exists
+            if ($travelodge->file_path) {
+                Storage::disk('public')->delete($travelodge->file_path);
+            }
 
-        $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab'; //token for test PAjBExb3IfM1VtcuNJVLhrj2mdN2ZNlAUTJXmbGRXAh e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads', $filename, 'public');
+            $travelodge->update(['file_path' => $filePath]);
+        }
+
+        $this->sendLineNotification($travelodge);
+
+        return redirect($request->input('previous_url'));
+    }
+
+    private function sendLineNotification($travelodge)
+    {
+        $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
         $messageUrl = 'https://notify-api.line.me/api/notify';
 
         $client = new \GuzzleHttp\Client();
 
         $message = "Update Issue Reported:\n";
-        $message .= "  - ID Issue: " . $request->id . "\n";
-        $message .= "  - Issue Category: " . $request->issue . "\n";
-        $message .= "  - Detail: " . $request->detail . "\n";
-        $message .= "  - Remarks: " . (!empty($request->remarks) ? $request->remarks : "No remarks") . "\n";
-        $message .= "  - Hotel: " . $request->hotel . "\n";
-        $message .= "  - Assignee: " . User::find($request->assignee)->name . "\n";
-        $message .= "  - Status: " . ($request->status == 0 ? 'In-progress' : 'Done');
+        $message .= "  - ID Issue: " . $travelodge->id . "\n";
+        $message .= "  - Issue Category: " . $travelodge->category->name . "\n";
+        $message .= "  - Detail: " . $travelodge->detail . "\n";
+        $message .= "  - Remarks: " . ($travelodge->remarks ?? "No remarks") . "\n";
+        $message .= "  - Department: " . $travelodge->department->name . "\n";
+        $message .= "  - Hotel: " . $travelodge->hotel . "\n";
+        $message .= "  - Assignee: " . $travelodge->assignee->name . "\n";
+        $message .= "  - Status: " . ($travelodge->status == 0 ? 'In-progress' : 'Done');
 
-        $response = $client->post($messageUrl, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'form_params' => [
-                'message' => $message,
-            ],
-        ]);
+        try {
+            $response = $client->post($messageUrl, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'form_params' => [
+                    'message' => $message,
+                ],
+            ]);
 
-        if ($response->getStatusCode() === 200) {
-            // Success
-        } else {
-            // Error handling (log or display message)
-            /* \Log::error('Line Notify error: ' . $response->getBody()); */
+            if ($response->getStatusCode() !== 200) {
+                /* \Log::error('Line Notify error: ' . $response->getBody()); */
+            }
+        } catch (\Exception $e) {
+            /* \Log::error('Line Notify error: ' . $e->getMessage()); */
         }
-        /* return redirect('/reports/reportIssue'); */
-        return redirect($request->input('previous_url'));
     }
 
     function UpdateGuest($type, $id)

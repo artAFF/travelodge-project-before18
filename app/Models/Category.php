@@ -12,4 +12,9 @@ class Category extends Model
     public $timestamps = false;
 
     protected $fillable = ['id', 'name'];
+
+    public function travelodges()
+    {
+        return $this->hasMany(Travelodge::class);
+    }
 }
