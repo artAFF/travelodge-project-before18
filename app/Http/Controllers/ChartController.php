@@ -93,18 +93,18 @@ class ChartController extends Controller
         $startDate = $request->query('start');
         $endDate = $request->query('end');
 
-        $query = Travelodge::query();
-
-        // Filter by hotel
-        if ($hotel) {
-            $query->where('hotel', $hotel);
-        }
+        $query = Travelodge::with(['category', 'department', 'assignee'])
+            ->where('hotel', $hotel);
 
         // Filter by type (category or department)
         if ($type === 'category') {
-            $query->where('issue', $label);
+            $query->whereHas('category', function ($q) use ($label) {
+                $q->where('name', $label);
+            });
         } elseif ($type === 'department') {
-            $query->where('department', $label);
+            $query->whereHas('department', function ($q) use ($label) {
+                $q->where('name', $label);
+            });
         }
 
         // Apply date filter
@@ -116,7 +116,23 @@ class ChartController extends Controller
 
         $issues = $query->get();
 
-        return response()->json($issues);
+        // Transform the data to ensure all necessary fields are present
+        $transformedIssues = $issues->map(function ($issue) {
+            return [
+                'id' => $issue->id,
+                'category' => ['name' => $issue->category->name ?? 'N/A'],
+                'detail' => $issue->detail ?? 'N/A',
+                'remarks' => $issue->remarks ?? 'N/A',
+                'department' => ['name' => $issue->department->name ?? 'N/A'],
+                'hotel' => $issue->hotel,
+                'status' => $issue->status,
+                'assignee' => $issue->assignee ? ['name' => $issue->assignee->name] : null,
+                'created_at' => $issue->created_at,
+                'updated_at' => $issue->updated_at
+            ];
+        });
+
+        return response()->json($transformedIssues);
     }
 
     private function applyDateFilter($query, $filterType)
@@ -175,13 +191,17 @@ class ChartController extends Controller
 
     private function getCategoryDataFromQuery($query)
     {
-        $categoriesWithCounts = $query->select('issue as category')
+        $categoriesWithCounts = $query->select('category_id')
             ->selectRaw('COUNT(*) as count')
-            ->groupBy('issue')
+            ->groupBy('category_id')
+            ->with('category')
             ->orderByDesc('count')
             ->get();
 
-        $categories = $categoriesWithCounts->pluck('category')->toArray();
+        $categories = $categoriesWithCounts->map(function ($item) {
+            return $item->category->name;
+        })->toArray();
+
         $data = $categoriesWithCounts->pluck('count')->toArray();
 
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#6495ED', '#20B2AA', '#FFA07A', '#808080', '#7FFFD4', '#D3D3D3', '#90CAF9'];
@@ -196,13 +216,17 @@ class ChartController extends Controller
 
     private function getDepartmentDataFromQuery($query)
     {
-        $departmentsWithCounts = $query->select('department')
+        $departmentsWithCounts = $query->select('department_id')
             ->selectRaw('COUNT(*) as count')
-            ->groupBy('department')
+            ->groupBy('department_id')
+            ->with('department')  // เพิ่ม eager loading สำหรับ department relationship
             ->orderByDesc('count')
             ->get();
 
-        $departments = $departmentsWithCounts->pluck('department')->toArray();
+        $departments = $departmentsWithCounts->map(function ($item) {
+            return $item->department->name;  // ดึงชื่อแผนกจาก relationship
+        })->toArray();
+
         $data = $departmentsWithCounts->pluck('count')->toArray();
 
         $colors = ['#C71585', '#E63946', '#F1C23B', '#53577A', '#2ECC40', '#3598DC', '#90CAF9', '#D81B60', '#FF9999', '#6A3AB1', '#2196F3', '#1976D2', '#007bff'];

@@ -27,6 +27,8 @@ Route::delete('/deletereport/{id}', [DeleteController::class, 'DeleteReportIssue
 Route::get('/reports/updateReport/{id}', [UpdateController::class, 'UpdateReportIssue'])->name("updateReport");
 Route::post('/reports/updatePreport/{id}', [UpdateController::class, 'UpdateIssue'])->name("updatePreport");
 
+Route::post('/update-assignee/{id}', [UpdateController::class, 'updateAssignee'])->name('update.assignee');
+
 Route::get('/reports/inprocess', [ReadController::class, 'inprocess'])->name('inprocess');
 
 Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDate');

@@ -65,7 +65,17 @@
                                 <a href="#" class="btn btn-success"><i class="bi bi-check2"></i></a>
                             @endif
                         </td>
-                        <td class="text-center">{{ $in_process1->assignee->name ?? 'N/A' }}</td>
+                        <td class="text-center">
+                            <select class="form-select assignee-select" data-issue-id="{{ $in_process1->id }}">
+                                <option value="">Not Assign</option>
+                                @foreach ($itSupportUsers as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ $in_process1->assignee_id == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
                         <td class="text-center">
                             {{ \Carbon\Carbon::parse($in_process1->created_at)->format('d/m/Y H:i:s') }}</td>
                         {{-- <td>{{ \Carbon\Carbon::parse($in_process1->updated_at)->format('d-m-Y H:i:s') }}</td> --}}
@@ -100,11 +110,12 @@
         </div>
     </div>
     <script>
-        function submitSearch() {
-            document.querySelector('form').submit();
-        }
-
         document.addEventListener("DOMContentLoaded", function() {
+            function submitSearch() {
+                document.querySelector('form').submit();
+            }
+
+            // Preview functionality
             document.querySelectorAll('.preview-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     let reportId = this.getAttribute('data-id');
@@ -113,6 +124,39 @@
                         .then(data => {
                             document.getElementById('previewContent').innerHTML = data;
                             new bootstrap.Modal(document.getElementById('previewModal')).show();
+                        });
+                });
+            });
+
+            // Assignee update
+            const assigneeSelects = document.querySelectorAll('.assignee-select');
+            assigneeSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const issueId = this.getAttribute('data-issue-id');
+                    const assigneeId = this.value;
+
+                    fetch(`/update-assignee/${issueId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                assignee_id: assigneeId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(
+                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`);
+                            } else {
+                                alert('Failed to update assignee');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while updating assignee');
                         });
                 });
             });

@@ -16,7 +16,7 @@
                 @endif
             </p>
             <p><strong>Hotel:</strong> {{ $report->hotel }}</p>
-            <p><strong>Status:</strong> {{ $report->status === 0 ? 'In Progress' : 'Completed' }}</p>
+            <p><strong>Status:</strong> {{ $report->status === 0 ? 'In Progress' : 'Done' }}</p>
         </div>
     </div>
 

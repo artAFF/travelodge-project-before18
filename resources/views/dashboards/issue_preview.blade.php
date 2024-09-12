@@ -6,13 +6,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Issue</th>
-                    <th>Detail</th>
-                    <th>Department</th>
-                    <th>Hotel</th>
-                    <th>Status</th>
-                    <th>Created At</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Category</th>
+                    <th class="text-center">Detail</th>
+                    <th class="text-center">Remarks</th>
+                    <th class="text-center">Department</th>
+                    <th class="text-center">Hotel</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Assignee</th>
+                    <th class="text-center">Created At</th>
+                    <th class="text-center">Updated At</th>
                 </tr>
             </thead>
             <tbody id="previewTableBody">
@@ -20,6 +23,18 @@
         </table>
     </div>
     <script>
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const type = urlParams.get('type');
@@ -51,16 +66,23 @@
                             `${label} Issues for ${hotelFullName}`;
                         const tableBody = document.getElementById('previewTableBody');
                         tableBody.innerHTML = data.map(issue => `
-                    <tr>
-                        <td>${issue.id}</td>
-                        <td>${issue.issue}</td>
-                        <td>${issue.detail}</td>
-                        <td>${issue.department}</td>
-                        <td>${issue.hotel}</td>
-                        <td>${issue.status === 0 ? 'In Process' : 'Completed'}</td>
-                        <td>${new Date(issue.created_at).toLocaleString()}</td>
-                    </tr>
-                `).join('');
+                            <tr>
+                                <td class="text-center">${issue.id}</td>
+                                <td class="text-center">${issue.category?.name || 'N/A'}</td>
+                                <td class="text-center">${issue.detail || 'N/A'}</td>
+                                <td class="text-center">${issue.remarks || 'N/A'}</td>
+                                <td class="text-center">${issue.department?.name || 'N/A'}</td>
+                                <td class="text-center">${issue.hotel || 'N/A'}</td>
+                                <td class="text-center">${issue.status === 0 ? 'In Process' : 'Done'}</td>
+                                <td class="text-center">${issue.assignee?.name || 'N/A'}</td>
+                                <td class="text-center">${formatDate(issue.created_at)}</td>
+                                <td class="text-center">${formatDate(issue.updated_at)}</td>
+                            </tr>
+                        `).join('');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.getElementById('previewTitle').textContent = 'Error loading data';
                     });
             }
         });

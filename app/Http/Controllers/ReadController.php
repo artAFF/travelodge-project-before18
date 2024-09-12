@@ -13,6 +13,7 @@ use App\Models\Tlcmn_server;
 use App\Models\Tlcmn_switch;
 use Illuminate\Http\Request;
 use App\Models\Travelodge;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -47,7 +48,42 @@ class ReadController extends Controller
             ->paginate(10)
             ->appends(['query' => $query, 'sort_by' => $sort_by, 'sort_order' => $sort_order]);
 
-        return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order'));
+        $itSupportUsers = User::whereHas('department', function ($query) {
+            $query->where('name', 'IT Support');
+        })->get();
+
+        return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
+    }
+
+    public function InprocessIssue(Request $request)
+    {
+        $query = $request->input('query');
+        $sort_by = $request->input('sort_by', 'id');
+        $sort_order = $request->input('sort_order', 'desc');
+        $user = auth()->user();
+
+        $in_process = Travelodge::with(['category', 'department', 'assignee'])
+            ->where('status', 0)
+            ->when($query, function ($q) use ($query) {
+                $q->whereHas('category', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%");
+                })->orWhereHas('department', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%");
+                })->orWhere('detail', 'like', "%{$query}%")
+                    ->orWhere('hotel', 'like', "%{$query}%");
+            })
+            ->when($user->role !== 'admin', function ($q) use ($user) {
+                $q->where('department_id', $user->department_id);
+            })
+            ->orderBy($sort_by, $sort_order)
+            ->paginate(10)
+            ->appends(['query' => $query, 'sort_by' => $sort_by, 'sort_order' => $sort_order]);
+
+        $itSupportUsers = User::whereHas('department', function ($query) {
+            $query->where('name', 'IT Support');
+        })->get();
+
+        return view('/reports/inprocess', compact('in_process', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
     }
 
     public function TableReportAll(Request $request, $type)
@@ -100,21 +136,30 @@ class ReadController extends Controller
         $query = $request->input('query');
         $sort_by = $request->input('sort_by', 'id');
         $sort_order = $request->input('sort_order', 'asc');
+        $user = auth()->user();
 
-        $in_process = Travelodge::where('status', 0)
-            ->when($query, function ($queryBuilder) use ($query) {
-                return $queryBuilder->where(function ($q) use ($query) {
-                    $q->where('issue', 'like', "%{$query}%")
-                        ->orWhere('detail', 'like', "%{$query}%")
-                        ->orWhere('department', 'like', "%{$query}%")
-                        ->orWhere('hotel', 'like', "%{$query}%")
-                        ->orWhere('location', 'like', "%{$query}%");
-                });
+        $in_process = Travelodge::with(['category', 'department', 'assignee'])
+            ->where('status', 0)
+            ->when($query, function ($q) use ($query) {
+                $q->whereHas('category', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%");
+                })->orWhereHas('department', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%");
+                })->orWhere('detail', 'like', "%{$query}%")
+                    ->orWhere('hotel', 'like', "%{$query}%");
+            })
+            ->when($user->role !== 'admin', function ($q) use ($user) {
+                $q->where('department_id', $user->department_id);
             })
             ->orderBy($sort_by, $sort_order)
-            ->paginate(15);
+            ->paginate(10)
+            ->appends(['query' => $query, 'sort_by' => $sort_by, 'sort_order' => $sort_order]);
 
-        return view('/reports/inprocess', compact('in_process', 'query', 'sort_by', 'sort_order'));
+        $itSupportUsers = User::whereHas('department', function ($query) {
+            $query->where('name', 'IT Support');
+        })->get();
+
+        return view('/reports/inprocess', compact('in_process', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
     }
 
     public function filterDate(Request $request)

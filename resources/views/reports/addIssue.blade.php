@@ -76,6 +76,7 @@
                 <div class="mb-3">
                     <label for="assignee" class="form-label">Assignee</label>
                     <select class="form-select" id="assignee" name="issues[0][assignee]">
+                        <option value="">Not Assign</option>
                         @foreach ($itSupportUsers as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach

@@ -52,7 +52,7 @@ class CreateController extends Controller
             'issues.*.detail' => 'required',
             'issues.*.hotel' => 'required',
             'issues.*.file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'issues.*.assignee' => 'required|exists:users,id',
+            'issues.*.assignee' => 'nullable|exists:users,id',
         ]);
 
         $issues = $request->input('issues');
@@ -64,7 +64,7 @@ class CreateController extends Controller
                 'detail' => $issueData['detail'],
                 'hotel' => $issueData['hotel'],
                 'status' => $issueData['status'],
-                'assignee_id' => $issueData['assignee'],
+                'assignee_id' => $issueData['assignee'] ?: null,
                 'remarks' => $issueData['remarks'] ?? null,
             ]);
 
@@ -90,13 +90,13 @@ class CreateController extends Controller
         $client = new \GuzzleHttp\Client();
 
         $message = "New Issue Reported:\n";
-        $message .= "  - Issue Category: " . Category::find($travelodge->category_id)->name . "\n";
+        $message .= "  - Issue Category: " . ($travelodge->category->name ?? 'N/A') . "\n";
         $message .= "  - Detail: " . $travelodge->detail . "\n";
         $message .= "  - Remarks: " . ($travelodge->remarks ?? "No remarks") . "\n";
-        $message .= "  - Department: " . Department::find($travelodge->department_id)->name . "\n";
+        $message .= "  - Department: " . ($travelodge->department->name ?? 'N/A') . "\n";
         $message .= "  - Hotel: " . $travelodge->hotel . "\n";
         $message .= "  - Attachment: " . ($travelodge->file_path ? 'Yes' : 'No') . "\n";
-        $message .= "  - Assignee: " . User::find($travelodge->assignee_id)->name . "\n";
+        $message .= "  - Assignee: " . ($travelodge->assignee->name ?? 'Unassigned') . "\n";
         $message .= "  - Status: " . ($travelodge->status == 0 ? 'In-progress' : 'Done');
 
         try {

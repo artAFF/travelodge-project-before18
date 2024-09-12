@@ -2,6 +2,7 @@
 @section('title', 'IT Support Issue')
 
 @section('content')
+
     <div class="container">
         <h3 class="text-center">All IT Support Issue</h1>
             <div class="row mb-3">
@@ -66,7 +67,16 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    {{ $reporter->assignee ? $reporter->assignee->name : 'N/A' }}</td>
+                                    <select class="form-select assignee-select" data-issue-id="{{ $reporter->id }}">
+                                        <option value="">Not Assign</option>
+                                        @foreach ($itSupportUsers as $user)
+                                            <option value="{{ $user->id }}"
+                                                {{ $reporter->assignee_id == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
                                 <td class="text-center">
                                     <button class="btn btn-secondary preview-btn" data-id="{{ $reporter->id }}"><i
                                             class="bi bi-eye"></i></button>
@@ -140,6 +150,39 @@
                         .then(data => {
                             document.getElementById('previewContent').innerHTML = data;
                             new bootstrap.Modal(document.getElementById('previewModal')).show();
+                        });
+                });
+            });
+
+            // Assignee update
+            const assigneeSelects = document.querySelectorAll('.assignee-select');
+            assigneeSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const issueId = this.getAttribute('data-issue-id');
+                    const assigneeId = this.value;
+
+                    fetch(`/update-assignee/${issueId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                assignee_id: assigneeId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(
+                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`);
+                            } else {
+                                alert('Failed to update assignee');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while updating assignee');
                         });
                 });
             });

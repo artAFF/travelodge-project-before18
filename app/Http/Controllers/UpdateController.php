@@ -54,7 +54,7 @@ class UpdateController extends Controller
             'detail' => 'required',
             'remarks' => 'nullable|string',
             'hotel' => 'required',
-            'assignee' => 'required|exists:users,id',
+            'assignee' => 'nullable|exists:users,id',
             'status' => 'required|in:0,1',
         ]);
 
@@ -67,7 +67,7 @@ class UpdateController extends Controller
             'remarks' => $request->remarks,
             'hotel' => $request->hotel,
             'status' => $request->status,
-            'assignee_id' => $request->assignee,
+            'assignee_id' => $request->assignee ?: null,
         ]);
 
         // Handle file upload if a new file is provided
@@ -95,15 +95,73 @@ class UpdateController extends Controller
 
         $client = new \GuzzleHttp\Client();
 
+
         $message = "Update Issue Reported:\n";
         $message .= "  - ID Issue: " . $travelodge->id . "\n";
-        $message .= "  - Issue Category: " . $travelodge->category->name . "\n";
+        $message .= "  - Issue Category: " . ($travelodge->category->name ?? 'N/A') . "\n";
         $message .= "  - Detail: " . $travelodge->detail . "\n";
         $message .= "  - Remarks: " . ($travelodge->remarks ?? "No remarks") . "\n";
-        $message .= "  - Department: " . $travelodge->department->name . "\n";
+        $message .= "  - Department: " . ($travelodge->department->name ?? 'N/A') . "\n";
         $message .= "  - Hotel: " . $travelodge->hotel . "\n";
-        $message .= "  - Assignee: " . $travelodge->assignee->name . "\n";
+        $message .= "  - Assignee: " . ($travelodge->assignee->name ?? 'Unassigned') . "\n";
         $message .= "  - Status: " . ($travelodge->status == 0 ? 'In-progress' : 'Done');
+
+        try {
+            $response = $client->post($messageUrl, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'form_params' => [
+                    'message' => $message,
+                ],
+            ]);
+
+            if ($response->getStatusCode() !== 200) {
+                /* \Log::error('Line Notify error: ' . $response->getBody()); */
+            }
+        } catch (\Exception $e) {
+            /* \Log::error('Line Notify error: ' . $e->getMessage()); */
+        }
+    }
+
+    public function updateAssignee(Request $request, $id)
+    {
+        $request->validate([
+            'assignee_id' => 'nullable|exists:users,id',
+        ]);
+
+        $travelodge = Travelodge::findOrFail($id);
+        $oldAssignee = $travelodge->assignee ? $travelodge->assignee->name : 'Not Assigned';
+
+        $newAssigneeId = $request->assignee_id ?: null;
+        $travelodge->update([
+            'assignee_id' => $newAssigneeId,
+        ]);
+
+        // ดึงข้อมูล Travelodge ที่อัพเดทแล้ว
+        $updatedTravelodge = Travelodge::findOrFail($id);
+        $newAssignee = $updatedTravelodge->assignee ? $updatedTravelodge->assignee->name : 'Not Assigned';
+
+        // ส่ง Line Notification หลังจากอัพเดทข้อมูลแล้ว
+        $this->sendAssigneeUpdateNotification($updatedTravelodge, $oldAssignee, $newAssignee);
+
+        return response()->json(['success' => true]);
+    }
+
+    private function sendAssigneeUpdateNotification($travelodge, $oldAssignee, $newAssignee)
+    {
+        $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
+        $messageUrl = 'https://notify-api.line.me/api/notify';
+
+        $client = new \GuzzleHttp\Client();
+
+        $message = "Assignee Update:\n";
+        $message .= "  - ID: " . $travelodge->id . "\n";
+        $message .= "  - Detail: " . $travelodge->detail . "\n";
+        $message .= "  - Remarks: " . ($travelodge->remarks ?? "No remarks") . "\n";
+        $message .= "  - Old Assignee: " . $oldAssignee . "\n";
+        $message .= "  - New Assignee: " . $newAssignee;
 
         try {
             $response = $client->post($messageUrl, [
