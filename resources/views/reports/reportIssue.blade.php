@@ -175,7 +175,8 @@
                         .then(data => {
                             if (data.success) {
                                 alert(
-                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`);
+                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`
+                                    );
                             } else {
                                 alert('Failed to update assignee');
                             }

@@ -27,14 +27,14 @@
             <label for="location2" class="form-label">Location</label>
             <select class="form-select" id="location2" name="location2">
                 <option value="Floor 1">Floor 1</option>
-                <option value="Floor 2">Floor 2</option>
-                <option value="Floor 3">Floor 3</option>
-                <option value="Floor 4">Floor 4</option>
-                <option value="Floor 5">Floor 5</option>
-                <option value="Floor 6">Floor 6</option>
-                <option value="Floor 7">Floor 7</option>
-                <option value="Floor 8">Floor 8</option>
-                <option value="Floor 9">Floor 9</option>
+                <option value="2">Floor 2</option>
+                <option value="3">Floor 3</option>
+                <option value="4">Floor 4</option>
+                <option value="5">Floor 5</option>
+                <option value="6">Floor 6</option>
+                <option value="7">Floor 7</option>
+                <option value="8">Floor 8</option>
+                <option value="9">Floor 9</option>
             </select>
         </div>
 

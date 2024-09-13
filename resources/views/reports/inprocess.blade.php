@@ -2,24 +2,28 @@
 @section('title', 'Issue In-process')
 
 @section('content')
-
     @if (count($in_process) > 0)
         <div class="container">
-            <h3 class="text-center">Issues in the process</h3>
-            <div class="col-md-4">
-                <form action="{{ route('inprocess') }}" method="GET">
-                    <div class="input-group">
-                        <input type="text" name="query" class="form-control" placeholder="Search"
-                            value="{{ request('query') }}">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-info">Search</button>
+            <h3 class="text-center mb-4">Issues in the process</h3>
+            <div class="row align-items-center justify-content-start">
+                <div class="col-md-4">
+                    <form action="{{ route('inprocess') }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control" placeholder="Search"
+                                value="{{ request('query') }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-info">Search</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="col-md-auto ms-md-3">
+                    <button id="captureAndSendBtn" class="btn btn-primary">Capture and Send to Line</button>
+                </div>
             </div>
         </div>
 
-        <table class="table table-striped table-hover ">
+        <table class="table table-striped table-hover mt-3">
             <thead>
                 <tr>
                     <th class="text-center"><a class="text-dark text-decoration-none"
@@ -43,10 +47,8 @@
                     </th>
                     <th class="text-center"><a class="text-dark text-decoration-none"
                             href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Created
-                            At</a></th>
-                    {{-- <th><a class="text-dark text-decoration-none"
-                                href="{{ route('inprocess', array_merge(request()->all(), ['sort_by' => 'updated_at', 'sort_order' => request('sort_order') === 'asc' ? 'desc' : 'asc'])) }}">Updated
-                                At</a></th> --}}
+                            At</a>
+                    </th>
                     <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
@@ -78,7 +80,6 @@
                         </td>
                         <td class="text-center">
                             {{ \Carbon\Carbon::parse($in_process1->created_at)->format('d/m/Y H:i:s') }}</td>
-                        {{-- <td>{{ \Carbon\Carbon::parse($in_process1->updated_at)->format('d-m-Y H:i:s') }}</td> --}}
                         <td class="text-center">
                             <button class="btn btn-secondary preview-btn" data-id="{{ $in_process1->id }}"><i
                                     class="bi bi-eye"></i></button>
@@ -95,7 +96,6 @@
     @else
         <h1 class="text text-center py-5">No data found</h1>
     @endif
-    </div>
 
     <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -109,6 +109,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             function submitSearch() {
@@ -149,7 +151,8 @@
                         .then(data => {
                             if (data.success) {
                                 alert(
-                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`);
+                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`
+                                );
                             } else {
                                 alert('Failed to update assignee');
                             }
@@ -160,7 +163,36 @@
                         });
                 });
             });
+
+            // Capture and send to Line
+            document.getElementById('captureAndSendBtn').addEventListener('click', function() {
+                html2canvas(document.querySelector("table")).then(canvas => {
+                    canvas.toBlob(function(blob) {
+                        let formData = new FormData();
+                        formData.append('image', blob, 'table_capture.png');
+
+                        fetch('/send-to-line-image', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Image sent to Line successfully!');
+                                } else {
+                                    alert('Failed to send image to Line');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('An error occurred while sending image to Line');
+                            });
+                    });
+                });
+            });
         });
     </script>
-
 @endsection

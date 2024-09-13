@@ -6,6 +6,7 @@ use App\Models\Travelodge;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;
 
 class ChartController extends Controller
 {
@@ -93,7 +94,11 @@ class ChartController extends Controller
         $startDate = $request->query('start');
         $endDate = $request->query('end');
 
-        $query = Travelodge::with(['category', 'department', 'assignee'])
+        $query = Travelodge::with([
+            'category:id,name',
+            'department:id,name',
+            'assignee:id,name'
+        ])
             ->where('hotel', $hotel);
 
         // Filter by type (category or department)
@@ -114,10 +119,10 @@ class ChartController extends Controller
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
-        $issues = $query->get();
 
-        // Transform the data to ensure all necessary fields are present
-        $transformedIssues = $issues->map(function ($issue) {
+        $issues = $query->paginate(10);
+
+        $transformedIssues = collect($issues->items())->map(function ($issue) {
             return [
                 'id' => $issue->id,
                 'category' => ['name' => $issue->category->name ?? 'N/A'],
@@ -132,7 +137,13 @@ class ChartController extends Controller
             ];
         });
 
-        return response()->json($transformedIssues);
+        return response()->json([
+            'data' => $transformedIssues,
+            'current_page' => $issues->currentPage(),
+            'last_page' => $issues->lastPage(),
+            'total' => $issues->total(),
+            'per_page' => $issues->perPage()
+        ]);
     }
 
     private function applyDateFilter($query, $filterType)

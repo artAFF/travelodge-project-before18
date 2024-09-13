@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\Travelodge;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 
@@ -55,7 +56,7 @@ class ReadController extends Controller
         return view('/reports/reportIssue', compact('ReportIssues', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
     }
 
-    public function InprocessIssue(Request $request)
+    public function inprocess(Request $request)
     {
         $query = $request->input('query');
         $sort_by = $request->input('sort_by', 'id');
@@ -63,14 +64,16 @@ class ReadController extends Controller
         $user = auth()->user();
 
         $in_process = Travelodge::with(['category', 'department', 'assignee'])
-            ->where('status', 0)
+            ->where('status', 0)  // Always filter for status 0
             ->when($query, function ($q) use ($query) {
-                $q->whereHas('category', function ($q) use ($query) {
-                    $q->where('name', 'like', "%{$query}%");
-                })->orWhereHas('department', function ($q) use ($query) {
-                    $q->where('name', 'like', "%{$query}%");
-                })->orWhere('detail', 'like', "%{$query}%")
-                    ->orWhere('hotel', 'like', "%{$query}%");
+                $q->where(function ($subQ) use ($query) {
+                    $subQ->whereHas('category', function ($q) use ($query) {
+                        $q->where('name', 'like', "%{$query}%");
+                    })->orWhereHas('department', function ($q) use ($query) {
+                        $q->where('name', 'like', "%{$query}%");
+                    })->orWhere('detail', 'like', "%{$query}%")
+                        ->orWhere('hotel', 'like', "%{$query}%");
+                });
             })
             ->when($user->role !== 'admin', function ($q) use ($user) {
                 $q->where('department_id', $user->department_id);
@@ -83,45 +86,33 @@ class ReadController extends Controller
             $query->where('name', 'IT Support');
         })->get();
 
-        return view('/reports/inprocess', compact('in_process', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
+        return view('reports.inprocess', compact('in_process', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
     }
 
-    public function TableReportAll(Request $request, $type)
+    public function sendToLineImage(Request $request)
     {
-        $prefix = $this->getPrefixFromType($type);
-        $source = $type;
+        $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
 
-        $pageGuests = $request->input('pageGuests', 1);
-        $pageSwitchs = $request->input('pageSwitchs', 1);
-        $pageServers = $request->input('pageServers', 1);
-        $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
-
-        $ReportGuests = DB::table("{$prefix}guests")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
-        $ReportSwitchs = DB::table("{$prefix}switches")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
-        $ReportServers = DB::table("{$prefix}servers")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
-        $ReportNetSpeeds = DB::table("{$prefix}nets")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'ReportGuests' => view('partials.report_guests', compact('ReportGuests', 'source'))->render(),
-                'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs', 'source'))->render(),
-                'ReportServers' => view('partials.report_servers', compact('ReportServers', 'source'))->render(),
-                'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds', 'source'))->render(),
-            ]);
+        if (!$request->hasFile('image')) {
+            return response()->json(['success' => false, 'message' => 'No image file found'], 400);
         }
 
-        return view("daily.hotels.{$source}", compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
-    }
+        $image = $request->file('image');
 
-    private function getPrefixFromType($type)
-    {
-        switch ($type) {
-            case 'ehcm':
-                return 'Ehcm_';
-            case 'uncm':
-                return 'Uncm_';
-            default:
-                return 'Tlcmn_';
+        $response = Http::attach(
+            'imageFile',
+            file_get_contents($image),
+            'table_capture.png'
+        )->withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->post('https://notify-api.line.me/api/notify', [
+            'message' => 'Table Capture',
+        ]);
+
+        if ($response->successful()) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false], 500);
         }
     }
 
@@ -129,37 +120,6 @@ class ReadController extends Controller
     {
         $report = Travelodge::findOrFail($id);
         return view('/reports/preview-issue', compact('report'));
-    }
-
-    public function inprocess(Request $request)
-    {
-        $query = $request->input('query');
-        $sort_by = $request->input('sort_by', 'id');
-        $sort_order = $request->input('sort_order', 'asc');
-        $user = auth()->user();
-
-        $in_process = Travelodge::with(['category', 'department', 'assignee'])
-            ->where('status', 0)
-            ->when($query, function ($q) use ($query) {
-                $q->whereHas('category', function ($q) use ($query) {
-                    $q->where('name', 'like', "%{$query}%");
-                })->orWhereHas('department', function ($q) use ($query) {
-                    $q->where('name', 'like', "%{$query}%");
-                })->orWhere('detail', 'like', "%{$query}%")
-                    ->orWhere('hotel', 'like', "%{$query}%");
-            })
-            ->when($user->role !== 'admin', function ($q) use ($user) {
-                $q->where('department_id', $user->department_id);
-            })
-            ->orderBy($sort_by, $sort_order)
-            ->paginate(10)
-            ->appends(['query' => $query, 'sort_by' => $sort_by, 'sort_order' => $sort_order]);
-
-        $itSupportUsers = User::whereHas('department', function ($query) {
-            $query->where('name', 'IT Support');
-        })->get();
-
-        return view('/reports/inprocess', compact('in_process', 'query', 'sort_by', 'sort_order', 'itSupportUsers'));
     }
 
     public function filterDate(Request $request)
@@ -225,5 +185,44 @@ class ReadController extends Controller
             ->paginate(15);
 
         return view('home.itsup_status', compact('itsup_statuses', 'department'));
+    }
+
+    public function TableReportAll(Request $request, $type)
+    {
+        $prefix = $this->getPrefixFromType($type);
+        $source = $type;
+
+        $pageGuests = $request->input('pageGuests', 1);
+        $pageSwitchs = $request->input('pageSwitchs', 1);
+        $pageServers = $request->input('pageServers', 1);
+        $pageNetSpeeds = $request->input('pageNetSpeeds', 1);
+
+        $ReportGuests = DB::table("{$prefix}guests")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageGuests', $pageGuests);
+        $ReportSwitchs = DB::table("{$prefix}switches")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageSwitchs', $pageSwitchs);
+        $ReportServers = DB::table("{$prefix}servers")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageServers', $pageServers);
+        $ReportNetSpeeds = DB::table("{$prefix}nets")->orderBy('id', 'desc')->paginate(10, ['*'], 'pageNetSpeeds', $pageNetSpeeds);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'ReportGuests' => view('partials.report_guests', compact('ReportGuests', 'source'))->render(),
+                'ReportSwitchs' => view('partials.report_switchs', compact('ReportSwitchs', 'source'))->render(),
+                'ReportServers' => view('partials.report_servers', compact('ReportServers', 'source'))->render(),
+                'ReportNetSpeeds' => view('partials.report_netspeeds', compact('ReportNetSpeeds', 'source'))->render(),
+            ]);
+        }
+
+        return view("daily.hotels.{$source}", compact('ReportGuests', 'ReportSwitchs', 'ReportServers', 'ReportNetSpeeds', 'source'));
+    }
+
+    private function getPrefixFromType($type)
+    {
+        switch ($type) {
+            case 'ehcm':
+                return 'Ehcm_';
+            case 'uncm':
+                return 'Uncm_';
+            default:
+                return 'Tlcmn_';
+        }
     }
 }

@@ -12,4 +12,19 @@ class Building extends Model
     public $timestamps = false;
 
     protected $fillable = ['id', 'name'];
+
+    public function tlcmnNets()
+    {
+        return $this->hasMany(Tlcmn_net::class);
+    }
+
+    public function ehcmNets()
+    {
+        return $this->hasMany(Ehcm_net::class);
+    }
+
+    public function uncmNets()
+    {
+        return $this->hasMany(Uncm_net::class);
+    }
 }

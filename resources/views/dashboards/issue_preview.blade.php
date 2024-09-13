@@ -21,21 +21,14 @@
             <tbody id="previewTableBody">
             </tbody>
         </table>
+        <div id="pagination" class="d-flex justify-content-center"></div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            const seconds = date.getSeconds().toString().padStart(2, '0');
+        let currentPage = 1;
 
-            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
+        function loadIssues(page = 1) {
             const urlParams = new URLSearchParams(window.location.search);
             const type = urlParams.get('type');
             const label = urlParams.get('label');
@@ -44,47 +37,114 @@
             const startDate = urlParams.get('start');
             const endDate = urlParams.get('end');
 
-            if (type && label && hotel) {
-                let apiUrl = `/api/issues/${type}/${label}?hotel=${encodeURIComponent(hotel)}`;
+            let apiUrl = `/api/issues/${type}/${label}?hotel=${encodeURIComponent(hotel)}&page=${page}`;
 
-                if (dateFilter && dateFilter !== 'all_time') {
-                    apiUrl += `&dateFilter=${dateFilter}`;
-                } else if (startDate && endDate) {
-                    apiUrl += `&start=${startDate}&end=${endDate}`;
+            if (dateFilter && dateFilter !== 'all_time') {
+                apiUrl += `&dateFilter=${dateFilter}`;
+            } else if (startDate && endDate) {
+                apiUrl += `&start=${startDate}&end=${endDate}`;
+            }
+
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                success: function(response) {
+                    console.log('API Response:', response);
+                    updateTable(response.data);
+                    updatePagination(response);
+                    updateTitle(label, hotel);
+                },
+                error: function(error) {
+                    console.error('Error fetching data:', error);
+                    console.log('Error details:', error.responseText);
+                    $('#previewTitle').text('Error loading data');
+                }
+            });
+        }
+
+        function updateTable(issues) {
+            const tableBody = $('#previewTableBody');
+            tableBody.empty();
+
+            issues.forEach(issue => {
+                tableBody.append(`
+                    <tr>
+                        <td class="text-center">${issue.id}</td>
+                        <td class="text-center">${issue.category?.name || 'N/A'}</td>
+                        <td class="text-center">${issue.detail || 'N/A'}</td>
+                        <td class="text-center">${issue.remarks || 'N/A'}</td>
+                        <td class="text-center">${issue.department?.name || 'N/A'}</td>
+                        <td class="text-center">${issue.hotel || 'N/A'}</td>
+                        <td class="text-center">${issue.status === 0 ? 'In Process' : 'Done'}</td>
+                        <td class="text-center">${issue.assignee?.name || 'N/A'}</td>
+                        <td class="text-center">${formatDate(issue.created_at)}</td>
+                        <td class="text-center">${formatDate(issue.updated_at)}</td>
+                    </tr>
+                `);
+            });
+        }
+
+        function updatePagination(response) {
+            const pagination = $('#pagination');
+            pagination.empty();
+
+            if (response.last_page > 1) {
+                if (response.current_page > 1) {
+                    pagination.append(`
+                        <button class="btn btn-sm btn-outline-primary m-1" onclick="loadIssues(${response.current_page - 1})">
+                            Previous
+                        </button>
+                    `);
                 }
 
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        const hotelNames = {
-                            'TLCMN': 'Travelodge Nimman',
-                            'EHCM': 'Eastin Tan',
-                            'UNCM': 'U nimman'
-                        };
-                        const hotelFullName = hotelNames[hotel] || hotel;
-                        document.getElementById('previewTitle').textContent =
-                            `${label} Issues for ${hotelFullName}`;
-                        const tableBody = document.getElementById('previewTableBody');
-                        tableBody.innerHTML = data.map(issue => `
-                            <tr>
-                                <td class="text-center">${issue.id}</td>
-                                <td class="text-center">${issue.category?.name || 'N/A'}</td>
-                                <td class="text-center">${issue.detail || 'N/A'}</td>
-                                <td class="text-center">${issue.remarks || 'N/A'}</td>
-                                <td class="text-center">${issue.department?.name || 'N/A'}</td>
-                                <td class="text-center">${issue.hotel || 'N/A'}</td>
-                                <td class="text-center">${issue.status === 0 ? 'In Process' : 'Done'}</td>
-                                <td class="text-center">${issue.assignee?.name || 'N/A'}</td>
-                                <td class="text-center">${formatDate(issue.created_at)}</td>
-                                <td class="text-center">${formatDate(issue.updated_at)}</td>
-                            </tr>
-                        `).join('');
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                        document.getElementById('previewTitle').textContent = 'Error loading data';
-                    });
+                let startPage = Math.max(1, response.current_page - 2);
+                let endPage = Math.min(response.last_page, response.current_page + 2);
+
+                for (let i = startPage; i <= endPage; i++) {
+                    pagination.append(`
+                        <button class="btn btn-sm btn-outline-primary m-1 ${i === response.current_page ? 'active' : ''}"
+                                onclick="loadIssues(${i})">
+                            ${i}
+                        </button>
+                    `);
+                }
+
+                if (response.current_page < response.last_page) {
+                    pagination.append(`
+                        <button class="btn btn-sm btn-outline-primary m-1" onclick="loadIssues(${response.current_page + 1})">
+                            Next
+                        </button>
+                    `);
+                }
             }
+        }
+
+        function updateTitle(label, hotel) {
+            const hotelNames = {
+                'TLCMN': 'Travelodge Nimman',
+                'EHCM': 'Eastin Tan',
+                'UNCM': 'U nimman'
+            };
+            const hotelFullName = hotelNames[hotel] || hotel;
+            $('#previewTitle').text(`${label} Issues for ${hotelFullName}`);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            return date.toLocaleString('en-GB', options).replace(',', '');
+        }
+
+        $(document).ready(function() {
+            loadIssues();
         });
     </script>
 @endsection

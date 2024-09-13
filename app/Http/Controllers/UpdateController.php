@@ -139,11 +139,9 @@ class UpdateController extends Controller
             'assignee_id' => $newAssigneeId,
         ]);
 
-        // ดึงข้อมูล Travelodge ที่อัพเดทแล้ว
         $updatedTravelodge = Travelodge::findOrFail($id);
         $newAssignee = $updatedTravelodge->assignee ? $updatedTravelodge->assignee->name : 'Not Assigned';
 
-        // ส่ง Line Notification หลังจากอัพเดทข้อมูลแล้ว
         $this->sendAssigneeUpdateNotification($updatedTravelodge, $oldAssignee, $newAssignee);
 
         return response()->json(['success' => true]);

@@ -7,15 +7,19 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Room No.</th>
+                    @if ($source == 'tlcmn')
+                        <th scope="col">Location</th>
+                        <th scope="col">Room No.</th>
+                    @else
+                        <th scope="col">Room No.</th>
+                        <th scope="col">Location</th>
+                    @endif
                     <th scope="col">Downlaod</th>
                     <th scope="col">Upload</th>
                     <th scope="col">Channel Number</th>
                     <th scope="col">Channel Name</th>
                     <th scope="col">Created Time</th>
                     <th scope="col">Action</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -42,6 +46,7 @@
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
                             </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -56,5 +61,3 @@
         </h2>
     @endif
 </div>
-
-<hr><br>

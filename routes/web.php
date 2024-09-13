@@ -30,6 +30,7 @@ Route::post('/reports/updatePreport/{id}', [UpdateController::class, 'UpdateIssu
 Route::post('/update-assignee/{id}', [UpdateController::class, 'updateAssignee'])->name('update.assignee');
 
 Route::get('/reports/inprocess', [ReadController::class, 'inprocess'])->name('inprocess');
+Route::post('/send-to-line-image', [ReadController::class, 'sendToLineImage']);
 
 Route::get('/filterDate', [ReadController::class, 'filterDate'])->name('filterDate');
 Route::get('/reports/preview-issue/{id}', [ReadController::class, 'preview'])->name('preview-issue');
