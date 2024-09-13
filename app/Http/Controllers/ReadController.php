@@ -60,7 +60,7 @@ class ReadController extends Controller
     {
         $query = $request->input('query');
         $sort_by = $request->input('sort_by', 'id');
-        $sort_order = $request->input('sort_order', 'desc');
+        $sort_order = $request->input('sort_order', 'asc');
         $user = auth()->user();
 
         $in_process = Travelodge::with(['category', 'department', 'assignee'])
