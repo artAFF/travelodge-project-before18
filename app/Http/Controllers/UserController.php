@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /*     public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('admin')->only(['create', 'store']);
-    } */
 
     public function __construct()
     {
@@ -38,14 +33,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,user',
-            'department_id' => 'required|exists:departments,id', // เพิ่มการตรวจสอบ department_id
+            'department_id' => 'required|exists:departments,id',
         ]);
 
         User::create([
             'name' => $request->name,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'department_id' => $request->department_id, // เพิ่ม department_id
+            'department_id' => $request->department_id,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User created successfully');
@@ -63,10 +58,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|in:admin,user',
             'password' => 'nullable|string|min:8|confirmed',
-            'department_id' => 'required|exists:departments,id', // เพิ่มการตรวจสอบ department_id
+            'department_id' => 'required|exists:departments,id',
         ]);
 
-        $userData = $request->only(['name', 'role', 'department_id']); // เพิ่ม department_id
+        $userData = $request->only(['name', 'role', 'department_id']);
 
         if ($request->filled('password')) {
             $userData['password'] = Hash::make($request->password);

@@ -174,16 +174,29 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                alert(
-                                    `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`
-                                    );
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: `Assignee updated successfully from ${data.oldAssignee} to ${data.newAssignee}`,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
                             } else {
-                                alert('Failed to update assignee');
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Failed to update assignee',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            alert('An error occurred while updating assignee');
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while updating assignee',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
                         });
                 });
             });

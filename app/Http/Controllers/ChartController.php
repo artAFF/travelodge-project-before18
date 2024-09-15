@@ -230,12 +230,12 @@ class ChartController extends Controller
         $departmentsWithCounts = $query->select('department_id')
             ->selectRaw('COUNT(*) as count')
             ->groupBy('department_id')
-            ->with('department')  // เพิ่ม eager loading สำหรับ department relationship
+            ->with('department')
             ->orderByDesc('count')
             ->get();
 
         $departments = $departmentsWithCounts->map(function ($item) {
-            return $item->department->name;  // ดึงชื่อแผนกจาก relationship
+            return $item->department->name;
         })->toArray();
 
         $data = $departmentsWithCounts->pluck('count')->toArray();
