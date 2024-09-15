@@ -43,14 +43,13 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/', [ChartController::class, 'HotelChart'])->name('hotel.chart');
 
     //Dashbaord
-    Route::get('/dashboards/DashboardDepartment', [ChartController::class, 'DepartmentChart'])->name('department.chart');
-    Route::get('/dashboards/DashboardCategory', [ChartController::class, 'CategoryChart'])->name('category.chart');
     Route::get('/dashboard/{hotel}', [ChartController::class, 'HotelDashboard'])->name('hotel.dashboard');
     Route::get('/api/issues/{type}/{label}', [ChartController::class, 'getIssueDetails']);
+    Route::get('/api/hotel-data/{view}/{filterType}', [ChartController::class, 'getHotelDataByDate']);
     Route::get('/dashboards/issue-preview', function () {
         return view('dashboards.issue_preview');
     })->name('issue.preview');
-    Route::get('/api/hotel-data/{view}/{filterType}', [ChartController::class, 'getHotelDataByDate']);
+
 
 
     //Pdf
