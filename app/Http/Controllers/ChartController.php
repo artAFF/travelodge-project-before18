@@ -74,7 +74,16 @@ class ChartController extends Controller
         $hotel = $request->query('hotel');
         $query = Travelodge::where('hotel', $hotel);
 
-        if ($filterType !== 'all_time') {
+        if ($filterType === 'custom') {
+            $startDate = $request->query('start');
+            $endDate = $request->query('end');
+            if ($startDate && $endDate) {
+                $startDateTime = Carbon::parse($startDate)->startOfDay();
+                $endDateTime = Carbon::parse($endDate)->endOfDay();
+
+                $query->whereBetween('created_at', [$startDateTime, $endDateTime]);
+            }
+        } else if ($filterType !== 'all_time') {
             $this->applyDateFilter($query, $filterType);
         }
 
