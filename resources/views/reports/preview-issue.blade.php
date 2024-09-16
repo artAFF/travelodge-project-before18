@@ -27,10 +27,12 @@
         <strong>Attached File:</strong>
         @if ($report->file_path)
             @php
-                $extension = pathinfo(storage_path('app/public/' . $report->file_path), PATHINFO_EXTENSION);
+                $extension = strtolower(pathinfo(storage_path('app/public/' . $report->file_path), PATHINFO_EXTENSION));
             @endphp
             @if ($extension == 'pdf')
                 <a href="{{ asset('storage/' . $report->file_path) }}" target="_blank">Open PDF in new tab</a>
+            @elseif (in_array($extension, ['jpg', 'jpeg', 'png']))
+                <a href="{{ asset('storage/' . $report->file_path) }}" target="_blank">View Image</a>
             @else
                 <a href="{{ route('download.file', $report->id) }}">Download File</a>
             @endif
@@ -40,10 +42,10 @@
     </p>
 
     @if ($report->file_path)
-        @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif']))
+        @if (in_array($extension, ['jpg', 'jpeg', 'png']))
             <img src="{{ asset('storage/' . $report->file_path) }}" alt="Attached Image"
                 style="max-width: 100%; height: auto;">
-        @elseif($extension == 'pdf')
+        @elseif ($extension == 'pdf')
             <embed src="{{ asset('storage/' . $report->file_path) }}" type="application/pdf" width="100%"
                 height="600px" />
         @else
