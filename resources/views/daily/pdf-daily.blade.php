@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 12pt;
-            line-height: 1.6;
+            font-size: 8pt;
+            line-height: 1.4;
             color: #333;
             margin: 0;
             padding: 20px;
@@ -17,31 +17,36 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         h1 {
             color: #003366;
             border-bottom: 2px solid #003366;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            font-size: 14pt;
+            margin-bottom: 10px;
         }
 
         h2 {
             color: #003366;
-            margin-top: 30px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 10pt;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         th,
         td {
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 4px;
             text-align: left;
+            font-size: 7pt;
         }
 
         th {
@@ -50,18 +55,24 @@
         }
 
         .section {
-            margin-bottom: 40px;
+            margin-bottom: 15px;
+        }
+
+        .section+.section {
+            margin-top: -5px;
         }
 
         .no-data {
             font-style: italic;
             color: #666;
+            font-size: 7pt;
+            margin-bottom: 10px;
         }
 
         .footer {
-            margin-top: 50px;
+            margin-top: 30px;
             text-align: center;
-            font-size: 10pt;
+            font-size: 7pt;
             color: #666;
         }
     </style>
@@ -74,10 +85,7 @@
         <p>Report Period: {{ $start_date ? \Carbon\Carbon::parse($start_date)->format('d/m/y') : 'N/A' }} -
             {{ $end_date ? \Carbon\Carbon::parse($end_date)->format('d/m/y') : 'N/A' }}</p>
         <p>Department: IT Operations</p>
-        <p>Hotel: {{ strtoupper($hotel) }}</p>
-        <p>Category: {{ ucfirst($category) }}</p>
     </div>
-
 
     <div class="section">
         <h2>1. Guest Room Network Performance</h2>
