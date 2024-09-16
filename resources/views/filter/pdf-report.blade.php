@@ -97,20 +97,26 @@
         <tbody>
             @foreach ($issues as $issue)
                 <tr>
-                    <th scope="row">{{ $issue['id'] }}</th>
-                    <td>{{ $issue->category->name ?? 'N/A' }}</td>
-                    <td>{{ $issue->detail }}</td>
-                    <td>{{ $issue->department->name ?? 'N/A' }}</td>
-                    <td>{{ $issue['hotel'] }}</td>
+                    <th scope="row">{{ $issue['id'] ?? 'N/A' }}</th>
+                    <td>{{ $issue['category']['name'] ?? 'N/A' }}</td>
+                    <td>{{ $issue['detail'] ?? 'N/A' }}</td>
+                    <td>{{ $issue['department']['name'] ?? 'N/A' }}</td>
+                    <td>{{ $issue['hotel'] ?? 'N/A' }}</td>
                     <td class="text-center">
-                        @if ($issue['status'] === 0)
-                            In-progress
+                        @if (isset($issue['status']))
+                            @if ($issue['status'] === 0)
+                                In-progress
+                            @else
+                                Done
+                            @endif
                         @else
-                            Done
+                            N/A
                         @endif
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($issue['created_at'])->format('d/m/Y H:i:s') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($issue['updated_at'])->format('d/m/Y H:i:s') }}</td>
+                    <td>{{ isset($issue['created_at']) ? \Carbon\Carbon::parse($issue['created_at'])->format('d/m/Y H:i:s') : 'N/A' }}
+                    </td>
+                    <td>{{ isset($issue['updated_at']) ? \Carbon\Carbon::parse($issue['updated_at'])->format('d/m/Y H:i:s') : 'N/A' }}
+                    </td>
                 </tr>
             @endforeach
         </tbody>
