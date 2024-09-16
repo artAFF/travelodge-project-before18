@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.app')
 @section('title', 'Manage Categories Issues')
 @section('content')
     <div class="container">
