@@ -30,12 +30,12 @@ class PdfController extends Controller
     {
         $query = Travelodge::query();
 
-        if ($request->issue && $request->issue != 'All') {
-            $query->where('issue', $request->issue);
+        if ($request->category_id && $request->category_id != 'All') {
+            $query->where('category_id', $request->category_id);
         }
 
-        if ($request->department && $request->department != 'All') {
-            $query->where('department', $request->department);
+        if ($request->department_id && $request->department_id != 'All') {
+            $query->where('department_id', $request->department_id);
         }
 
         if ($request->hotel && $request->hotel != 'All') {
@@ -56,6 +56,15 @@ class PdfController extends Controller
 
         $issues = $query->get();
 
+        session([
+            'filter_category_id' => $request->category_id,
+            'filter_department_id' => $request->department_id,
+            'filter_hotel' => $request->hotel,
+            'filter_status' => $request->status,
+            'filter_start_date' => $request->start_date,
+            'filter_end_date' => $request->end_date,
+        ]);
+
         return view('/filter/filtered-data', compact('issues'));
     }
 
@@ -71,9 +80,22 @@ class PdfController extends Controller
             return redirect()->back()->with('error', 'Invalid data format.');
         }
 
-        $pdf = FacadePdf::loadView('/filter/pdf-report', compact('issues'));
+        $start_date = session('filter_start_date') ? \Carbon\Carbon::parse(session('filter_start_date'))->format('d/m/y') : 'N/A';
+        $end_date = session('filter_end_date') ? \Carbon\Carbon::parse(session('filter_end_date'))->format('d/m/y') : 'N/A';
 
-        return $pdf->download('report.pdf');
+        $data = [
+            'issues' => $issues,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'category' => session('filter_category_id') ? Category::find(session('filter_category_id'))->name : 'All',
+            'department' => session('filter_department_id') ? Department::find(session('filter_department_id'))->name : 'All',
+            'hotel' => session('filter_hotel', 'All'),
+            'status' => session('filter_status') === '0' ? 'In-progress' : (session('filter_status') === '1' ? 'Done' : 'All'),
+        ];
+
+        $pdf = FacadePdf::loadView('/filter/pdf-report', $data);
+
+        return $pdf->download('IT_Support_Report.pdf');
     }
 
     public function search(Request $request)

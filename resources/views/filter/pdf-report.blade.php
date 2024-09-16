@@ -4,115 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Download All Report Issue</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>IT Support Report</title>
     <style>
         body {
             font-family: "Sarabun", sans-serif;
-            font-weight: 400;
-            font-style: normal;
-            font-size: 6pt;
+            font-size: 10pt;
+            line-height: 1.4;
             margin: 20px;
         }
 
-        h1 {
+        .header {
             text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 18pt;
+            margin-bottom: 10px;
+        }
+
+        .filter-info {
+            margin-bottom: 20px;
+        }
+
+        .filter-info h2 {
+            font-size: 12pt;
+            margin-bottom: 10px;
+        }
+
+        .filter-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .filter-table td {
+            width: 50%;
+            padding: 5px;
+            border: none;
+            text-align: left;
+            font-size: 10pt;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 6px;
             text-align: center;
+            font-size: 8pt;
         }
 
         th {
             background-color: #f2f2f2;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 5px 10px;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .btn-warning {
-            background-color: #f0ad4e;
-        }
-
-        .btn-success {
-            background-color: #5cb85c;
-        }
-
-        .bi {
-            font-family: 'Glyphicons Halflings';
-            font-style: normal;
-            font-weight: normal;
-            line-height: 1;
-        }
-
-        .bi-hourglass-split:before {
-            content: "\e329";
-        }
-
-        .bi-check2:before {
-            content: "\e013";
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-    <h1>Report IT Support reportAll</h1>
-    <table class="table table-striped table-hover">
+    <div class="header">
+        <h1>IT Support Report</h1>
+        <p>Generated on: {{ now()->format('l, d F Y H:i:s') }}</p>
+        <p>Report Period: {{ $start_date }} - {{ $end_date }}</p>
+    </div>
+
+    <div class="filter-info">
+        <h4>Filters Applied:</h2>
+            <table class="filter-table">
+                <tr>
+                    <td><strong>Category:</strong> {{ $category ?? 'All' }}</td>
+                    <td><strong>Department:</strong> {{ $department ?? 'All' }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Hotel:</strong> {{ $hotel ?? 'All' }}</td>
+                    <td><strong>Status:</strong> {{ $status ?? 'All' }}</td>
+                </tr>
+            </table>
+    </div>
+
+    <table>
         <thead>
             <tr>
-                <th scope="col" class="text-center">#</th>
-                <th scope="col" class="text-center">Issue</th>
-                <th class="col-md-2 text-center" scope="col">Detail</th>
-                <th class="col-md-1 text-center" scope="col">Department</th>
-                <th class="col-md-1 text-center" scope="col">Hotel</th>
-                <th scope="col" class="text-center">Status</th>
-                <th scope="col" class="text-center">Created Time</th>
-                <th scope="col" class="text-center">Updated Time</th>
+                <th>ID</th>
+                <th>Issue</th>
+                <th>Detail</th>
+                <th>Department</th>
+                <th>Hotel</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Updated At</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($issues as $issue)
                 <tr>
-                    <th scope="row">{{ $issue['id'] ?? 'N/A' }}</th>
+                    <td>{{ $issue['id'] ?? 'N/A' }}</td>
                     <td>{{ $issue['category']['name'] ?? 'N/A' }}</td>
                     <td>{{ $issue['detail'] ?? 'N/A' }}</td>
                     <td>{{ $issue['department']['name'] ?? 'N/A' }}</td>
                     <td>{{ $issue['hotel'] ?? 'N/A' }}</td>
-                    <td class="text-center">
-                        @if (isset($issue['status']))
-                            @if ($issue['status'] === 0)
-                                In-progress
-                            @else
-                                Done
-                            @endif
-                        @else
-                            N/A
-                        @endif
-                    </td>
+                    <td>{{ $issue['status'] === 0 ? 'In-progress' : 'Done' }}</td>
                     <td>{{ isset($issue['created_at']) ? \Carbon\Carbon::parse($issue['created_at'])->format('d/m/Y H:i:s') : 'N/A' }}
                     </td>
                     <td>{{ isset($issue['updated_at']) ? \Carbon\Carbon::parse($issue['updated_at'])->format('d/m/Y H:i:s') : 'N/A' }}
@@ -123,4 +119,4 @@
     </table>
 </body>
 
-</html>
+</html>ห

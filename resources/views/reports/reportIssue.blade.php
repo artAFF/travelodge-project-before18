@@ -7,7 +7,7 @@
         <h3 class="text-center">All IT Support Issue</h1>
             <div class="row mb-3">
                 <div class="col-md-8">
-                    <a href="/reports/addIssue" class="btn btn-primary">Add Report</a>
+                    <a href="/reports/addIssue" class="btn btn-primary">Add Report Issue</a>
                     <a href="/reports/inprocess" class="btn btn-warning">All In-process</a>
                 </div>
                 <div class="col-md-4">

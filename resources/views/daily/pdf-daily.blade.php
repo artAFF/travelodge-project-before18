@@ -70,9 +70,12 @@
 <body>
     <div class="header">
         <h1>IT Infrastructure Daily Status Report</h1>
-        <p>Date: {{ date('F d, Y') }}</p>
-        <p>Report Generated: {{ date('H:i:s') }}</p>
+        <p>Generated on: {{ now()->format('l, d F Y H:i:s') }}</p>
+        <p>Report Period: {{ $start_date ? \Carbon\Carbon::parse($start_date)->format('d/m/y') : 'N/A' }} -
+            {{ $end_date ? \Carbon\Carbon::parse($end_date)->format('d/m/y') : 'N/A' }}</p>
         <p>Department: IT Operations</p>
+        <p>Hotel: {{ strtoupper($hotel) }}</p>
+        <p>Category: {{ ucfirst($category) }}</p>
     </div>
 
 

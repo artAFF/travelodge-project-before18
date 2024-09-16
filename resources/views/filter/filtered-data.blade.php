@@ -42,4 +42,11 @@
             <p>No data available for download.</p>
         @endif
     </div>
+
+    <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+    <input type="hidden" name="department_id" value="{{ request('department_id') }}">
+    <input type="hidden" name="hotel" value="{{ request('hotel') }}">
+    <input type="hidden" name="status" value="{{ request('status') }}">
+    <input type="hidden" name="start_date" value="{{ request('start_date') }}">
+    <input type="hidden" name="end_date" value="{{ request('end_date') }}">
 @endsection
