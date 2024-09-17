@@ -13,16 +13,16 @@
                 <th>View</th>
             </thead>
             <tbody>
-                @foreach ($departments as $department => $statuse)
+                @foreach ($departments as $department_id => $statuse)
                     <tr>
-                        <td>{{ $department }}</td>
-                        <td>{{ $statuse['0'] }}</td>
-                        <td>{{ $statuse['1'] }}</td>
-                        <td>{{ $statuse['total'] }}</td>
+                        <td>{{ App\Models\Department::find($department_id)->name ?? 'N/A' }}</td>
+                        <td>{{ $statuse['0'] ?? 'N/A' }}</td>
+                        <td>{{ $statuse['1'] ?? 'N/A' }}</td>
+                        <td>{{ $statuse['total'] ?? 'N/A' }}</td>
                         <td>
-                            @if (isset($departmentLinks[$department]))
-                                @if (auth()->user()->role === 'admin' || auth()->user()->department->name === $department)
-                                    <a href="{{ $departmentLinks[$department] }}" class="btn btn-primary">
+                            @if (isset($departmentLinks[$department_id]))
+                                @if (auth()->user()->role === 'admin' || auth()->user()->department_id === $department_id)
+                                    <a href="{{ $departmentLinks[$department_id] }}" class="btn btn-primary">
                                         <i class="bi bi-hourglass-split"></i>
                                     </a>
                                 @else

@@ -122,6 +122,6 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
 });
 
 // Home_old
-/* Route::get('/home/itsup_status/{department}', [ReadController::class, 'itsup_status'])->name('itsup_status'); */
-/* Route::get('/', [ReadController::class, 'NumberOfCurrentStatus'])->name('main'); */
+Route::get('home/itsup_status/{department_id}', [ReadController::class, 'itsup_status'])->name('itsup_status');
+Route::get('/', [ReadController::class, 'NumberOfCurrentStatus'])->name('main');
 /* Auth::routes(); */

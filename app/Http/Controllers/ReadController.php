@@ -138,52 +138,45 @@ class ReadController extends Controller
     {
         $departments = [];
         $departmentLinks = [];
-
         $departmentRecords = Department::all();
-
         foreach ($departmentRecords as $dept) {
-            $departments[$dept->name] = ['0' => 0, '1' => 0];
-            $departmentLinks[$dept->name] = route('itsup_status', ['department' => $dept->name]);
+            $departments[$dept->id] = ['0' => 0, '1' => 0];
+            $departmentLinks[$dept->id] = route('itsup_status', ['department_id' => $dept->id]);
         }
-
         $travelodges = Travelodge::all();
         foreach ($travelodges as $travelodge) {
-            $department = $travelodge->department;
+            $department_id = $travelodge->department_id;
             $status = $travelodge->status;
-            if (isset($departments[$department])) {
-                if (isset($departments[$department][$status])) {
-                    $departments[$department][$status]++;
+            if (isset($departments[$department_id])) {
+                if (isset($departments[$department_id][$status])) {
+                    $departments[$department_id][$status]++;
                 } else {
-                    error_log("Invalid status '$status' for department '$department'");
+                    error_log("Invalid status '$status' for department_id '$department_id'");
                 }
             } else {
-                error_log("Invalid department '$department'");
+                error_log("Invalid department_id '$department_id'");
             }
         }
-
         $allTotals = ['0' => 0, '1' => 0, 'total' => 0];
-        foreach ($departments as $department => $statuses) {
-            $departments[$department]['total'] = array_sum($statuses);
+        foreach ($departments as $department_id => $statuses) {
+            $departments[$department_id]['total'] = array_sum($statuses);
             $allTotals['0'] += $statuses['0'];
             $allTotals['1'] += $statuses['1'];
-            $allTotals['total'] += $departments[$department]['total'];
+            $allTotals['total'] += $departments[$department_id]['total'];
         }
-
         return view('/home/main', ['departments' => $departments, 'departmentLinks' => $departmentLinks, 'allTotals' => $allTotals]);
     }
 
-    public function itsup_status($department)
+    public function itsup_status($department_id)
     {
         $user = auth()->user();
-
-        if ($user->role !== 'admin' && $user->department->name !== $department) {
+        if ($user->role !== 'admin' && $user->department_id != $department_id) {
             abort(403, 'Unauthorized action.');
         }
-
-        $itsup_statuses = Travelodge::where('department', $department)
+        $itsup_statuses = Travelodge::where('department_id', $department_id)
             ->where('status', 0)
             ->paginate(15);
-
+        $department = Department::findOrFail($department_id);
         return view('home.itsup_status', compact('itsup_statuses', 'department'));
     }
 

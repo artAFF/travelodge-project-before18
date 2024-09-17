@@ -4,7 +4,7 @@
 @section('content')
     @if (count($itsup_statuses) > 0)
         <div class="container">
-            <h1 class="text-center">{{ $department }} Issues in the Process</h1>
+            <h1 class="text-center">{{ $department->name ?? 'N/A' }} Issues in the Process</h1>
 
             <form method="GET" action="/filter">
                 <div class="row pb-3">
@@ -38,20 +38,24 @@
                 <tbody>
                     @foreach ($itsup_statuses as $itsup_status)
                         <tr>
-                            <td>{{ $itsup_status->id }}</td>
-                            <td>{{ $itsup_status->issue }}</td>
-                            <td>{{ $itsup_status->detail }}</td>
-                            <td>{{ $itsup_status->department }}</td>
-                            <td>{{ $itsup_status->hotel }}</td>
+                            <td>{{ $itsup_status->id ?? 'N/A' }}</td>
+                            <td>{{ $itsup_status->issue ?? 'N/A' }}</td>
+                            <td>{{ $itsup_status->detail ?? 'N/A' }}</td>
+                            <td>{{ $itsup_status->department->name ?? 'N/A' }}</td>
+                            <td>{{ $itsup_status->hotel ?? 'N/A' }}</td>
                             <td class="text-center">
-                                @if ($itsup_status->status === 0)
+                                @if (($itsup_status->status ?? null) === 0)
                                     <a href="#" class="btn btn-warning"><i class="bi bi-hourglass-split"></i></a>
-                                @else
+                                @elseif (($itsup_status->status ?? null) === 1)
                                     <a href="#" class="btn btn-success"><i class="bi bi-check2"></i></a>
+                                @else
+                                    <span class="btn btn-secondary">N/A</span>
                                 @endif
                             </td>
-                            <td>{{ \Carbon\Carbon::parse($itsup_status->created_at)->format('d-m-Y H:i:s') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($itsup_status->updated_at)->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $itsup_status->created_at ? \Carbon\Carbon::parse($itsup_status->created_at)->format('d-m-Y H:i:s') : 'N/A' }}
+                            </td>
+                            <td>{{ $itsup_status->updated_at ? \Carbon\Carbon::parse($itsup_status->updated_at)->format('d-m-Y H:i:s') : 'N/A' }}
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
