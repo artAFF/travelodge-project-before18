@@ -1,5 +1,5 @@
-@extends('layout')
-@section('layouts.app', 'Hotel Dashboard')
+@extends('layouts.app')
+@section('title', 'Hotel Dashboard')
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
