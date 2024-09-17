@@ -24,7 +24,10 @@ use App\Models\Uncm_net;
 use App\Models\Uncm_server;
 use App\Models\Uncm_switch;
 use App\Models\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class UpdateController extends Controller
@@ -125,6 +128,67 @@ class UpdateController extends Controller
         }
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $report = Travelodge::findOrFail($id);
+            $oldStatus = $report->status;
+            $newStatus = $request->status;
+            $report->status = $newStatus;
+            $report->save();
+
+            $lineSent = $this->sendStatusUpdateNotification($report, $oldStatus, $newStatus);
+
+            return response()->json([
+                'success' => true,
+                'db_updated' => true,
+                'line_sent' => $lineSent
+            ]);
+        } catch (\Exception $e) {
+            /* \Log::error('Status update error: ' . $e->getMessage()); */
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function sendStatusUpdateNotification($travelodge, $oldStatus, $newStatus)
+    {
+        $accessToken = 'e1GzyiuXMwk1u5gA8MgtsWo1JBxNEvPeU6DCeKMQsab';
+        $messageUrl = 'https://notify-api.line.me/api/notify';
+
+        $client = new Client();
+
+        $message = "Status Update:\n";
+        $message .= "  - ID: " . $travelodge->id . "\n";
+        $message .= "  - Detail: " . $travelodge->detail . "\n";
+        $message .= "  - Old Status: " . ($oldStatus == 0 ? 'In-process' : 'Done') . "\n";
+        $message .= "  - New Status: " . ($newStatus == 0 ? 'In-process' : 'Done');
+
+        try {
+            $response = $client->post($messageUrl, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'form_params' => [
+                    'message' => $message,
+                ],
+            ]);
+
+            if ($response->getStatusCode() === 200) {
+                return true;
+            } else {
+                /* \Log::error('Line Notify error: ' . $response->getBody());
+                return false; */
+            }
+        } catch (RequestException $e) {
+            /* \Log::error('Line Notify error: ' . $e->getMessage());
+            return false; */
+        }
+    }
+
     public function updateAssignee(Request $request, $id)
     {
         $request->validate([
@@ -144,7 +208,11 @@ class UpdateController extends Controller
 
         $this->sendAssigneeUpdateNotification($updatedTravelodge, $oldAssignee, $newAssignee);
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'oldAssignee' => $oldAssignee,
+            'newAssignee' => $newAssignee
+        ]);
     }
 
     private function sendAssigneeUpdateNotification($travelodge, $oldAssignee, $newAssignee)

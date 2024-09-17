@@ -29,6 +29,8 @@ Route::post('/reports/updatePreport/{id}', [UpdateController::class, 'UpdateIssu
 
 Route::post('/update-assignee/{id}', [UpdateController::class, 'updateAssignee'])->name('update.assignee');
 
+Route::post('/update-status/{id}', [UpdateController::class, 'updateStatus'])->name('updateStatus');
+
 Route::get('/reports/inprocess', [ReadController::class, 'inprocess'])->name('inprocess');
 Route::post('/send-to-line-image', [ReadController::class, 'sendToLineImage']);
 
@@ -40,7 +42,7 @@ Route::middleware(['auth', 'check.role:admin'])->group(function () {
 
     //Home
     Route::get('/home', [ChartController::class, 'HotelChart'])->name('hotel.chart');
-    /*     Route::get('/', [ChartController::class, 'HotelChart'])->name('hotel.chart'); */
+    Route::get('/', [ChartController::class, 'HotelChart'])->name('hotel.chart');
 
     //Dashbaord
     Route::get('/dashboard/{hotel}', [ChartController::class, 'HotelDashboard'])->name('hotel.dashboard');

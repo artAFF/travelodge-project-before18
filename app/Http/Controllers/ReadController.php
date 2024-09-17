@@ -64,7 +64,7 @@ class ReadController extends Controller
         $user = auth()->user();
 
         $in_process = Travelodge::with(['category', 'department', 'assignee'])
-            ->where('status', 0)  // Always filter for status 0
+            ->where('status', 0)
             ->when($query, function ($q) use ($query) {
                 $q->where(function ($subQ) use ($query) {
                     $subQ->whereHas('category', function ($q) use ($query) {

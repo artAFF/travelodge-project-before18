@@ -52,4 +52,12 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('login');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->isAdmin()) {
+            return redirect()->route('hotel.chart');
+        }
+        return redirect()->route('main');
+    }
 }
